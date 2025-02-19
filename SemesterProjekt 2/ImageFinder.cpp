@@ -7,7 +7,7 @@ ImageFinder::ImageFinder() {}
 
 void ImageFinder::testStart() {
     // Open webcam once
-    cv::VideoCapture cap(1);
+    cv::VideoCapture cap(0);
     if (!cap.isOpened()) {
         throw std::runtime_error("Error: Could not open the webcam.");
     }
