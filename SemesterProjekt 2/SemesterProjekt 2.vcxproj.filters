@@ -15,7 +15,35 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SemesterProjekt 2.cpp">
+    <Image Include="chessWithMarkedCornors.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="greenCircle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="redCircle.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="chess.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImageFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HueDifferenceProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OpenCVtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HueDifferenceProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

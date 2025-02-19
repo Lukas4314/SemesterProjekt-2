@@ -65,9 +65,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\OpenCVtest\OpenCVtest\OpenCV_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\OpenCVtest\OpenCVtest\OpenCV_release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -127,7 +129,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SemesterProjekt 2.cpp" />
+    <Image Include="chess.jpg" />
+    <Image Include="chessWithMarkedCornors.jpg" />
+    <Image Include="greenCircle.png" />
+    <Image Include="redCircle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="HueDifferenceProcessor.h" />
+    <ClInclude Include="ImageFinder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="HueDifferenceProcessor.cpp" />
+    <ClCompile Include="ImageFinder.cpp" />
+    <ClCompile Include="OpenCVtest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
