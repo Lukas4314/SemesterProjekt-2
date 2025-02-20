@@ -65,11 +65,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\OpenCVtest\OpenCVtest\OpenCV_debug.props" />
+    <Import Project="..\..\..\test\test\gay.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\OpenCVtest\OpenCVtest\OpenCV_release.props" />
+    <Import Project="..\..\..\test\test\PropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -137,11 +137,13 @@
   <ItemGroup>
     <ClInclude Include="HueDifferenceProcessor.h" />
     <ClInclude Include="ImageFinder.h" />
+    <ClInclude Include="Stockfishengine.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
-    <ClCompile Include="OpenCVtest.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Stockfishengine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
