@@ -1,38 +1,63 @@
+#define NOMINMAX
 #include "HueDifferenceProcessor.h"
 #include "ImageFinder.h"
 #include <iostream>
 #include <windows.h>
-#include "StockfishEngine.h"
+#include <opencv2/opencv.hpp>
+#include <algorithm>
+
 
 int main() {
-	std::string enginePath = "stockfish-windows-x86-64-avx2"; // path
-
-	StockfishEngine stockfish(enginePath);
-
-	if (!stockfish.start()) {
-		std::cerr << "Failed to start Stockfish!" << std::endl;
-		return 1;
-	}
-
-	std::string response = stockfish.sendCommand("uci");
-	std::cout << response << std::endl;
-
-	response = stockfish.sendCommand("position startpos");
-	response = stockfish.sendCommand("go depth 15");
-	std::cout << response << std::endl;
-
-	return 0;
-
-	/*
-	cv::Mat cheesWithMarkedCornors = cv::imread("chessWithMarkedCornors.jpg", cv::IMREAD_COLOR);
+	cv::Mat cheesWithMarkedCornors = cv::imread("chessWithMarkedCornors2.jpg", cv::IMREAD_COLOR);
 	cv::Mat greenCircle = cv::imread("greenCircle.png", cv::IMREAD_COLOR);
+	cv::Mat redCircle = cv::imread("redCircle.png", cv::IMREAD_COLOR);
+	cv::Mat mask = cv::imread("circleMask.png", cv::IMREAD_GRAYSCALE);
+	double imageScale = 0.5;
+	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
+	cv::resize(greenCircle, greenCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	cv::resize(redCircle, redCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	cv::resize(mask, mask, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
 	ImageFinder imageFinder;
-	int x = 0;
-	int y = 0;
-	//imageFinder.findImageInImage(greenCircle, cheesWithMarkedCornors,x, y);
-	//std::cout << "x: " << x << " y: " << y << std::endl;
-	imageFinder.testStart();
-	cv::waitKey(0);
-	*/
-	
+
+	cv::Point2i greenPoint(0, 0);
+	cv::Point2i greenCenterPoint(0, 0);
+
+	cv::Point2i redPoint(0, 0);
+	cv::Point2i redCenterPoint(0, 0);
+
+	imageFinder.findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask);
+	imageFinder.findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask);
+
+
+	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
+	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
+
+	cv::Point2i difference = redCenterPoint - greenCenterPoint;
+
+	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 + 45;
+	std::cout << "Angle: " << angle << std::endl;
+
+	cv::rectangle(cheesWithMarkedCornors, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(255, 0, 0), 2);
+	cv::rectangle(cheesWithMarkedCornors, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(255, 0, 0), 2);
+
+	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
+	cv::warpAffine(cheesWithMarkedCornors, cheesWithMarkedCornors, rotationMatrix, cheesWithMarkedCornors.size());
+
+	imageFinder.rotatePoint(greenCenterPoint, cv::Point2i(cheesWithMarkedCornors.rows / 2, cheesWithMarkedCornors.cols / 2), angle);
+	imageFinder.rotatePoint(redCenterPoint, cv::Point2i(cheesWithMarkedCornors.rows / 2, cheesWithMarkedCornors.cols / 2), angle);
+
+	std::cout << "Green Center Point: " << greenCenterPoint << std::endl;
+	std::cout << "Red Center Point: " << redCenterPoint << std::endl;
+
+	cv::Rect boundingBox(
+		std::min(greenCenterPoint.x, redCenterPoint.x),
+		std::min(greenCenterPoint.y, redCenterPoint.y) + greenCircle.rows,
+		abs(greenCenterPoint.x - redCenterPoint.x),
+		abs(greenCenterPoint.y - redCenterPoint.y) - greenCircle.rows * 2
+	);
+	cv::rectangle(cheesWithMarkedCornors, boundingBox, cv::Scalar(255, 255, 0), 2);
+
+	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
+	cv::imshow("cheesWithMarkedCornors", cheesWithMarkedCornors);
+	cv::waitKey();
 }
