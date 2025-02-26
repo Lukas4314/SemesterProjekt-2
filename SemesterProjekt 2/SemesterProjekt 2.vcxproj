@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="boardCutter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="boardCutter.h" />
     <ClInclude Include="HueDifferenceProcessor.h" />
     <ClInclude Include="ImageFinder.h" />
   </ItemGroup>
