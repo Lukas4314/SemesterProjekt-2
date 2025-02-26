@@ -1,13 +1,13 @@
 #pragma once
 #include <opencv2/opencv.hpp>
-class boardCutter
+class BoardCutter
 {
 public:
-	boardCutter();
-	~boardCutter();
+	BoardCutter();
+	~BoardCutter();
 
-	static cv::Mat cutBoard(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask);
-
+	static cv::Mat cutBoard(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double);
+	static void zoom(cv::Mat, cv::Mat&, double, cv::Point2i);
 
 
 };

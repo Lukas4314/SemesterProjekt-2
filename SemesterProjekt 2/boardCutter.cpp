@@ -1,22 +1,21 @@
-#include "boardCutter.h"
+#include "BoardCutter.h"
 #include <opencv2/opencv.hpp>
 #include "ImageFinder.h"
 
-boardCutter::boardCutter()
+BoardCutter::BoardCutter()
 {
 }
-boardCutter::~boardCutter()
+BoardCutter::~BoardCutter()
 {
 }
 
 
-cv::Mat boardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask)
+cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale)
 {
-	double imageScale = 0.5;
-	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
-	cv::resize(greenCircle, greenCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
-	cv::resize(redCircle, redCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
-	cv::resize(mask, mask, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
+	cv::resize(greenCircle, greenCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
+	cv::resize(redCircle, redCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
+	cv::resize(mask, mask, cv::Size(), scale, scale, cv::INTER_LINEAR);
 
 	cv::Point2i greenPoint(0, 0);
 	cv::Point2i greenCenterPoint(0, 0);
@@ -24,8 +23,8 @@ cv::Mat boardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	cv::Point2i redPoint(0, 0);
 	cv::Point2i redCenterPoint(0, 0);
 
-	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask);
-	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask);
+	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle");
+	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask, "redCirlce");
 
 
 	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
@@ -34,28 +33,41 @@ cv::Mat boardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
 
 	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 + 45;
-	std::cout << "Angle: " << angle << std::endl;
-
-	cv::rectangle(cheesWithMarkedCornors, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(255, 0, 0), 2);
-	cv::rectangle(cheesWithMarkedCornors, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(255, 0, 0), 2);
+	std::cout << angle << std::endl;
+	cv::rectangle(cheesWithMarkedCornors, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
+	cv::rectangle(cheesWithMarkedCornors, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
 	cv::warpAffine(cheesWithMarkedCornors, cheesWithMarkedCornors, rotationMatrix, cheesWithMarkedCornors.size());
+	ImageFinder::rotatePoint(greenCenterPoint, cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), -angle);
+	ImageFinder::rotatePoint(redCenterPoint, cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), -angle);
 
-	ImageFinder::rotatePoint(greenCenterPoint, cv::Point2i(cheesWithMarkedCornors.rows / 2, cheesWithMarkedCornors.cols / 2), angle);
-	ImageFinder::rotatePoint(redCenterPoint, cv::Point2i(cheesWithMarkedCornors.rows / 2, cheesWithMarkedCornors.cols / 2), angle);
 
-	std::cout << "Green Center Point: " << greenCenterPoint << std::endl;
-	std::cout << "Red Center Point: " << redCenterPoint << std::endl;
 
 	cv::Rect boundingBox(
 		std::min(greenCenterPoint.x, redCenterPoint.x),
-		std::min(greenCenterPoint.y, redCenterPoint.y) + greenCircle.rows,
+		std::min(greenCenterPoint.y, redCenterPoint.y),
 		abs(greenCenterPoint.x - redCenterPoint.x),
-		abs(greenCenterPoint.y - redCenterPoint.y) - greenCircle.rows * 2
+		abs(greenCenterPoint.y - redCenterPoint.y)
 	);
 	cv::rectangle(cheesWithMarkedCornors, boundingBox, cv::Scalar(255, 255, 0), 2);
+	std::cout << boundingBox << std::endl;
 
+	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width > cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height > cheesWithMarkedCornors.rows){
+		return cheesWithMarkedCornors;
+	}
 	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
 	return cheesWithMarkedCornors;
+}
+
+
+void BoardCutter::zoom(cv::Mat inputImage, cv::Mat &outputImage, double zoomFactor, cv::Point2i offset) {
+	int centerX = inputImage.cols / 2+ offset.x;
+	int centerY = inputImage.rows / 2+ offset.y;
+	int newWidth = static_cast<int>(inputImage.cols / zoomFactor);
+	int newHeight = static_cast<int>(inputImage.rows / zoomFactor);
+
+	// Crop the region of interest (ROI)
+	cv::Rect roi(centerX - newWidth / 2, centerY - newHeight / 2, newWidth, newHeight);
+	outputImage = inputImage(roi);
 }

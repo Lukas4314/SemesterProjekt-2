@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <windows.h>
+#include <string>
 
 ImageFinder::ImageFinder() {}
 
@@ -37,7 +38,7 @@ void ImageFinder::testStart() {
         if (frame.empty()) break;
 
         // Find green circle in the frame
-        findImageInImage(greenCircle, frame, greenBallPoint, mask);
+        findImageInImage(greenCircle, frame, greenBallPoint, mask, "test");
 
 
 		cv::rectangle(frame, cv::Rect(greenBallPoint.x, greenBallPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
@@ -55,12 +56,12 @@ void ImageFinder::testStart() {
     cap.release();  // Release webcam resource
 }
 
-void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &point, cv::Mat mask) {
+void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &point, cv::Mat mask, std::string name) {
     if (frame.empty() || image.empty()) return;
 
     // Match the template using the hue channel with a mask
     cv::Mat result;
-    int templateModes = cv::TM_SQDIFF;
+    int templateModes = cv::TM_SQDIFF_NORMED;
     if (!mask.empty() && mask.size() == image.size()) {
         cv::matchTemplate(frame, image, result, templateModes, mask);
     }
@@ -69,17 +70,26 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &po
         cv::matchTemplate(frame, image, result, templateModes);
     }
 
+
+
     // Find the best match location
     double minVal, maxVal;
     cv::Point minLoc, maxLoc;
     cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
 
+
+    cv::Mat heatMap;
+    cv::normalize(result, result, 0, 255, cv::NORM_MINMAX, CV_8U);
+    cv::applyColorMap(result, heatMap, cv::COLORMAP_JET);
+    cv::imshow(name, heatMap);
+
+
     // Store best match coordinates
-	std::cout << "minLoc.x: " << minLoc.x << " minLoc.y: " << minLoc.y << std::endl;
 	point = minLoc;
 }
 
 void ImageFinder::rotatePoint(cv::Point2i& point, cv::Point2i center, double angle) {
+
 	double s = sin(angle * CV_PI / 180);
 	double c = cos(angle * CV_PI / 180);
 	// Translate point back to origin
@@ -93,3 +103,38 @@ void ImageFinder::rotatePoint(cv::Point2i& point, cv::Point2i center, double ang
 	point.y = ynew + center.y;
 }
 ImageFinder::~ImageFinder() {}
+
+
+void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat& outputImage,int minSat, int maxSat, int minVal, int maxVal) {
+    cv::Mat hsvImage;
+    cv::cvtColor(inputImage, hsvImage, cv::COLOR_BGR2HSV);
+
+    std::vector<cv::Mat> channels;
+    cv::split(hsvImage, channels);
+    cv::Mat hue = channels[0];  // Extract Hue channel
+    cv::Mat saturation = channels[1];  // Extract Saturation channel
+    cv::Mat value = channels[2];  // Extract Value channel
+
+    // Create mask for low/high saturation or value
+    cv::Mat mask;
+    cv::Mat lowSat = saturation < minSat;
+    cv::Mat highSat = saturation > maxSat;
+    cv::Mat lowVal = value < minVal;
+    cv::Mat highVal = value > maxVal;
+
+    mask = lowSat | highSat | lowVal | highVal; // Combine all conditions
+
+    // Convert Hue channel to a heatmap
+    cv::Mat heatmap;
+    cv::applyColorMap(hue, heatmap, cv::COLORMAP_JET);
+
+    for (int y = 0; y < heatmap.rows; y++) {
+        for (int x = 0; x < heatmap.cols; x++) {
+            if (mask.at<uchar>(y, x) > 0) {
+                heatmap.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
+            }
+        }
+    }
+
+    outputImage = heatmap;
+}
