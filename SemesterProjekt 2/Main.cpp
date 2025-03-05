@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "boardCutter.h"
 
+
 int main() {
 
 	//cv::Mat cheesWithMarkedCornors = cv::imread("chessWithMarkedCornors2.jpg", cv::IMREAD_COLOR);
