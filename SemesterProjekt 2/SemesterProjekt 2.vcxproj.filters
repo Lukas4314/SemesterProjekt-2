@@ -24,12 +24,21 @@
     <ClCompile Include="HueDifferenceProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BoardCutter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StockFishAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HueDifferenceProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImageFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardCutter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
