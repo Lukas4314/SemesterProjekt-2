@@ -10,7 +10,7 @@ void ImageFinder::testStart() {
     // Open webcam once
     cv::VideoCapture cap(0);
     if (!cap.isOpened()) {
-        throw std::runtime_error("Error: Could not open the webcam.");
+        throw std::runtime_error("Error: Could not open the cam.");
     }
 
     // Load reference images
@@ -45,7 +45,7 @@ void ImageFinder::testStart() {
 
 
         // Show the original frame
-        cv::imshow("Webcam", frame);
+        cv::imshow("Frame", frame);
 
         // Exit if 'q' is pressed
         if (cv::waitKey() == 'q') break;
@@ -78,10 +78,8 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &po
     cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
 
 
-    cv::Mat heatMap;
     cv::normalize(result, result, 0, 255, cv::NORM_MINMAX, CV_8U);
-    cv::applyColorMap(result, heatMap, cv::COLORMAP_JET);
-    cv::imshow(name, heatMap);
+    //cv::imshow(name, 255-result);
 
 
     // Store best match coordinates

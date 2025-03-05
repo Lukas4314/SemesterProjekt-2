@@ -12,6 +12,7 @@ BoardCutter::~BoardCutter()
 
 cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale)
 {
+	cv::Mat chessWithMarkedCornorsDebug = cheesWithMarkedCornors.clone();
 	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
 	cv::resize(greenCircle, greenCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
 	cv::resize(redCircle, redCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
@@ -34,24 +35,34 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 + 45;
 	std::cout << angle << std::endl;
-	cv::rectangle(cheesWithMarkedCornors, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
-	cv::rectangle(cheesWithMarkedCornors, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
+
+	cv::imshow("MarkedConorsDebug", chessWithMarkedCornorsDebug);
+
 
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
+
 	cv::warpAffine(cheesWithMarkedCornors, cheesWithMarkedCornors, rotationMatrix, cheesWithMarkedCornors.size());
+	cv::warpAffine(chessWithMarkedCornorsDebug, chessWithMarkedCornorsDebug, rotationMatrix, chessWithMarkedCornorsDebug.size());
+
+
 	ImageFinder::rotatePoint(greenCenterPoint, cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), -angle);
 	ImageFinder::rotatePoint(redCenterPoint, cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), -angle);
 
 
 
 	cv::Rect boundingBox(
-		std::min(greenCenterPoint.x, redCenterPoint.x),
-		std::min(greenCenterPoint.y, redCenterPoint.y),
-		abs(greenCenterPoint.x - redCenterPoint.x),
-		abs(greenCenterPoint.y - redCenterPoint.y)
+		std::min(greenCenterPoint.x, redCenterPoint.x) + mask.rows / 2,
+		std::min(greenCenterPoint.y, redCenterPoint.y) + mask.rows / 2,
+		abs(greenCenterPoint.x - redCenterPoint.x) - mask.rows,
+		abs(greenCenterPoint.y - redCenterPoint.y) - mask.rows
 	);
-	cv::rectangle(cheesWithMarkedCornors, boundingBox, cv::Scalar(255, 255, 0), 2);
-	std::cout << boundingBox << std::endl;
+	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
+	//std::cout << boundingBox << std::endl;
+	cv::imshow("MarkedConorsDebug", chessWithMarkedCornorsDebug);
+
+
 
 	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width > cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height > cheesWithMarkedCornors.rows){
 		return cheesWithMarkedCornors;
