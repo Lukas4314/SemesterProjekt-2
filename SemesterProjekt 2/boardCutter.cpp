@@ -64,7 +64,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 
 
-	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width > cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height > cheesWithMarkedCornors.rows){
+	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width > cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height > cheesWithMarkedCornors.rows) {
 		return cheesWithMarkedCornors;
 	}
 	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
@@ -72,9 +72,9 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 }
 
 
-void BoardCutter::zoom(cv::Mat inputImage, cv::Mat &outputImage, double zoomFactor, cv::Point2i offset) {
-	int centerX = inputImage.cols / 2+ offset.x;
-	int centerY = inputImage.rows / 2+ offset.y;
+void BoardCutter::zoom(cv::Mat inputImage, cv::Mat& outputImage, double zoomFactor, cv::Point2i offset) {
+	int centerX = inputImage.cols / 2 + offset.x;
+	int centerY = inputImage.rows / 2 + offset.y;
 	int newWidth = static_cast<int>(inputImage.cols / zoomFactor);
 	int newHeight = static_cast<int>(inputImage.rows / zoomFactor);
 

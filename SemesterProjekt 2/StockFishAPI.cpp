@@ -1,3 +1,6 @@
+/*
+
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -86,3 +89,6 @@ int startStockfish() {
 
     return 0;
 }
+
+
+*/

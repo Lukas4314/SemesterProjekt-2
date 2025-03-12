@@ -28,7 +28,7 @@ void ImageFinder::testStart() {
         throw std::runtime_error("Error: Could not load the reference images.");
     }
 
-	cv::Point2i greenBallPoint(0, 0);
+    cv::Point2i greenBallPoint(0, 0);
 
     cv::namedWindow("Webcam", cv::WINDOW_AUTOSIZE);
 
@@ -41,7 +41,7 @@ void ImageFinder::testStart() {
         findImageInImage(greenCircle, frame, greenBallPoint, mask, "test", bgrMode);
 
 
-		cv::rectangle(frame, cv::Rect(greenBallPoint.x, greenBallPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
+        cv::rectangle(frame, cv::Rect(greenBallPoint.x, greenBallPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 
 
         // Show the original frame
@@ -70,19 +70,19 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
             cv::matchTemplate(frame, image, result, templateModes, mask);
         }
         else if (mode == ImageFinder::hsvMode) {
-			cv::Mat hsvImage;
+            cv::Mat hsvImage;
             cv::Mat hsvFrame;
             cv::cvtColor(image, hsvImage, cv::COLOR_BGR2HSV);
-			cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
+            cv::cvtColor(frame, hsvFrame, cv::COLOR_BGR2HSV);
 
-			std::vector<cv::Mat> hsvImageChannels;
-			std::vector<cv::Mat> hsvFrameChannels;
+            std::vector<cv::Mat> hsvImageChannels;
+            std::vector<cv::Mat> hsvFrameChannels;
 
-			cv::split(hsvImage, hsvImageChannels);
-			cv::split(hsvFrame, hsvFrameChannels);
+            cv::split(hsvImage, hsvImageChannels);
+            cv::split(hsvFrame, hsvFrameChannels);
 
 
-			cv::matchTemplate(hsvFrameChannels[0], hsvImageChannels[0], result, templateModes, mask);
+            cv::matchTemplate(hsvFrameChannels[0], hsvImageChannels[0], result, templateModes, mask);
 
 
         }
@@ -111,17 +111,17 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
 
 void ImageFinder::rotatePoint(cv::Point2i& point, cv::Point2i center, double angle) {
 
-	double s = sin(angle * CV_PI / 180);
-	double c = cos(angle * CV_PI / 180);
-	// Translate point back to origin
+    double s = sin(angle * CV_PI / 180);
+    double c = cos(angle * CV_PI / 180);
+    // Translate point back to origin
     point.x -= center.x;
-	point.y -= center.y;
-	// Rotate point
-	int xnew = (int)round(point.x * c - point.y * s);
-	int ynew = (int)round(point.x * s + point.y * c);
-	// Translate point back
-	point.x = xnew + center.x;
-	point.y = ynew + center.y;
+    point.y -= center.y;
+    // Rotate point
+    int xnew = (int)round(point.x * c - point.y * s);
+    int ynew = (int)round(point.x * s + point.y * c);
+    // Translate point back
+    point.x = xnew + center.x;
+    point.y = ynew + center.y;
 }
 ImageFinder::~ImageFinder() {}
 
@@ -138,10 +138,10 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
     // Convert input color to HSV
     cv::Mat colorMat(1, 1, CV_8UC3, bgrColor);
     cv::cvtColor(colorMat, colorMat, cv::COLOR_BGR2HSV);
-	cv::resize(colorMat, colorMat, cv::Size(image.cols, image.rows), cv::INTER_NEAREST);
+    cv::resize(colorMat, colorMat, cv::Size(image.cols, image.rows), cv::INTER_NEAREST);
 
-	std::vector<cv::Mat> hsvColorChannels;
-	cv::split(colorMat, hsvColorChannels);
+    std::vector<cv::Mat> hsvColorChannels;
+    cv::split(colorMat, hsvColorChannels);
 
 
     // Split the HSV channels of the image
@@ -153,8 +153,8 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
     cv::absdiff(hsvChannels[0], hsvColorChannels[0], diffH);
     cv::absdiff(hsvChannels[1], hsvColorChannels[1], diffS);
     cv::absdiff(hsvChannels[2], hsvColorChannels[2], diffV);
-    
-	std::cout << hsvChannels[0].size() << "  " << hsvColorChannels[0].size() << std::endl;
+
+    std::cout << hsvChannels[0].size() << "  " << hsvColorChannels[0].size() << std::endl;
 
 
 
@@ -165,9 +165,9 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
 
     // Show the results
 
-	cv::Size size = cv::Size(1440/3, 400);
+    cv::Size size = cv::Size(1440 / 3, 400);
 
-	cv::resize(diffH, diffH, size, cv::INTER_LINEAR);
+    cv::resize(diffH, diffH, size, cv::INTER_LINEAR);
     cv::resize(diffS, diffS, size, cv::INTER_LINEAR);
     cv::resize(diffV, diffV, size, cv::INTER_LINEAR);
     cv::resize(hsvChannels[2], hsvChannels[2], size, cv::INTER_LINEAR);
@@ -177,22 +177,22 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
     cv::imshow("Hue Difference", diffH);
     cv::imshow("Saturation Difference", diffS);
     cv::imshow("Value Difference", diffV);
-	cv::imshow("Value Channel", hsvChannels[2]);
-	cv::imshow("Saturation Channel",255-hsvChannels[1]);
+    cv::imshow("Value Channel", hsvChannels[2]);
+    cv::imshow("Saturation Channel", 255 - hsvChannels[1]);
 
 
-	cv::moveWindow("Hue Difference", 0, 0);
-	cv::moveWindow("Saturation Difference", 0, 400);
-	cv::moveWindow("Value Difference", 0, 800);
-	cv::moveWindow("Value Channel", 480, 0);
-	cv::moveWindow("Saturation Channel", 480, 400);
+    cv::moveWindow("Hue Difference", 0, 0);
+    cv::moveWindow("Saturation Difference", 0, 400);
+    cv::moveWindow("Value Difference", 0, 800);
+    cv::moveWindow("Value Channel", 480, 0);
+    cv::moveWindow("Saturation Channel", 480, 400);
 
 
 }
 
 
 
-void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat& outputImage,int minSat, int maxSat, int minVal, int maxVal) {
+void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat& outputImage, int minSat, int maxSat, int minVal, int maxVal) {
     cv::Mat hsvImage;
     cv::cvtColor(inputImage, hsvImage, cv::COLOR_BGR2HSV);
 
