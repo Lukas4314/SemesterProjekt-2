@@ -79,7 +79,7 @@ void analyzePosition(const std::string& fen, int depth) {
     writeJsonToFile(jsonResponse, filePath);
 }
 
-int main() {
+int startStockFish() {
     std::string fen = "rn1q1rk1/pp2b1pp/2p2n2/3p1pB1/3P4/1QP2N2/PP1N1PPP/R4RK1 b - - 1 11"; // Example of FEN
     int depth = 15; // Example depth
     analyzePosition(fen, depth);
