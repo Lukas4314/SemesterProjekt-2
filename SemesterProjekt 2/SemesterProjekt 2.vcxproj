@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
+    <ClCompile Include="StockFishAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardCutter.h" />

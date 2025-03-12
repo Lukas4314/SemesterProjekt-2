@@ -9,26 +9,31 @@
 #include "ImageDrawer.h"
 
 int main() {
-
-	//cv::Mat cheesWithMarkedCornors = cv::imread("chessWithMarkedCornors2.jpg", cv::IMREAD_COLOR);
+	cv::Mat cheesWithMarkedCornors = cv::imread("chessWithMarkedCornors2.jpg", cv::IMREAD_COLOR);
 	cv::Mat greenCircle = cv::imread("greenCircle.png", cv::IMREAD_COLOR);
 	cv::Mat redCircle = cv::imread("redCircle.png", cv::IMREAD_COLOR);
 	cv::Mat blueCircle = cv::imread("blueCircle.png", cv::IMREAD_COLOR);
 	cv::Mat mask = cv::imread("circleMask.png", cv::IMREAD_GRAYSCALE);
+	double imageScale = 0.5;
+	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 0.5, 0.5, cv::INTER_LINEAR);
+	cv::resize(greenCircle, greenCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	cv::resize(redCircle, redCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	cv::resize(mask, mask, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
+	ImageFinder imageFinder;
 
+	cv::Point2i greenPoint(0, 0);
+	cv::Point2i greenCenterPoint(0, 0);
 
 	//cv::cvtColor(greenCircle, greenCircle, cv::COLOR_BGR2HSV);
 	//cv::cvtColor(redCircle, redCircle, cv::COLOR_BGR2HSV);
 	//cv::cvtColor(blueCircle, blueCircle, cv::COLOR_BGR2HSV);
 
+	imageFinder.findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask);
+	imageFinder.findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask);
 
 
-	cv::VideoCapture cap(1, cv::CAP_DSHOW);
-	if (!cap.isOpened()) {
-		throw std::runtime_error("Error: Could not open the webcam.");
-	}
-	cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
-	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
+	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
+	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
 
 	cv::Mat cheesWithMarkedCornors;
 
