@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
+    <ClCompile Include="MoveFinder.cpp" />
     <ClCompile Include="StockFishAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +32,7 @@
     <ClInclude Include="HueDifferenceProcessor.h" />
     <ClInclude Include="ImageDrawer.h" />
     <ClInclude Include="ImageFinder.h" />
+    <ClInclude Include="MoveFinder.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="chess.jpg" />

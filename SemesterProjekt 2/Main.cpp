@@ -2,11 +2,11 @@
 #include "HueDifferenceProcessor.h"
 #include "ImageFinder.h"
 #include <iostream>
-#include <windows.h>
 #include <opencv2/opencv.hpp>
 #include <algorithm>
 #include "boardCutter.h"
 #include "ImageDrawer.h"
+#include "MoveFinder.h"
 
 int main() {
 
@@ -32,7 +32,14 @@ int main() {
 
 	cv::Mat cheesWithMarkedCornors;
 
+	cv::Mat oldChessboard;
+
+	BoardCutter boardCutter = BoardCutter();
+
+
 	while (true) {
+		cap >> cheesWithMarkedCornors;
+		cap >> cheesWithMarkedCornors;
 		cap >> cheesWithMarkedCornors;
 
 		//cv::imshow("Original frame", cheesWithMarkedCornors);
@@ -43,37 +50,39 @@ int main() {
 		cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, cheesWithMarkedCornors.rows - boundingBoxStart.y - 300);
 		cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
 
-		cv::imshow("cutted frame", cheesWithMarkedCornors);
-
-
-
-
 		cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0); // Get the first pixel (row=0, col=0)
 		cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
-		ImageFinder::showHSVChannelDifferences(cheesWithMarkedCornors, firstPixelColor);
+		//ImageFinder::showHSVChannelDifferences(cheesWithMarkedCornors, firstPixelColor);
 
 
-		if (cv::waitKey(1) == 'q') {
-			break;
-		}
-		continue;
 
 
 
 
 
 		// Cut out chessboard
-		cv::Mat chessBoard = BoardCutter::cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode);
-
-
+		cv::Mat chessBoard = boardCutter.cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode2);
 		cv::Mat drawedChessboard = chessBoard.clone();
 		ImageDrawer::drawChessBoard(chessBoard, drawedChessboard);
 
-		//cv::imshow("Chessboard", chessBoard);
 		//cv::imshow("drawedChessboard", drawedChessboard);
+		cv::imshow("chessBoard",chessBoard);
+
+
+		if (!oldChessboard.empty()) {
+			cv::imshow("oldBoard", oldChessboard);
+			MoveFinder::findMove(oldChessboard, chessBoard);
+		}
+		oldChessboard = chessBoard.clone();
+
+
+
+
+
+
 
 		// Exit if 'q' is pressed
-		if (cv::waitKey(1) == 'q') {
+		if (cv::waitKey(0) == 'q') {
 			break;
 		}
 	}
