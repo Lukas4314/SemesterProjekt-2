@@ -10,7 +10,7 @@ BoardCutter::~BoardCutter()
 }
 
 
-cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale)
+cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode)
 {
 	cv::Mat chessWithMarkedCornorsDebug = cheesWithMarkedCornors.clone();
 	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
@@ -24,8 +24,8 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	cv::Point2i redPoint(0, 0);
 	cv::Point2i redCenterPoint(0, 0);
 
-	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle");
-	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask, "redCirlce");
+	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle", mode);
+	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask, "redCirlce", mode);
 
 
 	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);

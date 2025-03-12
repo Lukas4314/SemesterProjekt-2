@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoardCutter.cpp" />
+    <ClCompile Include="ImageDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
@@ -28,6 +29,7 @@
   <ItemGroup>
     <ClInclude Include="BoardCutter.h" />
     <ClInclude Include="HueDifferenceProcessor.h" />
+    <ClInclude Include="ImageDrawer.h" />
     <ClInclude Include="ImageFinder.h" />
   </ItemGroup>
   <ItemGroup>
