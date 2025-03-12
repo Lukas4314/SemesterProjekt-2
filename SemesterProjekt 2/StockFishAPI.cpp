@@ -1,6 +1,3 @@
-/*
-
-
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -32,12 +29,12 @@ std::string exec(const char* cmd) {
     char buffer[128];
     std::string result = "";
 
-    FILE* pipe = _popen(cmd, "r");
+    FILE* pipe = popen(cmd, "r");
     if (!pipe) throw std::runtime_error("popen failed!");
     while (fgets(buffer, sizeof(buffer), pipe) != nullptr) {
         result += buffer;
     }
-    _pclose(pipe);
+    pclose(pipe);
     return result;
 }
 
@@ -82,13 +79,10 @@ void analyzePosition(const std::string& fen, int depth) {
     writeJsonToFile(jsonResponse, filePath);
 }
 
-int startStockfish() {
+int startStockFish() {
     std::string fen = "rn1q1rk1/pp2b1pp/2p2n2/3p1pB1/3P4/1QP2N2/PP1N1PPP/R4RK1 b - - 1 11"; // Example of FEN
     int depth = 15; // Example depth
     analyzePosition(fen, depth);
 
     return 0;
 }
-
-
-*/

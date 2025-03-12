@@ -76,7 +76,6 @@ int main() {
 
 		//cv::imshow("Chessboard", chessBoard);
 		//cv::imshow("drawedChessboard", drawedChessboard);
-
         // Exit if 'q' is pressed
         if (cv::waitKey(1) == 'q') {
             break;
