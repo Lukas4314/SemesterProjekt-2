@@ -3,7 +3,7 @@
 #include <string>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include "StockFishAPI.h" // Assuming StockfishAnalyzer encapsulates Stockfish interaction
+#include "StockFishAPI.h" // Assuming StockfishAPI encapsulates Stockfish interaction
 
 using namespace std;
 
@@ -12,11 +12,21 @@ class ChessBoard {
 private:
     vector<vector<char>> board; // The board is a 2D vector of characters
     string FEN; // Stores the FEN representation of the board
-    
+    string activeColor; // 'w' for white to move, 'b' for black to move
+    string castlingRights; // Castling availability
+    string enPassant; // En passant target square
+    int halfmoveClock; // Halfmove clock for the 50-move rule
+    int fullmoveNumber; // Fullmove number
+
 public:
     // Constructor initializes the chessboard with the starting position
     ChessBoard() : board(8, vector<char>(8, '-')) {
         setupBoard(); // Calls setupBoard function to set initial position
+        activeColor = "w"; // White starts
+        castlingRights = "KQkq"; // All castling rights available at the start
+        enPassant = "-"; // No en passant available at start
+        halfmoveClock = 0; // Reset halfmove clock
+        fullmoveNumber = 1; // Game starts at move 1
         updateFEN(); // Updates the FEN notation
     }
     
@@ -34,7 +44,7 @@ public:
     // Function to update FEN notation based on the current board state
     void updateFEN() {
         FEN = ""; // Reset FEN string
-        for (int i = 0; i < 8; ++i) { // Iterate over each row
+        for (int i = 7; i >= 0; --i) { // Iterate over each row in reverse order
             int emptyCount = 0; // Counter for empty squares
             for (int j = 0; j < 8; ++j) { // Iterate over each column
                 if (board[i][j] == '-') { // If the square is empty
@@ -50,10 +60,13 @@ public:
             if (emptyCount > 0) {
                 FEN += to_string(emptyCount); // Append remaining empty squares count
             }
-            if (i < 7) {
+            if (i > 0) {
                 FEN += "/"; // Separate rows with '/'
             }
         }
+        
+        // Append additional FEN information
+        FEN += " " + activeColor + " " + castlingRights + " " + enPassant + " " + to_string(halfmoveClock) + " " + to_string(fullmoveNumber);
     }
     
     // Function to get the FEN notation
@@ -67,6 +80,8 @@ public:
             toRow >= 0 && toRow < 8 && toCol >= 0 && toCol < 8) { // Error checking
             board[toRow][toCol] = board[fromRow][fromCol]; // Move piece
             board[fromRow][fromCol] = '-'; // Empty old position
+            activeColor = (activeColor == "w") ? "b" : "w"; // Toggle turn
+            fullmoveNumber += (activeColor == "w") ? 1 : 0; // Increase move count only after black moves
             updateFEN(); // Update FEN after move
         } else {
             cerr << "Invalid move!" << endl;
@@ -112,12 +127,12 @@ public:
 int main() {
     ChessBoard chess;
     chess.printBoard();
-   
-    cout << "\nFEN: " << chess.getFEN() << endl; // Display FEN notation
 
     string fen = chess.getFEN(); // Get current FEN
     int depth = 15; // Example depth
     StockfishAPI::analyzePosition(fen, depth); // Get best move from Stockfish
+    
+    cout << "\nFEN: " << chess.getFEN() << endl; // Display FEN notation
     
     cout << "\nApplying best move from JSON...\n";
     chess.applyBestMoveFromJson("stockfish_analysis.json"); // Apply best move
