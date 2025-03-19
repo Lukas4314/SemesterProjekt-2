@@ -36,6 +36,9 @@
     <ClCompile Include="MoveFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AllInOneMain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HueDifferenceProcessor.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MoveFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AllInOneMain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

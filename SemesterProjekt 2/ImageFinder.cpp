@@ -201,10 +201,6 @@ void ImageFinder::adjustHSVChannels(std::vector<cv::Mat>& hsvChannels,
     cv::pow(hsvChannels[0], hueExponent, hsvChannels[0]); // Hue
     cv::pow(hsvChannels[1], saturationExponent, hsvChannels[1]); // Saturation
     cv::pow(hsvChannels[2], valueExponent, hsvChannels[2]); // Value
-
-
-
-
 }
 
 

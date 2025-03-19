@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllInOneMain.cpp" />
     <ClCompile Include="BoardCutter.cpp" />
     <ClCompile Include="ImageDrawer.cpp" />
     <ClCompile Include="main.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="StockFishAPI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllInOneMain.h" />
     <ClInclude Include="BoardCutter.h" />
     <ClInclude Include="HueDifferenceProcessor.h" />
     <ClInclude Include="ImageDrawer.h" />
