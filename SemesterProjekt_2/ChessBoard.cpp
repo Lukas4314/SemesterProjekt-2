@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include "StockFishAPI.h" // Assuming StockfishAnalyzer encapsulates Stockfish interaction
 
 using namespace std;
 
@@ -75,7 +76,7 @@ public:
     // Function to read best move from Stockfish JSON file and apply it
     void applyBestMoveFromJson(const string& filePath) { // Takes a file path to the json file
         ifstream file(filePath); // Opens the json file
-        if (!file.is_open()) {  // For printing error if file was unsuccefully opened
+        if (!file.is_open()) {  // For printing error if file was unsuccessfully opened
             cerr << "Failed to open JSON file!" << endl;
             return;
         }
@@ -111,11 +112,15 @@ public:
 int main() {
     ChessBoard chess;
     chess.printBoard();
-    
+   
     cout << "\nFEN: " << chess.getFEN() << endl; // Display FEN notation
+
+    string fen = chess.getFEN(); // Get current FEN
+    int depth = 15; // Example depth
+    StockfishAPI::analyzePosition(fen, depth); // Get best move from Stockfish
     
     cout << "\nApplying best move from JSON...\n";
-    chess.applyBestMoveFromJson("stockfish_analysis.json"); // We us ethe applyBestMoveFromJson function with a path to the json file
+    chess.applyBestMoveFromJson("stockfish_analysis.json"); // Apply best move
     chess.printBoard(); // Prints the new board
     cout << "\nUpdated FEN: " << chess.getFEN() << endl;
     
