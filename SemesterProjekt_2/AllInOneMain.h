@@ -1,5 +1,5 @@
 #include <opencv2/opencv.hpp>
-#include "boardCutter.h"
+#include "BoardCutter.h"
 #include <string>
 #pragma once
 class AllInOneMain

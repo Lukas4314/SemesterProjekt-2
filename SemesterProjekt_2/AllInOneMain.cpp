@@ -3,23 +3,23 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <algorithm>
-#include "boardCutter.h"
+#include "BoardCutter.h"
 #include "ImageDrawer.h"
 #include "MoveFinder.h"
 #include "Utill.h"
 
 
 AllInOneMain::AllInOneMain() {  
-   greenCircle = cv::imread("greenCircle.png", cv::IMREAD_COLOR);  
-   redCircle = cv::imread("redCircle.png", cv::IMREAD_COLOR);  
-   blueCircle = cv::imread("blueCircle.png", cv::IMREAD_COLOR);  
-   mask = cv::imread("circleMask.png", cv::IMREAD_GRAYSCALE);  
+   greenCircle = cv::imread("../greenCircle.png", cv::IMREAD_COLOR);  
+   redCircle = cv::imread("../redCircle.png", cv::IMREAD_COLOR);  
+   blueCircle = cv::imread("../blueCircle.png", cv::IMREAD_COLOR);  
+   mask = cv::imread("../circleMask.png", cv::IMREAD_GRAYSCALE);  
  
    //cv::cvtColor(greenCircle, greenCircle, cv::COLOR_BGR2HSV);  
    //cv::cvtColor(redCircle, redCircle, cv::COLOR_BGR2HSV);  
    //cv::cvtColor(blueCircle, blueCircle, cv::COLOR_BGR2HSV);  
  
-   cap.open(1, cv::CAP_DSHOW);  
+   cap.open(0, cv::CAP_ANY);  
    if (!cap.isOpened()) {  
        throw std::runtime_error("Error: Could not open the webcam.");  
    }  
