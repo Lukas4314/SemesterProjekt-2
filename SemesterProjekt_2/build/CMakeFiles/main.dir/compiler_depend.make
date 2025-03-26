@@ -3198,8 +3198,65 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
   /usr/local/include/opencv4/opencv2/video.hpp \
   /usr/local/include/opencv4/opencv2/video/tracking.hpp \
   /usr/local/include/opencv4/opencv2/video/background_segm.hpp \
-  ../BoardCutter.h
+  ../BoardCutter.h \
+  ../ChessBoard.h \
+  ../StockfishUCI.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+  /usr/include/linux/close_range.h \
+  /usr/include/x86_64-linux-gnu/sys/wait.h \
+  /usr/include/signal.h \
+  /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
+  /usr/include/x86_64-linux-gnu/bits/signum-arch.h \
+  /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h \
+  /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h \
+  /usr/include/x86_64-linux-gnu/bits/siginfo-consts.h \
+  /usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h \
+  /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h \
+  /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
+  /usr/include/x86_64-linux-gnu/bits/sigevent-consts.h \
+  /usr/include/x86_64-linux-gnu/bits/sigaction.h \
+  /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
+  /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
+  /usr/include/x86_64-linux-gnu/sys/ucontext.h \
+  /usr/include/x86_64-linux-gnu/bits/sigstack.h \
+  /usr/include/x86_64-linux-gnu/bits/sigstksz.h \
+  /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h \
+  /usr/include/x86_64-linux-gnu/bits/sigthread.h \
+  /usr/include/x86_64-linux-gnu/bits/signal_ext.h
 
+
+/usr/include/x86_64-linux-gnu/bits/signal_ext.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigthread.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigstksz.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/stack_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigevent-consts.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/siginfo-consts.h:
+
+/usr/include/linux/close_range.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
+
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 
 ../StockfishEngine.h:
 
@@ -3227,6 +3284,10 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/deque:
 
+/usr/include/x86_64-linux-gnu/bits/ss_flags.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h:
+
 /usr/include/c++/11/bits/list.tcc:
 
 /usr/include/c++/11/list:
@@ -3247,15 +3308,21 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/local/include/opencv4/opencv2/objdetect/face.hpp:
 
+/usr/include/x86_64-linux-gnu/bits/siginfo-arch.h:
+
 /usr/local/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp:
 
 /usr/local/include/opencv4/opencv2/objdetect/aruco_board.hpp:
 
 /usr/local/include/opencv4/opencv2/objdetect/aruco_dictionary.hpp:
 
+../StockfishUCI.h:
+
 /usr/local/include/opencv4/opencv2/objdetect/aruco_detector.hpp:
 
 /usr/local/include/opencv4/opencv2/ml.hpp:
+
+/usr/include/x86_64-linux-gnu/sys/ucontext.h:
 
 /usr/local/include/opencv4/opencv2/imgproc/segmentation.hpp:
 
@@ -3268,6 +3335,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/opencv4/opencv2/flann/autotuned_index.h:
 
 /usr/include/c++/11/math.h:
+
+/usr/include/x86_64-linux-gnu/bits/signum-generic.h:
 
 /usr/include/c++/11/bits/quoted_string.h:
 
@@ -3308,6 +3377,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/opencv4/opencv2/objdetect/barcode.hpp:
 
 /usr/local/include/opencv4/opencv2/flann/dist.h:
+
+/usr/include/x86_64-linux-gnu/bits/sigcontext.h:
 
 /usr/local/include/opencv4/opencv2/flann/dynamic_bitset.h:
 
@@ -3411,6 +3482,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/bits/locale_classes.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h:
+
 /usr/include/c++/11/bits/ios_base.h:
 
 /usr/include/c++/11/istream:
@@ -3420,6 +3493,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/opencv4/opencv2/core/cvstd.inl.hpp:
 
 /usr/local/include/opencv4/opencv2/core/mat.hpp:
+
+/usr/include/x86_64-linux-gnu/bits/types/sigval_t.h:
 
 /usr/local/include/opencv4/opencv2/core/types.hpp:
 
@@ -3459,6 +3534,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/pstl/glue_memory_defs.h:
 
+/usr/include/unistd.h:
+
 /usr/include/c++/11/bits/stl_algobase.h:
 
 /usr/local/include/opencv4/opencv2/flann/saving.h:
@@ -3478,6 +3555,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/opencv4/opencv2/flann/kdtree_single_index.h:
 
 /usr/include/c++/11/bits/char_traits.h:
+
+/usr/include/x86_64-linux-gnu/sys/wait.h:
 
 /usr/include/asm-generic/errno-base.h:
 
@@ -3520,6 +3599,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/bits/refwrap.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
+
+/usr/include/signal.h:
 
 /usr/include/strings.h:
 
@@ -3693,13 +3774,19 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h:
+
 /usr/include/c++/11/bits/functexcept.h:
 
 /usr/include/c++/11/cstdint:
 
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
+/usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h:
+
 /usr/include/c++/11/tr1/special_function_util.h:
+
+/usr/include/x86_64-linux-gnu/bits/environments.h:
 
 /usr/include/c++/11/bits/exception_defines.h:
 
@@ -3743,6 +3830,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 ../AllInOneMain.cpp:
 
+/usr/include/x86_64-linux-gnu/bits/sigaction.h:
+
 /usr/local/include/opencv4/opencv2/core/affine.hpp:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
@@ -3783,7 +3872,11 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 
+../ChessBoard.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
@@ -3915,6 +4008,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/tr1/hypergeometric.tcc:
 
+/usr/include/x86_64-linux-gnu/bits/sigstack.h:
+
 /usr/include/c++/11/clocale:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
@@ -3943,6 +4038,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/cpu-set.h:
 
+/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
+
 /usr/include/time.h:
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
@@ -3966,6 +4063,8 @@ CMakeFiles/main.dir/main.cpp.o: ../main.cpp \
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
 /usr/include/c++/11/cerrno:
+
+/usr/include/x86_64-linux-gnu/bits/signum-arch.h:
 
 /usr/include/x86_64-linux-gnu/bits/errno.h:
 
