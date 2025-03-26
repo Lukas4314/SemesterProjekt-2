@@ -35,6 +35,11 @@ int AllInOneMain::getPieceMoved() {
 	cap >> cheesWithMarkedCornors;
 	cap >> cheesWithMarkedCornors;
 	cap >> cheesWithMarkedCornors;
+	cap >> cheesWithMarkedCornors;
+	cap >> cheesWithMarkedCornors;
+	cap >> cheesWithMarkedCornors;
+	cap >> cheesWithMarkedCornors;
+
 
 	//cv::imshow("Original frame", cheesWithMarkedCornors);
 

@@ -121,6 +121,66 @@ public:
         return true;
     }
 
+    // Function for applying move from camere
+    void applyMoveStringCamera(const string& move) {
+        if (move.length() != 4) {
+            cerr << "Invalid move format!" << endl;
+            return;
+        }
+
+        char piece1 = board[8 - (move[1] - '0')][move[0] - 'a'];
+        char piece2 = board[8 - (move[3] - '0')][move[2] - 'a'];
+
+        int toCol;
+        int toRow;
+        int fromCol;
+        int fromRow;
+
+        if (piece1 == '-') {
+            toCol = move[0] - 'a';
+            toRow = 8 - (move[1] - '0');
+            fromCol = move[2] - 'a';
+            fromRow = 8 - (move[3] - '0');
+        }
+
+        else if(activeColor == "w" && isupper(piece1)) {
+            toCol = move[0] - 'a';
+            toRow = 8 - (move[1] - '0');
+            fromCol = move[2] - 'a';
+            fromRow = 8 - (move[3] - '0');
+        }
+
+        else if (/**/) {
+            fromCol = move[0] - 'a';
+            fromRow = 8 - (move[1] - '0');
+            toCol = move[2] - 'a';
+            toRow = 8 - (move[3] - '0');
+        }
+
+        // Rook
+        else if (piece1 == 'R' || piece1 == 'r') {
+            // I want to make a for loop where I check if the
+        }
+
+        // Pawn
+        else if (piece1 == 'P' || piece1 == 'p') {
+            i
+        }
+
+        // Knight
+
+        // Bishop
+
+        // Queen
+
+        // King
+
+        else
+
+        movePiece(fromRow, fromCol, toRow, toCol);
+    }
+
+
     // This function: 1. Sends all previous moves to stockfish. 2. Asks for the best move (using the stockfishUCI class). 3. Extracts the best move. 4. Applies it to your board
     void applyBestMoveFromEngine(StockfishUCI& engine, int depth = 15) {    // Takes a reference to a StockfishUCI object and a depth
         string allMoves;    // String of all moves 

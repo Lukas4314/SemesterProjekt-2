@@ -6,7 +6,7 @@ public:
 	MoveFinder();
 	~MoveFinder();
 
-	static int findMove(cv::Mat, cv::Mat);
+	static int findMove(cv::Mat, cv::Mat, int);
 
 
 };
