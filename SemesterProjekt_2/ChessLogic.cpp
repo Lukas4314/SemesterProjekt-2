@@ -13,7 +13,7 @@ int main() {
         StockfishUCI engine;
 
         // Prints the board and FEN to the console
-        chess.printBoard();
+        //chess.printBoard();
         cout << "FEN is: " << chess.getFEN() << endl;
 
         // Initiates a while true loop for switching between user input and stockfish input
@@ -25,14 +25,14 @@ int main() {
             }
 
             // Prints board and FEN again
-            chess.printBoard();
+            // chess.printBoard();
             cout << "FEN after move: " << chess.getFEN() << endl;
 
             // Uses applyBestMoveFromEngine function to apply best move based on move history
             chess.applyBestMoveFromEngine(engine);
 
             // Prints board and FEN last time
-            chess.printBoard();
+            // chess.printBoard();
             cout << "FEN after engine: " << chess.getFEN() << endl;
         }
     } catch (const exception& e) {

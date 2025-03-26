@@ -138,6 +138,7 @@ public:
         }
 
         string bestMove = output.substr(pos + 9, 4);    // Here we use the substr function to extract the best move and skip past the "bestmove " string and straight to the important part ex. b2b3
+        cout << "Best move: " << bestMove << endl;
 
         // This is how we convert a2a4 (example) to a move which can be applied by movePiece
         int fromCol = bestMove[0] - 'a';
