@@ -2,18 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build and Run ChessRobot",
+            "label": "Build OpenCV",
             "type": "shell",
             "command": "bash",
             "args": [
                 "-c",
-                "cd ${workspaceFolder}/build && cmake .. && make && ./SemesterProjekt2/SemesterProjekt-2/SemesterProjekt 2"
+                "g++ -g -I/usr/include/opencv4 -o DisplayImage DisplayImage.cpp $(pkg-config --cflags --libs opencv4)"
             ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
             "group": "build",
             "problemMatcher": [
                 "$gcc"
-            ],
-            "detail": "Build and run the ChessRobot executable"
+            ]
         },
         {
             "type": "cppbuild",
