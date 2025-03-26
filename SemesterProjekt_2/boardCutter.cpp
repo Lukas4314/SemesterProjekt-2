@@ -4,6 +4,8 @@
 
 BoardCutter::BoardCutter()
 {
+	oldGreenPoint = cv::Point2i(0, 0);
+	oldRedPoint = cv::Point2i(0, 0);
 }
 BoardCutter::~BoardCutter()
 {
@@ -24,21 +26,34 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	cv::Point2i redPoint(0, 0);
 	cv::Point2i redCenterPoint(0, 0);
 
-	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle", mode);
+
 	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask, "redCirlce", mode);
+	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle", mode);
+
+	if (cv::norm(greenPoint - oldGreenPoint) < 10 && cv::norm(redPoint - oldRedPoint) < 10) {
+		greenPoint = oldGreenPoint;
+		redPoint = oldRedPoint;
+	}
+	else {
+		oldGreenPoint = greenPoint;
+		oldRedPoint = redPoint;
+	}
 
 
 	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
 	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
+	std::cout << "Green Center point: " << greenCenterPoint << std::endl;
+	std::cout << "Red Center point " << redCenterPoint << std::endl;
+
 
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
 
-	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 + 45;
+	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90;
 	std::cout << angle << std::endl;
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 
-	cv::imshow("MarkedConorsDebug", chessWithMarkedCornorsDebug);
+	//cv::imshow("MarkedConorsDebugWithMarkedCornors", chessWithMarkedCornorsDebug);
 
 
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
@@ -51,12 +66,11 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	ImageFinder::rotatePoint(redCenterPoint, cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), -angle);
 
 
-
 	cv::Rect boundingBox(
 		std::min(greenCenterPoint.x, redCenterPoint.x) + mask.rows / 2,
 		std::min(greenCenterPoint.y, redCenterPoint.y) + mask.rows / 2,
-		abs(greenCenterPoint.x - redCenterPoint.x) - mask.rows,
-		abs(greenCenterPoint.y - redCenterPoint.y) - mask.rows
+		abs(abs(greenCenterPoint.x - redCenterPoint.x) - mask.rows),
+		abs(abs(greenCenterPoint.y - redCenterPoint.y) - mask.rows)
 	);
 	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
 	//std::cout << boundingBox << std::endl;
@@ -64,7 +78,17 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 
 
-	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width > cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height > cheesWithMarkedCornors.rows) {
+	if (boundingBox.x < 0 || boundingBox.y < 0 || boundingBox.x + boundingBox.width >= cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height >= cheesWithMarkedCornors.rows) {
+		std::cout << "Error: Bounding box out of bounds" << std::endl;
+		std::cout << "Green Center point: " << greenCenterPoint << std::endl;
+		std::cout << "Red Center point " << redCenterPoint << std::endl;
+
+		std::cout << std::min(greenCenterPoint.x, redCenterPoint.x) + mask.rows / 2 << std::endl;
+		std::cout << std::min(greenCenterPoint.y, redCenterPoint.y) + mask.rows / 2 << std::endl;
+		std::cout << abs(abs(greenCenterPoint.x - redCenterPoint.x) - mask.rows) << std::endl;
+		std::cout << abs(abs(greenCenterPoint.y - redCenterPoint.y) - mask.rows) << std::endl;
+
+
 		return cheesWithMarkedCornors;
 	}
 	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
