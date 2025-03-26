@@ -1,6 +1,6 @@
 #include <opencv2/opencv.hpp>
 #include "boardCutter.h"
-
+#include <string>
 #pragma once
 class AllInOneMain
 {
@@ -8,6 +8,8 @@ public:
 	AllInOneMain();
 	~AllInOneMain();
 	int getPieceMoved();
+	std::string getPieceMovedString();
+
 private:
 	cv::VideoCapture cap;
 	cv::Mat greenCircle;

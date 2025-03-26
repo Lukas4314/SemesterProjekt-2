@@ -13,7 +13,7 @@
 int main() {
 	AllInOneMain allInOneMain = AllInOneMain();
 	while (true) {
-		allInOneMain.getPieceMoved();
+		std::cout<<allInOneMain.getPieceMovedString()<<std::endl;
 		if (cv::waitKey(0) == 'q') {
 			break;
 		}

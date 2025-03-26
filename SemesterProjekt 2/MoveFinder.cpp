@@ -54,5 +54,5 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard) {
 	cv::imshow("diffBoard", diffBoard);
 
 	
-	return highestDiffPoint.x * 1000 + highestDiffPoint.y*100 + secondHighestDiffPoint.x * 10 + secondHighestDiffPoint.y;
+	return highestDiffPoint.x * 1000 + (7-highestDiffPoint.y)*100 + secondHighestDiffPoint.x * 10 + (7-secondHighestDiffPoint.y);
 }

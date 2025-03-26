@@ -6,7 +6,7 @@
 #include "boardCutter.h"
 #include "ImageDrawer.h"
 #include "MoveFinder.h"
-
+#include "Utill.h"
 
 
 AllInOneMain::AllInOneMain() {  
@@ -63,7 +63,6 @@ int AllInOneMain::getPieceMoved() {
 	if (!oldChessboard.empty()) {
 		cv::imshow("oldBoard", oldChessboard);
 		movedPiece = MoveFinder::findMove(oldChessboard, chessBoard);
-		std::cout << "Moved piece: " << movedPiece << std::endl;
 	}
 	oldChessboard = chessBoard.clone();
 
@@ -75,4 +74,9 @@ int AllInOneMain::getPieceMoved() {
 	}
 
 	return 0;
+}
+
+
+std::string AllInOneMain::getPieceMovedString() {
+	return Utill::translateIntMoveToString(getPieceMoved());
 }
