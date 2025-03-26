@@ -19,18 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AllInOneMain.cpp" />
     <ClCompile Include="BoardCutter.cpp" />
     <ClCompile Include="ImageDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HueDifferenceProcessor.cpp" />
     <ClCompile Include="ImageFinder.cpp" />
+    <ClCompile Include="MoveFinder.cpp" />
     <ClCompile Include="StockFishAPI.cpp" />
+    <ClCompile Include="Utill.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AllInOneMain.h" />
     <ClInclude Include="BoardCutter.h" />
     <ClInclude Include="HueDifferenceProcessor.h" />
     <ClInclude Include="ImageDrawer.h" />
     <ClInclude Include="ImageFinder.h" />
+    <ClInclude Include="MoveFinder.h" />
+    <ClInclude Include="Utill.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="chess.jpg" />
