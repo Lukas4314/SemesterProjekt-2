@@ -150,32 +150,12 @@ public:
             fromRow = 8 - (move[3] - '0');
         }
 
-        else if (/**/) {
+        else {
             fromCol = move[0] - 'a';
             fromRow = 8 - (move[1] - '0');
             toCol = move[2] - 'a';
             toRow = 8 - (move[3] - '0');
         }
-
-        // Rook
-        else if (piece1 == 'R' || piece1 == 'r') {
-            // I want to make a for loop where I check if the
-        }
-
-        // Pawn
-        else if (piece1 == 'P' || piece1 == 'p') {
-            i
-        }
-
-        // Knight
-
-        // Bishop
-
-        // Queen
-
-        // King
-
-        else
 
         movePiece(fromRow, fromCol, toRow, toCol);
     }
