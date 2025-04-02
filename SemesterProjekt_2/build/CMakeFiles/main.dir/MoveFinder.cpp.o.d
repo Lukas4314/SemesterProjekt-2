@@ -364,4 +364,6 @@ CMakeFiles/main.dir/MoveFinder.cpp.o: \
  /usr/local/include/opencv4/opencv2/stitching/detail/camera.hpp \
  /usr/local/include/opencv4/opencv2/video.hpp \
  /usr/local/include/opencv4/opencv2/video/tracking.hpp \
- /usr/local/include/opencv4/opencv2/video/background_segm.hpp
+ /usr/local/include/opencv4/opencv2/video/background_segm.hpp \
+ /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/Utill.h \
+ /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageDrawer.h

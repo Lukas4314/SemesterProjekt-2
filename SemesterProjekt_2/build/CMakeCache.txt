@@ -221,9 +221,6 @@ Semesterprojekt_2_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Semesterprojekt_2_SOURCE_DIR:STATIC=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2
 
-//No help, variable specified on the command line.
-WITH_GTK:UNINITIALIZED=ON
-
 
 ########################
 # INTERNAL cache entries

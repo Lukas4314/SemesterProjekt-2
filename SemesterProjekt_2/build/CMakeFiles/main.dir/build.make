@@ -97,10 +97,24 @@ CMakeFiles/main.dir/BoardCutter.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/BoardCutter.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/BoardCutter.cpp -o CMakeFiles/main.dir/BoardCutter.cpp.s
 
+CMakeFiles/main.dir/ChessBoard.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/ChessBoard.cpp.o: ../ChessBoard.cpp
+CMakeFiles/main.dir/ChessBoard.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/ChessBoard.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/ChessBoard.cpp.o -MF CMakeFiles/main.dir/ChessBoard.cpp.o.d -o CMakeFiles/main.dir/ChessBoard.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ChessBoard.cpp
+
+CMakeFiles/main.dir/ChessBoard.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/ChessBoard.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ChessBoard.cpp > CMakeFiles/main.dir/ChessBoard.cpp.i
+
+CMakeFiles/main.dir/ChessBoard.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/ChessBoard.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ChessBoard.cpp -o CMakeFiles/main.dir/ChessBoard.cpp.s
+
 CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o: ../HueDifferenceProcessor.cpp
 CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o -MF CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o.d -o CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/HueDifferenceProcessor.cpp
 
 CMakeFiles/main.dir/HueDifferenceProcessor.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/main.dir/HueDifferenceProcessor.cpp.s: cmake_force
 CMakeFiles/main.dir/ImageDrawer.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/ImageDrawer.cpp.o: ../ImageDrawer.cpp
 CMakeFiles/main.dir/ImageDrawer.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/main.dir/ImageDrawer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/ImageDrawer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/ImageDrawer.cpp.o -MF CMakeFiles/main.dir/ImageDrawer.cpp.o.d -o CMakeFiles/main.dir/ImageDrawer.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageDrawer.cpp
 
 CMakeFiles/main.dir/ImageDrawer.cpp.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/main.dir/ImageDrawer.cpp.s: cmake_force
 CMakeFiles/main.dir/ImageFinder.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/ImageFinder.cpp.o: ../ImageFinder.cpp
 CMakeFiles/main.dir/ImageFinder.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/main.dir/ImageFinder.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/ImageFinder.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/ImageFinder.cpp.o -MF CMakeFiles/main.dir/ImageFinder.cpp.o.d -o CMakeFiles/main.dir/ImageFinder.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageFinder.cpp
 
 CMakeFiles/main.dir/ImageFinder.cpp.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/main.dir/ImageFinder.cpp.s: cmake_force
 CMakeFiles/main.dir/MoveFinder.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/MoveFinder.cpp.o: ../MoveFinder.cpp
 CMakeFiles/main.dir/MoveFinder.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/main.dir/MoveFinder.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/MoveFinder.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/MoveFinder.cpp.o -MF CMakeFiles/main.dir/MoveFinder.cpp.o.d -o CMakeFiles/main.dir/MoveFinder.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveFinder.cpp
 
 CMakeFiles/main.dir/MoveFinder.cpp.i: cmake_force
@@ -153,10 +167,24 @@ CMakeFiles/main.dir/MoveFinder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/MoveFinder.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveFinder.cpp -o CMakeFiles/main.dir/MoveFinder.cpp.s
 
+CMakeFiles/main.dir/MoveValidator.cpp.o: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/MoveValidator.cpp.o: ../MoveValidator.cpp
+CMakeFiles/main.dir/MoveValidator.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/MoveValidator.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/MoveValidator.cpp.o -MF CMakeFiles/main.dir/MoveValidator.cpp.o.d -o CMakeFiles/main.dir/MoveValidator.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveValidator.cpp
+
+CMakeFiles/main.dir/MoveValidator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/MoveValidator.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveValidator.cpp > CMakeFiles/main.dir/MoveValidator.cpp.i
+
+CMakeFiles/main.dir/MoveValidator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/MoveValidator.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveValidator.cpp -o CMakeFiles/main.dir/MoveValidator.cpp.s
+
 CMakeFiles/main.dir/StockfishEngine.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/StockfishEngine.cpp.o: ../StockfishEngine.cpp
 CMakeFiles/main.dir/StockfishEngine.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/main.dir/StockfishEngine.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/main.dir/StockfishEngine.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/StockfishEngine.cpp.o -MF CMakeFiles/main.dir/StockfishEngine.cpp.o.d -o CMakeFiles/main.dir/StockfishEngine.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/StockfishEngine.cpp
 
 CMakeFiles/main.dir/StockfishEngine.cpp.i: cmake_force
@@ -170,7 +198,7 @@ CMakeFiles/main.dir/StockfishEngine.cpp.s: cmake_force
 CMakeFiles/main.dir/Utill.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/Utill.cpp.o: ../Utill.cpp
 CMakeFiles/main.dir/Utill.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/main.dir/Utill.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/main.dir/Utill.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/Utill.cpp.o -MF CMakeFiles/main.dir/Utill.cpp.o.d -o CMakeFiles/main.dir/Utill.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/Utill.cpp
 
 CMakeFiles/main.dir/Utill.cpp.i: cmake_force
@@ -184,7 +212,7 @@ CMakeFiles/main.dir/Utill.cpp.s: cmake_force
 CMakeFiles/main.dir/main.cpp.o: CMakeFiles/main.dir/flags.make
 CMakeFiles/main.dir/main.cpp.o: ../main.cpp
 CMakeFiles/main.dir/main.cpp.o: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/main.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/main.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/main.cpp.o -MF CMakeFiles/main.dir/main.cpp.o.d -o CMakeFiles/main.dir/main.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/main.cpp
 
 CMakeFiles/main.dir/main.cpp.i: cmake_force
@@ -199,10 +227,12 @@ CMakeFiles/main.dir/main.cpp.s: cmake_force
 main_OBJECTS = \
 "CMakeFiles/main.dir/AllInOneMain.cpp.o" \
 "CMakeFiles/main.dir/BoardCutter.cpp.o" \
+"CMakeFiles/main.dir/ChessBoard.cpp.o" \
 "CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o" \
 "CMakeFiles/main.dir/ImageDrawer.cpp.o" \
 "CMakeFiles/main.dir/ImageFinder.cpp.o" \
 "CMakeFiles/main.dir/MoveFinder.cpp.o" \
+"CMakeFiles/main.dir/MoveValidator.cpp.o" \
 "CMakeFiles/main.dir/StockfishEngine.cpp.o" \
 "CMakeFiles/main.dir/Utill.cpp.o" \
 "CMakeFiles/main.dir/main.cpp.o"
@@ -212,10 +242,12 @@ main_EXTERNAL_OBJECTS =
 
 main: CMakeFiles/main.dir/AllInOneMain.cpp.o
 main: CMakeFiles/main.dir/BoardCutter.cpp.o
+main: CMakeFiles/main.dir/ChessBoard.cpp.o
 main: CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o
 main: CMakeFiles/main.dir/ImageDrawer.cpp.o
 main: CMakeFiles/main.dir/ImageFinder.cpp.o
 main: CMakeFiles/main.dir/MoveFinder.cpp.o
+main: CMakeFiles/main.dir/MoveValidator.cpp.o
 main: CMakeFiles/main.dir/StockfishEngine.cpp.o
 main: CMakeFiles/main.dir/Utill.cpp.o
 main: CMakeFiles/main.dir/main.cpp.o
@@ -236,7 +268,7 @@ main: /usr/local/lib/libopencv_flann.so.4.12.0
 main: /usr/local/lib/libopencv_imgproc.so.4.12.0
 main: /usr/local/lib/libopencv_core.so.4.12.0
 main: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable main"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/main.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

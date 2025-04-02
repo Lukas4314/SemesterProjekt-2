@@ -177,6 +177,30 @@ BoardCutter.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/BoardCutter.cpp.s
 .PHONY : BoardCutter.cpp.s
 
+ChessBoard.o: ChessBoard.cpp.o
+.PHONY : ChessBoard.o
+
+# target to build an object file
+ChessBoard.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChessBoard.cpp.o
+.PHONY : ChessBoard.cpp.o
+
+ChessBoard.i: ChessBoard.cpp.i
+.PHONY : ChessBoard.i
+
+# target to preprocess a source file
+ChessBoard.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChessBoard.cpp.i
+.PHONY : ChessBoard.cpp.i
+
+ChessBoard.s: ChessBoard.cpp.s
+.PHONY : ChessBoard.s
+
+# target to generate assembly for a file
+ChessBoard.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/ChessBoard.cpp.s
+.PHONY : ChessBoard.cpp.s
+
 HueDifferenceProcessor.o: HueDifferenceProcessor.cpp.o
 .PHONY : HueDifferenceProcessor.o
 
@@ -273,6 +297,30 @@ MoveFinder.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MoveFinder.cpp.s
 .PHONY : MoveFinder.cpp.s
 
+MoveValidator.o: MoveValidator.cpp.o
+.PHONY : MoveValidator.o
+
+# target to build an object file
+MoveValidator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MoveValidator.cpp.o
+.PHONY : MoveValidator.cpp.o
+
+MoveValidator.i: MoveValidator.cpp.i
+.PHONY : MoveValidator.i
+
+# target to preprocess a source file
+MoveValidator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MoveValidator.cpp.i
+.PHONY : MoveValidator.cpp.i
+
+MoveValidator.s: MoveValidator.cpp.s
+.PHONY : MoveValidator.s
+
+# target to generate assembly for a file
+MoveValidator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/MoveValidator.cpp.s
+.PHONY : MoveValidator.cpp.s
+
 StockfishEngine.o: StockfishEngine.cpp.o
 .PHONY : StockfishEngine.o
 
@@ -360,6 +408,9 @@ help:
 	@echo "... BoardCutter.o"
 	@echo "... BoardCutter.i"
 	@echo "... BoardCutter.s"
+	@echo "... ChessBoard.o"
+	@echo "... ChessBoard.i"
+	@echo "... ChessBoard.s"
 	@echo "... HueDifferenceProcessor.o"
 	@echo "... HueDifferenceProcessor.i"
 	@echo "... HueDifferenceProcessor.s"
@@ -372,6 +423,9 @@ help:
 	@echo "... MoveFinder.o"
 	@echo "... MoveFinder.i"
 	@echo "... MoveFinder.s"
+	@echo "... MoveValidator.o"
+	@echo "... MoveValidator.i"
+	@echo "... MoveValidator.s"
 	@echo "... StockfishEngine.o"
 	@echo "... StockfishEngine.i"
 	@echo "... StockfishEngine.s"
