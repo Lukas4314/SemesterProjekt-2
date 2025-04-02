@@ -29,47 +29,34 @@ public:
 private:
 
 // Function for checking if pawn move is valid (Need to implement isPathClear function)
-    static bool isValidPawn(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>>& board, const string& activeColor) {
-
-    int moved = toRow - fromRow;
-    int colDiff = abs(toCol - fromCol);
+static bool isValidPawn(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>>& board, const string& activeColor) {
+    int rowDiff = toRow - fromRow;
+    int colDiff = toCol - fromCol;
     char dest = board[toRow][toCol];
 
     // Diagonal capture
-    if (activeColor == "w" && moved == -1 && colDiff == 1) {
-        return islower(dest); // capture black piece
+    if (abs(colDiff) == 1) {
+        if (activeColor == "w" && rowDiff == -1) return islower(dest);
+        if (activeColor == "b" && rowDiff == 1)  return isupper(dest);
+        return false;
     }
 
-    if (activeColor == "b" && moved == 1 && colDiff == 1) {
-        return isupper(dest); // capture white piece
-    }
+    // Forward move (must be in same column)
+    if (colDiff != 0) return false;
 
-    // Regular forward move (no column change)
-    if (colDiff != 0) return false; // can't move sideways unless capturing
-
-    // Check direction + length
+    // White forward
     if (activeColor == "w") {
-        if (moved >= 0) return false;
-        moved = -moved;
-        if (moved == 2 && fromRow != 6) return false;
-        if (moved > 2) return false;
-
-        // Blocked path check
-        if (moved == 1 && board[toRow][toCol] != '-') return false;
-        if (moved == 2 && (board[fromRow - 1][fromCol] != '-' || board[toRow][toCol] != '-')) return false;
+        if (rowDiff == -1 && dest == '-') return true;
+        if (rowDiff == -2 && fromRow == 6 && board[fromRow - 1][fromCol] == '-' && dest == '-') return true;
     }
 
+    // Black forward
     if (activeColor == "b") {
-        if (moved <= 0) return false;
-        if (moved == 2 && fromRow != 1) return false;
-        if (moved > 2) return false;
-
-        // Blocked path check
-        if (moved == 1 && board[toRow][toCol] != '-') return false;
-        if (moved == 2 && (board[fromRow + 1][fromCol] != '-' || board[toRow][toCol] != '-')) return false;
+        if (rowDiff == 1 && dest == '-') return true;
+        if (rowDiff == 2 && fromRow == 1 && board[fromRow + 1][fromCol] == '-' && dest == '-') return true;
     }
 
-    return true;
+    return false;
 }
 
     static bool isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>>& board) {
@@ -77,9 +64,9 @@ private:
         int moved = toRow - fromRow;
         int colDiff = abs(toCol - fromCol);
         char dest = board[toRow][toCol];
+        char from = board[toCol][fromRow];
 
         if ((colDiff != 0) && (moved != 0)) return false; // Rook cant move in row direction and col direction
-
 
 
     }
