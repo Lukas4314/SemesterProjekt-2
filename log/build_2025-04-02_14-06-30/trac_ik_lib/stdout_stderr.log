@@ -1,0 +1,34 @@
+[35m[1mConsolidate compiler generated dependencies of target trac_ik_lib[0m
+[100%] Built target trac_ik_lib
+-- Install configuration: ""
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/library_path.sh
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/library_path.dsv
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/dual_quaternion.h
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/math3d.h
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/visibility_control.hpp
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/trac_ik.hpp
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/kdl_tl.hpp
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/include/trac_ik/nlopt_ik.hpp
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/lib/libtrac_ik_lib.so
+-- Set runtime path of "/home/magne/ros2_ws/install/trac_ik_lib/lib/libtrac_ik_lib.so" to ""
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/ament_index/resource_index/package_run_dependencies/trac_ik_lib
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/ament_index/resource_index/parent_prefix_path/trac_ik_lib
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/ament_prefix_path.sh
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/ament_prefix_path.dsv
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/path.sh
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/environment/path.dsv
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/local_setup.bash
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/local_setup.sh
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/local_setup.zsh
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/local_setup.dsv
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/package.dsv
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/ament_index/resource_index/packages/trac_ik_lib
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/export_trac_ik_libExport.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/export_trac_ik_libExport-noconfig.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/ament_cmake_export_targets-extras.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/trac_ik_libConfig.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/cmake/trac_ik_libConfig-version.cmake
+-- Installing: /home/magne/ros2_ws/install/trac_ik_lib/share/trac_ik_lib/package.xml

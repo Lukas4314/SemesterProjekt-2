@@ -1,0 +1,102 @@
+[0.007s] Invoking command in '/home/magne/ros2_ws/build/ur5_sem2_scripts': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/magne/ros2_ws/build/ur5_sem2_scripts -- -j20 -l20
+[0.024s] /usr/bin/cmake -S/home/magne/ros2_ws/src/ur5_sem2_scripts -B/home/magne/ros2_ws/build/ur5_sem2_scripts --check-build-system CMakeFiles/Makefile.cmake 0
+[0.037s] /usr/bin/cmake -E cmake_progress_start /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles /home/magne/ros2_ws/build/ur5_sem2_scripts//CMakeFiles/progress.marks
+[0.046s] /usr/bin/gmake  -f CMakeFiles/Makefile2 all
+[0.047s] gmake[1]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.047s] /usr/bin/gmake  -f CMakeFiles/ChessMoves.dir/build.make CMakeFiles/ChessMoves.dir/depend
+[0.047s] /usr/bin/gmake  -f CMakeFiles/simple_move.dir/build.make CMakeFiles/simple_move.dir/depend
+[0.047s] /usr/bin/gmake  -f CMakeFiles/svejse_frame.dir/build.make CMakeFiles/svejse_frame.dir/depend
+[0.047s] /usr/bin/gmake  -f CMakeFiles/chess_frame.dir/build.make CMakeFiles/chess_frame.dir/depend
+[0.048s] /usr/bin/gmake  -f CMakeFiles/square_move.dir/build.make CMakeFiles/square_move.dir/depend
+[0.048s] /usr/bin/gmake  -f CMakeFiles/readJoints.dir/build.make CMakeFiles/readJoints.dir/depend
+[0.050s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.050s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/chess_frame.dir/DependInfo.cmake --color=
+[0.051s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.051s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/ChessMoves.dir/DependInfo.cmake --color=
+[0.051s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.051s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/readJoints.dir/DependInfo.cmake --color=
+[0.051s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.051s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/svejse_frame.dir/DependInfo.cmake --color=
+[0.052s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.052s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/simple_move.dir/DependInfo.cmake --color=
+[0.052s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.052s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/square_move.dir/DependInfo.cmake --color=
+[0.056s] Dependencies file "CMakeFiles/ChessMoves.dir/src/ChessMoves.cpp.o.d" is newer than depends file "/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/ChessMoves.dir/compiler_depend.internal".
+[0.057s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.057s] [35m[1mConsolidate compiler generated dependencies of target ChessMoves[0m
+[0.057s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.057s] /usr/bin/gmake  -f CMakeFiles/svejse_frame.dir/build.make CMakeFiles/svejse_frame.dir/build
+[0.057s] /usr/bin/gmake  -f CMakeFiles/readJoints.dir/build.make CMakeFiles/readJoints.dir/build
+[0.058s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.058s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.058s] /usr/bin/gmake  -f CMakeFiles/chess_frame.dir/build.make CMakeFiles/chess_frame.dir/build
+[0.059s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.059s] /usr/bin/gmake  -f CMakeFiles/square_move.dir/build.make CMakeFiles/square_move.dir/build
+[0.059s] /usr/bin/gmake  -f CMakeFiles/simple_move.dir/build.make CMakeFiles/simple_move.dir/build
+[0.062s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.062s] /usr/bin/gmake  -f CMakeFiles/ChessMoves.dir/build.make CMakeFiles/ChessMoves.dir/build
+[0.063s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.063s] gmake[2]: Nothing to be done for 'CMakeFiles/svejse_frame.dir/build'.
+[0.063s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.065s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.065s] gmake[2]: Nothing to be done for 'CMakeFiles/chess_frame.dir/build'.
+[0.065s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] gmake[2]: Nothing to be done for 'CMakeFiles/readJoints.dir/build'.
+[0.067s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] gmake[2]: Nothing to be done for 'CMakeFiles/square_move.dir/build'.
+[0.067s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] [ 13%] Built target svejse_frame
+[0.067s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.067s] gmake[2]: Nothing to be done for 'CMakeFiles/simple_move.dir/build'.
+[0.068s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.068s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.068s] gmake[2]: Nothing to be done for 'CMakeFiles/ChessMoves.dir/build'.
+[0.068s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.072s] [ 26%] Built target chess_frame
+[0.072s] [ 40%] Built target readJoints
+[0.073s] [ 66%] Built target simple_move
+[0.073s] [ 66%] Built target square_move
+[0.073s] [ 80%] Built target ChessMoves
+[0.074s] /usr/bin/gmake  -f CMakeFiles/robot_main.dir/build.make CMakeFiles/robot_main.dir/depend
+[0.080s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.081s] cd /home/magne/ros2_ws/build/ur5_sem2_scripts && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/src/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/robot_main.dir/DependInfo.cmake --color=
+[0.087s] Dependencies file "CMakeFiles/robot_main.dir/src/ChessMoves.cpp.o.d" is newer than depends file "/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/robot_main.dir/compiler_depend.internal".
+[0.088s] [35m[1mConsolidate compiler generated dependencies of target robot_main[0m
+[0.095s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.095s] /usr/bin/gmake  -f CMakeFiles/robot_main.dir/build.make CMakeFiles/robot_main.dir/build
+[0.104s] gmake[2]: Entering directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.104s] gmake[2]: Nothing to be done for 'CMakeFiles/robot_main.dir/build'.
+[0.104s] gmake[2]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.112s] [100%] Built target robot_main
+[0.112s] gmake[1]: Leaving directory '/home/magne/ros2_ws/build/ur5_sem2_scripts'
+[0.112s] /usr/bin/cmake -E cmake_progress_start /home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles 0
+[0.122s] Invoked command in '/home/magne/ros2_ws/build/ur5_sem2_scripts' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/magne/ros2_ws/build/ur5_sem2_scripts -- -j20 -l20
+[0.133s] Invoking command in '/home/magne/ros2_ws/build/ur5_sem2_scripts': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/magne/ros2_ws/build/ur5_sem2_scripts
+[0.139s] -- Install configuration: ""
+[0.139s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/simple_move
+[0.139s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/svejse_frame
+[0.139s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/chess_frame
+[0.139s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/square_move
+[0.139s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/readJoints
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/robot_main
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/libChessMoves.a
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/launch
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/launch/simple_move.launch.py
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/package_run_dependencies/ur5_sem2_scripts
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/parent_prefix_path/ur5_sem2_scripts
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/ament_prefix_path.sh
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/ament_prefix_path.dsv
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/path.sh
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/path.dsv
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.bash
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.sh
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.zsh
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.dsv
+[0.140s] -- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/package.dsv
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/packages/ur5_sem2_scripts
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/cmake/ur5_sem2_scriptsConfig.cmake
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/cmake/ur5_sem2_scriptsConfig-version.cmake
+[0.140s] -- Up-to-date: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/package.xml
+[0.142s] Invoked command in '/home/magne/ros2_ws/build/ur5_sem2_scripts' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/magne/ros2_ws/build/ur5_sem2_scripts

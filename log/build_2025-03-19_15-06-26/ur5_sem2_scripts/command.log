@@ -1,0 +1,2 @@
+Invoking command in '/home/magne/ros2_ws/build/ur5_sem2_scripts': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/magne/ros2_ws/build/ur5_sem2_scripts -- -j20 -l20
+Invoked command in '/home/magne/ros2_ws/build/ur5_sem2_scripts' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/magne/ros2_ws/build/ur5_sem2_scripts -- -j20 -l20

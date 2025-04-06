@@ -1,0 +1,16 @@
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::playercapture(moveStruct, double (*)[4])[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:264:56:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KTFchess[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  264 | bool ChessMoves::playercapture(moveStruct move, [01;35m[Kdouble TFchess[4][4][m[K) {
+      |                                                 [01;35m[K~~~~~~~^~~~~~~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::execute_move(double*, double*)[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:305:30:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kstart_pose[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+  305 |     geometry_msgs::msg::Pose [01;35m[Kstart_pose[m[K = move_group_interface.getCurrentPose().pose;
+      |                              [01;35m[K^~~~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::playercapture(moveStruct, double (*)[4])[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:264:56:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KTFchess[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  264 | bool ChessMoves::playercapture(moveStruct move, [01;35m[Kdouble TFchess[4][4][m[K) {
+      |                                                 [01;35m[K~~~~~~~^~~~~~~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::execute_move(double*, double*)[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:305:30:[m[K [01;35m[Kwarning: [m[Kvariable ‘[01m[Kstart_pose[m[K’ set but not used [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-but-set-variable-Wunused-but-set-variable]8;;[m[K]
+  305 |     geometry_msgs::msg::Pose [01;35m[Kstart_pose[m[K = move_group_interface.getCurrentPose().pose;
+      |                              [01;35m[K^~~~~~~~~~[m[K

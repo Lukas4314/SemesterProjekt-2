@@ -1,0 +1,292 @@
+[0.000000] (-) TimerEvent: {}
+[0.000279] (-) JobUnselected: {'identifier': 'trac_ik'}
+[0.000320] (-) JobUnselected: {'identifier': 'trac_ik_examples'}
+[0.000342] (-) JobUnselected: {'identifier': 'trac_ik_kinematics'}
+[0.000360] (-) JobUnselected: {'identifier': 'trac_ik_lib'}
+[0.000380] (ur5_sem2_scripts) JobQueued: {'identifier': 'ur5_sem2_scripts', 'dependencies': OrderedDict()}
+[0.000403] (ur5_sem2_scripts) JobStarted: {'identifier': 'ur5_sem2_scripts'}
+[0.006688] (ur5_sem2_scripts) JobProgress: {'identifier': 'ur5_sem2_scripts', 'progress': 'cmake'}
+[0.007296] (ur5_sem2_scripts) Command: {'cmd': ['/usr/bin/cmake', '/home/magne/ros2_ws/src/ur5_sem2_scripts', '-DCMAKE_INSTALL_PREFIX=/home/magne/ros2_ws/install/ur5_sem2_scripts'], 'cwd': '/home/magne/ros2_ws/build/ur5_sem2_scripts', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'magne'), ('FONTCONFIG_PATH', '/etc/fonts'), ('GIO_MODULE_DIR', '/home/magne/snap/code/common/.cache/gio-modules'), ('XDG_SESSION_TYPE', 'wayland'), ('GIT_ASKPASS', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('GTK_EXE_PREFIX_VSCODE_SNAP_ORIG', ''), ('GDK_BACKEND_VSCODE_SNAP_ORIG', ''), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/magne/ros2_ws/install/trac_ik_kinematics/lib:/home/magne/ros2_ws/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/magne'), ('CHROME_DESKTOP', 'code.desktop'), ('LOCPATH_VSCODE_SNAP_ORIG', ''), ('OLDPWD', '/home/magne/ros2_ws'), ('TERM_PROGRAM_VERSION', '1.98.1'), ('DESKTOP_SESSION', 'ubuntu'), ('GTK_PATH', '/snap/code/186/usr/lib/x86_64-linux-gnu/gtk-3.0'), ('XDG_DATA_HOME_VSCODE_SNAP_ORIG', ''), ('GTK_IM_MODULE_FILE', '/home/magne/snap/code/common/.cache/immodules/immodules.cache'), ('GIO_LAUNCHED_DESKTOP_FILE', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG', ''), ('VSCODE_GIT_ASKPASS_MAIN', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/snap/code/186/usr/share/code/code'), ('MANAGERPID', '1508'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '1671'), ('BUNDLED_DEBUGPY_PATH', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/libs/debugpy'), ('IM_CONFIG_CHECK_ENV', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '10043'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/magne/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'magne'), ('JOURNAL_STREAM', '8:16078'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_SESSION_CLASS', 'user'), ('XDG_DATA_DIRS_VSCODE_SNAP_ORIG', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('USERNAME', 'magne'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/magne/.cargo/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/scripts/noConfigScripts:/home/magne/.config/Code/User/globalStorage/github.copilot-chat/debugCommand'), ('SESSION_MANAGER', 'local/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:@/tmp/.ICE-unix/1638,unix/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:/tmp/.ICE-unix/1638'), ('GTK_EXE_PREFIX', '/snap/code/186/usr'), ('INVOCATION_ID', '03df2385a65d4b25a4659349a29f13ef'), ('XDG_MENU_PREFIX', 'gnome-'), ('BAMF_DESKTOP_FILE_HINT', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':0'), ('LOCPATH', '/snap/code/186/usr/lib/locale'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-65556687dc8ddc09.txt'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('GIO_MODULE_DIR_VSCODE_SNAP_ORIG', ''), ('XDG_DATA_HOME', '/home/magne/snap/code/186/.local/share'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.VHDO32'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-d8df45a53b.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('GSETTINGS_SCHEMA_DIR', '/home/magne/snap/code/186/.local/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GTK_PATH_VSCODE_SNAP_ORIG', ''), ('FONTCONFIG_FILE', '/etc/fonts/fonts.conf'), ('GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG', ''), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/magne/ros2_ws/build/ur5_sem2_scripts'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/home/magne/snap/code/186/.local/share:/home/magne/snap/code/186:/snap/code/186/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble')]), 'shell': False}
+[0.065258] (ur5_sem2_scripts) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.099287] (-) TimerEvent: {}
+[0.119341] (ur5_sem2_scripts) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.125367] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.189808] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.194946] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.195143] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.195488] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.199407] (-) TimerEvent: {}
+[0.200085] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.279253] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.282903] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.283143] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.283240] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.284563] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.299540] (-) TimerEvent: {}
+[0.399949] (-) TimerEvent: {}
+[0.428522] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[0.500078] (-) TimerEvent: {}
+[0.513008] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rclcpp: 16.0.11 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[0.550642] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.554075] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.560187] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.569097] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.580545] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.600202] (-) TimerEvent: {}
+[0.615762] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[0.617486] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.699231] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[0.700288] (-) TimerEvent: {}
+[0.723686] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[0.761488] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.767770] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[0.801122] (-) TimerEvent: {}
+[0.829429] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[0.829842] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[0.892786] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[0.893592] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[0.901204] (-) TimerEvent: {}
+[0.944047] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found tf2_ros: 0.25.12 (/opt/ros/humble/share/tf2_ros/cmake)\n'}
+[1.001343] (-) TimerEvent: {}
+[1.040964] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found moveit_ros_planning_interface: 2.5.8 (/opt/ros/humble/share/moveit_ros_planning_interface/cmake)\n'}
+[1.059809] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: date_time filesystem program_options system thread \n'}
+[1.101486] (-) TimerEvent: {}
+[1.176699] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: chrono date_time filesystem iostreams program_options regex serialization system thread \n'}
+[1.201636] (-) TimerEvent: {}
+[1.208330] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found parameter_traits: 0.4.0 (/opt/ros/humble/share/parameter_traits/cmake)\n'}
+[1.217503] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Eigen3: TRUE (found version "3.4.0") \n'}
+[1.219295] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found rclcpp_lifecycle: 16.0.11 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)\n'}
+[1.246021] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: filesystem \n'}
+[1.301787] (-) TimerEvent: {}
+[1.315279] (ur5_sem2_scripts) StdoutLine: {'line': b'-- library: /usr/lib/x86_64-linux-gnu/libcurl.so\n'}
+[1.346556] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target\n'}
+[1.395129] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread chrono \n'}
+[1.401899] (-) TimerEvent: {}
+[1.422920] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: thread system filesystem regex date_time program_options \n'}
+[1.447243] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.74.0/BoostConfig.cmake (found version "1.74.0") found components: system filesystem date_time program_options thread \n'}
+[1.485794] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.11 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[1.502030] (-) TimerEvent: {}
+[1.559328] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[1.559564] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Configured cppcheck include dirs: /home/magne/ros2_ws/src/ur5_sem2_scripts/include;$<BUILD_INTERFACE:/home/magne/ros2_ws/src/ur5_sem2_scripts/include>\n'}
+[1.559600] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[1.560022] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'flake8' to check Python code syntax and style conventions\n"}
+[1.560442] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[1.560757] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257\n"}
+[1.561463] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[1.561500] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[1.561765] (ur5_sem2_scripts) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[1.562508] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Configuring done\n'}
+[1.602204] (-) TimerEvent: {}
+[1.627803] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Generating done\n'}
+[1.653593] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Build files have been written to: /home/magne/ros2_ws/build/ur5_sem2_scripts\n'}
+[1.669234] (ur5_sem2_scripts) CommandEnded: {'returncode': 0}
+[1.670017] (ur5_sem2_scripts) JobProgress: {'identifier': 'ur5_sem2_scripts', 'progress': 'build'}
+[1.670935] (ur5_sem2_scripts) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/magne/ros2_ws/build/ur5_sem2_scripts', '--', '-j20', '-l20'], 'cwd': '/home/magne/ros2_ws/build/ur5_sem2_scripts', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'magne'), ('FONTCONFIG_PATH', '/etc/fonts'), ('GIO_MODULE_DIR', '/home/magne/snap/code/common/.cache/gio-modules'), ('XDG_SESSION_TYPE', 'wayland'), ('GIT_ASKPASS', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('GTK_EXE_PREFIX_VSCODE_SNAP_ORIG', ''), ('GDK_BACKEND_VSCODE_SNAP_ORIG', ''), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/magne/ros2_ws/install/trac_ik_kinematics/lib:/home/magne/ros2_ws/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/magne'), ('CHROME_DESKTOP', 'code.desktop'), ('LOCPATH_VSCODE_SNAP_ORIG', ''), ('OLDPWD', '/home/magne/ros2_ws'), ('TERM_PROGRAM_VERSION', '1.98.1'), ('DESKTOP_SESSION', 'ubuntu'), ('GTK_PATH', '/snap/code/186/usr/lib/x86_64-linux-gnu/gtk-3.0'), ('XDG_DATA_HOME_VSCODE_SNAP_ORIG', ''), ('GTK_IM_MODULE_FILE', '/home/magne/snap/code/common/.cache/immodules/immodules.cache'), ('GIO_LAUNCHED_DESKTOP_FILE', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG', ''), ('VSCODE_GIT_ASKPASS_MAIN', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/snap/code/186/usr/share/code/code'), ('MANAGERPID', '1508'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '1671'), ('BUNDLED_DEBUGPY_PATH', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/libs/debugpy'), ('IM_CONFIG_CHECK_ENV', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '10043'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/magne/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'magne'), ('JOURNAL_STREAM', '8:16078'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_SESSION_CLASS', 'user'), ('XDG_DATA_DIRS_VSCODE_SNAP_ORIG', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('USERNAME', 'magne'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/magne/.cargo/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/scripts/noConfigScripts:/home/magne/.config/Code/User/globalStorage/github.copilot-chat/debugCommand'), ('SESSION_MANAGER', 'local/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:@/tmp/.ICE-unix/1638,unix/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:/tmp/.ICE-unix/1638'), ('GTK_EXE_PREFIX', '/snap/code/186/usr'), ('INVOCATION_ID', '03df2385a65d4b25a4659349a29f13ef'), ('XDG_MENU_PREFIX', 'gnome-'), ('BAMF_DESKTOP_FILE_HINT', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':0'), ('LOCPATH', '/snap/code/186/usr/lib/locale'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-65556687dc8ddc09.txt'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('GIO_MODULE_DIR_VSCODE_SNAP_ORIG', ''), ('XDG_DATA_HOME', '/home/magne/snap/code/186/.local/share'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.VHDO32'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-d8df45a53b.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('GSETTINGS_SCHEMA_DIR', '/home/magne/snap/code/186/.local/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GTK_PATH_VSCODE_SNAP_ORIG', ''), ('FONTCONFIG_FILE', '/etc/fonts/fonts.conf'), ('GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG', ''), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/magne/ros2_ws/build/ur5_sem2_scripts'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/home/magne/snap/code/186/.local/share:/home/magne/snap/code/186:/snap/code/186/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble')]), 'shell': False}
+[1.702316] (-) TimerEvent: {}
+[1.717426] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 21%] \x1b[32mBuilding CXX object CMakeFiles/readJoints.dir/src/readJoints.cpp.o\x1b[0m\n'}
+[1.717724] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 21%] \x1b[32mBuilding CXX object CMakeFiles/svejse_frame.dir/src/svejse_frame.cpp.o\x1b[0m\n'}
+[1.717855] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 21%] \x1b[32mBuilding CXX object CMakeFiles/simple_move.dir/src/simple_move.cpp.o\x1b[0m\n'}
+[1.718003] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/ChessMoves.dir/src/ChessMoves.cpp.o\x1b[0m\n'}
+[1.718069] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 35%] \x1b[32mBuilding CXX object CMakeFiles/chess_frame.dir/src/chess_frame.cpp.o\x1b[0m\n'}
+[1.718108] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 42%] \x1b[32mBuilding CXX object CMakeFiles/square_move.dir/src/square_move.cpp.o\x1b[0m\n'}
+[1.802437] (-) TimerEvent: {}
+[1.902832] (-) TimerEvent: {}
+[2.003206] (-) TimerEvent: {}
+[2.103830] (-) TimerEvent: {}
+[2.204216] (-) TimerEvent: {}
+[2.304596] (-) TimerEvent: {}
+[2.405018] (-) TimerEvent: {}
+[2.505395] (-) TimerEvent: {}
+[2.607230] (-) TimerEvent: {}
+[2.707674] (-) TimerEvent: {}
+[2.808069] (-) TimerEvent: {}
+[2.908461] (-) TimerEvent: {}
+[3.008949] (-) TimerEvent: {}
+[3.109335] (-) TimerEvent: {}
+[3.209742] (-) TimerEvent: {}
+[3.310173] (-) TimerEvent: {}
+[3.410590] (-) TimerEvent: {}
+[3.511000] (-) TimerEvent: {}
+[3.611321] (-) TimerEvent: {}
+[3.711674] (-) TimerEvent: {}
+[3.812089] (-) TimerEvent: {}
+[3.912476] (-) TimerEvent: {}
+[4.012880] (-) TimerEvent: {}
+[4.113271] (-) TimerEvent: {}
+[4.213664] (-) TimerEvent: {}
+[4.314079] (-) TimerEvent: {}
+[4.414482] (-) TimerEvent: {}
+[4.514875] (-) TimerEvent: {}
+[4.615260] (-) TimerEvent: {}
+[4.715567] (-) TimerEvent: {}
+[4.815860] (-) TimerEvent: {}
+[4.916149] (-) TimerEvent: {}
+[5.016458] (-) TimerEvent: {}
+[5.116834] (-) TimerEvent: {}
+[5.217212] (-) TimerEvent: {}
+[5.317541] (-) TimerEvent: {}
+[5.412708] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX executable svejse_frame\x1b[0m\n'}
+[5.417654] (-) TimerEvent: {}
+[5.429095] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 57%] \x1b[32m\x1b[1mLinking CXX executable chess_frame\x1b[0m\n'}
+[5.517812] (-) TimerEvent: {}
+[5.618206] (-) TimerEvent: {}
+[5.718595] (-) TimerEvent: {}
+[5.719280] (ur5_sem2_scripts) StderrLine: {'line': b'\x1b[01m\x1b[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/simple_move.cpp:\x1b[m\x1b[K In function \xe2\x80\x98\x1b[01m\x1b[Kint main(int, char**)\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[5.719491] (ur5_sem2_scripts) StderrLine: {'line': b'\x1b[01m\x1b[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/simple_move.cpp:32:10:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kunused variable \xe2\x80\x98\x1b[01m\x1b[Kjoint_values\x1b[m\x1b[K\xe2\x80\x99 [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-variable\x07-Wunused-variable\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[5.719575] (ur5_sem2_scripts) StderrLine: {'line': b'   32 |   double \x1b[01;35m\x1b[Kjoint_values\x1b[m\x1b[K[5][3] = {\n'}
+[5.719636] (ur5_sem2_scripts) StderrLine: {'line': b'      |          \x1b[01;35m\x1b[K^~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[5.818723] (-) TimerEvent: {}
+[5.884416] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 57%] Built target svejse_frame\n'}
+[5.899047] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 57%] Built target chess_frame\n'}
+[5.918844] (-) TimerEvent: {}
+[6.019216] (-) TimerEvent: {}
+[6.119595] (-) TimerEvent: {}
+[6.219998] (-) TimerEvent: {}
+[6.320389] (-) TimerEvent: {}
+[6.422829] (-) TimerEvent: {}
+[6.523202] (-) TimerEvent: {}
+[6.623590] (-) TimerEvent: {}
+[6.632950] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 64%] \x1b[32m\x1b[1mLinking CXX executable readJoints\x1b[0m\n'}
+[6.723732] (-) TimerEvent: {}
+[6.825127] (-) TimerEvent: {}
+[6.886620] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 64%] Built target readJoints\n'}
+[6.925267] (-) TimerEvent: {}
+[7.025689] (-) TimerEvent: {}
+[7.126125] (-) TimerEvent: {}
+[7.226801] (-) TimerEvent: {}
+[7.327191] (-) TimerEvent: {}
+[7.427620] (-) TimerEvent: {}
+[7.529853] (-) TimerEvent: {}
+[7.630215] (-) TimerEvent: {}
+[7.730618] (-) TimerEvent: {}
+[7.831047] (-) TimerEvent: {}
+[7.931468] (-) TimerEvent: {}
+[7.933515] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 71%] \x1b[32m\x1b[1mLinking CXX executable simple_move\x1b[0m\n'}
+[8.031628] (-) TimerEvent: {}
+[8.132069] (-) TimerEvent: {}
+[8.206531] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 71%] Built target simple_move\n'}
+[8.232187] (-) TimerEvent: {}
+[8.333295] (-) TimerEvent: {}
+[8.433643] (-) TimerEvent: {}
+[8.535828] (-) TimerEvent: {}
+[8.636215] (-) TimerEvent: {}
+[8.736642] (-) TimerEvent: {}
+[8.813401] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 78%] \x1b[32m\x1b[1mLinking CXX static library libChessMoves.a\x1b[0m\n'}
+[8.836777] (-) TimerEvent: {}
+[8.839238] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 78%] Built target ChessMoves\n'}
+[8.859792] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 85%] \x1b[32mBuilding CXX object CMakeFiles/robot_main.dir/src/robot_main.cpp.o\x1b[0m\n'}
+[8.936981] (-) TimerEvent: {}
+[9.037308] (-) TimerEvent: {}
+[9.097505] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 92%] \x1b[32m\x1b[1mLinking CXX executable square_move\x1b[0m\n'}
+[9.137467] (-) TimerEvent: {}
+[9.237860] (-) TimerEvent: {}
+[9.338291] (-) TimerEvent: {}
+[9.391375] (ur5_sem2_scripts) StdoutLine: {'line': b'[ 92%] Built target square_move\n'}
+[9.438426] (-) TimerEvent: {}
+[9.538843] (-) TimerEvent: {}
+[9.640058] (-) TimerEvent: {}
+[9.740390] (-) TimerEvent: {}
+[9.840812] (-) TimerEvent: {}
+[9.941236] (-) TimerEvent: {}
+[10.041650] (-) TimerEvent: {}
+[10.142066] (-) TimerEvent: {}
+[10.242463] (-) TimerEvent: {}
+[10.342860] (-) TimerEvent: {}
+[10.443227] (-) TimerEvent: {}
+[10.543631] (-) TimerEvent: {}
+[10.643996] (-) TimerEvent: {}
+[10.744377] (-) TimerEvent: {}
+[10.844725] (-) TimerEvent: {}
+[10.945120] (-) TimerEvent: {}
+[11.045466] (-) TimerEvent: {}
+[11.145826] (-) TimerEvent: {}
+[11.246155] (-) TimerEvent: {}
+[11.346509] (-) TimerEvent: {}
+[11.446843] (-) TimerEvent: {}
+[11.547206] (-) TimerEvent: {}
+[11.647586] (-) TimerEvent: {}
+[11.747948] (-) TimerEvent: {}
+[11.848300] (-) TimerEvent: {}
+[11.948652] (-) TimerEvent: {}
+[12.049037] (-) TimerEvent: {}
+[12.149391] (-) TimerEvent: {}
+[12.249800] (-) TimerEvent: {}
+[12.350169] (-) TimerEvent: {}
+[12.450550] (-) TimerEvent: {}
+[12.550910] (-) TimerEvent: {}
+[12.651272] (-) TimerEvent: {}
+[12.751667] (-) TimerEvent: {}
+[12.793634] (ur5_sem2_scripts) StderrLine: {'line': b'\x1b[01m\x1b[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/robot_main.cpp:\x1b[m\x1b[K In function \xe2\x80\x98\x1b[01m\x1b[Kint main(int, char**)\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[12.793912] (ur5_sem2_scripts) StderrLine: {'line': b'\x1b[01m\x1b[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/robot_main.cpp:11:14:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kunused parameter \xe2\x80\x98\x1b[01m\x1b[Kargc\x1b[m\x1b[K\xe2\x80\x99 [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter\x07-Wunused-parameter\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[12.794006] (ur5_sem2_scripts) StderrLine: {'line': b'   11 | int main(\x1b[01;35m\x1b[Kint argc\x1b[m\x1b[K, char * argv[])\n'}
+[12.794070] (ur5_sem2_scripts) StderrLine: {'line': b'      |          \x1b[01;35m\x1b[K~~~~^~~~\x1b[m\x1b[K\n'}
+[12.794127] (ur5_sem2_scripts) StderrLine: {'line': b'\x1b[01m\x1b[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/robot_main.cpp:11:27:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kunused parameter \xe2\x80\x98\x1b[01m\x1b[Kargv\x1b[m\x1b[K\xe2\x80\x99 [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter\x07-Wunused-parameter\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[12.794187] (ur5_sem2_scripts) StderrLine: {'line': b'   11 | int main(int argc, \x1b[01;35m\x1b[Kchar * argv[]\x1b[m\x1b[K)\n'}
+[12.794241] (ur5_sem2_scripts) StderrLine: {'line': b'      |                    \x1b[01;35m\x1b[K~~~~~~~^~~~~~\x1b[m\x1b[K\n'}
+[12.851801] (-) TimerEvent: {}
+[12.952183] (-) TimerEvent: {}
+[13.052555] (-) TimerEvent: {}
+[13.152945] (-) TimerEvent: {}
+[13.253290] (-) TimerEvent: {}
+[13.353668] (-) TimerEvent: {}
+[13.454044] (-) TimerEvent: {}
+[13.554418] (-) TimerEvent: {}
+[13.654787] (-) TimerEvent: {}
+[13.755162] (-) TimerEvent: {}
+[13.855499] (-) TimerEvent: {}
+[13.955833] (-) TimerEvent: {}
+[14.056232] (-) TimerEvent: {}
+[14.156636] (-) TimerEvent: {}
+[14.257018] (-) TimerEvent: {}
+[14.357385] (-) TimerEvent: {}
+[14.458140] (-) TimerEvent: {}
+[14.558623] (-) TimerEvent: {}
+[14.659452] (-) TimerEvent: {}
+[14.760272] (-) TimerEvent: {}
+[14.861100] (-) TimerEvent: {}
+[14.929022] (ur5_sem2_scripts) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable robot_main\x1b[0m\n'}
+[14.961235] (-) TimerEvent: {}
+[15.061639] (-) TimerEvent: {}
+[15.162043] (-) TimerEvent: {}
+[15.262450] (-) TimerEvent: {}
+[15.362859] (-) TimerEvent: {}
+[15.463320] (-) TimerEvent: {}
+[15.563753] (-) TimerEvent: {}
+[15.605587] (ur5_sem2_scripts) StdoutLine: {'line': b'[100%] Built target robot_main\n'}
+[15.615102] (ur5_sem2_scripts) CommandEnded: {'returncode': 0}
+[15.615730] (ur5_sem2_scripts) JobProgress: {'identifier': 'ur5_sem2_scripts', 'progress': 'install'}
+[15.623452] (ur5_sem2_scripts) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/magne/ros2_ws/build/ur5_sem2_scripts'], 'cwd': '/home/magne/ros2_ws/build/ur5_sem2_scripts', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('LANGUAGE', 'en_US:en'), ('USER', 'magne'), ('FONTCONFIG_PATH', '/etc/fonts'), ('GIO_MODULE_DIR', '/home/magne/snap/code/common/.cache/gio-modules'), ('XDG_SESSION_TYPE', 'wayland'), ('GIT_ASKPASS', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('GTK_EXE_PREFIX_VSCODE_SNAP_ORIG', ''), ('GDK_BACKEND_VSCODE_SNAP_ORIG', ''), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/home/magne/ros2_ws/install/trac_ik_kinematics/lib:/home/magne/ros2_ws/install/trac_ik_lib/lib:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/magne'), ('CHROME_DESKTOP', 'code.desktop'), ('LOCPATH_VSCODE_SNAP_ORIG', ''), ('OLDPWD', '/home/magne/ros2_ws'), ('TERM_PROGRAM_VERSION', '1.98.1'), ('DESKTOP_SESSION', 'ubuntu'), ('GTK_PATH', '/snap/code/186/usr/lib/x86_64-linux-gnu/gtk-3.0'), ('XDG_DATA_HOME_VSCODE_SNAP_ORIG', ''), ('GTK_IM_MODULE_FILE', '/home/magne/snap/code/common/.cache/immodules/immodules.cache'), ('GIO_LAUNCHED_DESKTOP_FILE', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG', ''), ('VSCODE_GIT_ASKPASS_MAIN', '/snap/code/186/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/snap/code/186/usr/share/code/code'), ('MANAGERPID', '1508'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '1671'), ('BUNDLED_DEBUGPY_PATH', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/libs/debugpy'), ('IM_CONFIG_CHECK_ENV', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '10043'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/home/magne/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'magne'), ('JOURNAL_STREAM', '8:16078'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_SESSION_CLASS', 'user'), ('XDG_DATA_DIRS_VSCODE_SNAP_ORIG', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('USERNAME', 'magne'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/home/magne/.cargo/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/bundled/scripts/noConfigScripts:/home/magne/.config/Code/User/globalStorage/github.copilot-chat/debugCommand'), ('SESSION_MANAGER', 'local/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:@/tmp/.ICE-unix/1638,unix/magne-ASUS-Vivobook-S-14-M5406WA-M5406WA:/tmp/.ICE-unix/1638'), ('GTK_EXE_PREFIX', '/snap/code/186/usr'), ('INVOCATION_ID', '03df2385a65d4b25a4659349a29f13ef'), ('XDG_MENU_PREFIX', 'gnome-'), ('BAMF_DESKTOP_FILE_HINT', '/var/lib/snapd/desktop/applications/code_code.desktop'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':0'), ('LOCPATH', '/snap/code/186/usr/lib/locale'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/magne/.vscode/extensions/ms-python.debugpy-2025.4.1-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-65556687dc8ddc09.txt'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('GIO_MODULE_DIR_VSCODE_SNAP_ORIG', ''), ('XDG_DATA_HOME', '/home/magne/snap/code/186/.local/share'), ('XMODIFIERS', '@im=ibus'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.VHDO32'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-d8df45a53b.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('GSETTINGS_SCHEMA_DIR', '/home/magne/snap/code/186/.local/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('GTK_PATH_VSCODE_SNAP_ORIG', ''), ('FONTCONFIG_FILE', '/etc/fonts/fonts.conf'), ('GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG', ''), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/magne/ros2_ws/build/ur5_sem2_scripts'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/home/magne/snap/code/186/.local/share:/home/magne/snap/code/186:/snap/code/186/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/magne/ros2_ws/install/ur5_sem2_scripts:/home/magne/ros2_ws/install/trac_ik:/home/magne/ros2_ws/install/trac_ik_kinematics:/home/magne/ros2_ws/install/trac_ik_examples:/home/magne/ros2_ws/install/trac_ik_lib:/opt/ros/humble')]), 'shell': False}
+[15.628847] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[15.629100] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/simple_move\n'}
+[15.629341] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/simple_move" to ""\n'}
+[15.629432] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/svejse_frame\n'}
+[15.630074] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/svejse_frame" to ""\n'}
+[15.630357] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/chess_frame\n'}
+[15.631357] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/chess_frame" to ""\n'}
+[15.631486] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/square_move\n'}
+[15.631529] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/square_move" to ""\n'}
+[15.631564] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/readJoints\n'}
+[15.631598] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/readJoints" to ""\n'}
+[15.631647] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/robot_main\n'}
+[15.631675] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Set runtime path of "/home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/robot_main" to ""\n'}
+[15.631704] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/lib/ur5_sem2_scripts/libChessMoves.a\n'}
+[15.631762] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/launch\n'}
+[15.631851] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/launch/simple_move.launch.py\n'}
+[15.631971] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/package_run_dependencies/ur5_sem2_scripts\n'}
+[15.632053] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/parent_prefix_path/ur5_sem2_scripts\n'}
+[15.632137] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/ament_prefix_path.sh\n'}
+[15.632237] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/ament_prefix_path.dsv\n'}
+[15.632327] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/path.sh\n'}
+[15.632398] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/environment/path.dsv\n'}
+[15.632429] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.bash\n'}
+[15.632471] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.sh\n'}
+[15.632513] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.zsh\n'}
+[15.632561] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/local_setup.dsv\n'}
+[15.632619] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/package.dsv\n'}
+[15.632701] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ament_index/resource_index/packages/ur5_sem2_scripts\n'}
+[15.632778] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/cmake/ur5_sem2_scriptsConfig.cmake\n'}
+[15.632828] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/cmake/ur5_sem2_scriptsConfig-version.cmake\n'}
+[15.632888] (ur5_sem2_scripts) StdoutLine: {'line': b'-- Installing: /home/magne/ros2_ws/install/ur5_sem2_scripts/share/ur5_sem2_scripts/package.xml\n'}
+[15.634703] (ur5_sem2_scripts) CommandEnded: {'returncode': 0}
+[15.644847] (ur5_sem2_scripts) JobEnded: {'identifier': 'ur5_sem2_scripts', 'rc': 0}
+[15.645307] (-) EventReactorShutdown: {}

@@ -1,0 +1,8 @@
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:1:10:[m[K [01;31m[Kfatal error: [m[KChessMoves.hpp: No such file or directory
+    1 | #include [01;31m[K"ChessMoves.hpp"[m[K
+      |          [01;31m[K^~~~~~~~~~~~~~~~[m[K
+compilation terminated.
+gmake[2]: *** [CMakeFiles/ChessMoves.dir/build.make:79: CMakeFiles/ChessMoves.dir/src/ChessMoves.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:152: CMakeFiles/ChessMoves.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+gmake: *** [Makefile:149: all] Error 2

@@ -1,0 +1,26 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/magne/ros2_ws/install/trac_ik_kinematics/include/**",
+        "/home/magne/ros2_ws/install/trac_ik_lib/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/magne/ros2_ws/src/trac_ik/trac_ik_lib/include/**",
+        "/home/magne/ros2_ws/src/ur5_sem2_scripts/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++17",
+      "configurationProvider": "ms-vscode.cmake-tools",
+      "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+    }
+  ],
+  "version": 4
+}

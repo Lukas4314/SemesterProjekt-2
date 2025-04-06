@@ -1,0 +1,2 @@
+/usr/bin/ar qc libChessMoves.a CMakeFiles/ChessMoves.dir/src/ChessMoves.cpp.o
+/usr/bin/ranlib libChessMoves.a

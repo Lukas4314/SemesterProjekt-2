@@ -1,0 +1,16 @@
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/uninstall.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/ur5_sem2_scripts_uninstall.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/ChessMoves.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/simple_move.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/svejse_frame.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/chess_frame.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/square_move.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/readJoints.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/robot_main.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/test.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/edit_cache.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/rebuild_cache.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/list_install_components.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/install.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/install/local.dir
+/home/magne/ros2_ws/build/ur5_sem2_scripts/CMakeFiles/install/strip.dir

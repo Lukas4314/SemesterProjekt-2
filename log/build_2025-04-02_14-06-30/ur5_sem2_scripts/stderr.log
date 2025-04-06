@@ -1,0 +1,20 @@
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::playercapture(moveStruct, double (*)[4])[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:264:56:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KTFchess[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  264 | bool ChessMoves::playercapture(moveStruct move, [01;35m[Kdouble TFchess[4][4][m[K) {
+      |                                                 [01;35m[K~~~~~~~^~~~~~~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:[m[K In member function ‘[01m[Kbool ChessMoves::execute_move(double*, double*)[m[K’:
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:359:12:[m[K [01;31m[Kerror: [m[Kredeclaration of ‘[01m[Kdouble fraction[m[K’
+  359 |     double [01;31m[Kfraction[m[K = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory1);
+      |            [01;31m[K^~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:327:12:[m[K [01;36m[Knote: [m[K‘[01m[Kdouble fraction[m[K’ previously declared here
+  327 |     double [01;36m[Kfraction[m[K = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+      |            [01;36m[K^~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:397:12:[m[K [01;31m[Kerror: [m[Kredeclaration of ‘[01m[Kdouble fraction[m[K’
+  397 |     double [01;31m[Kfraction[m[K = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory2);
+      |            [01;31m[K^~~~~~~~[m[K
+[01m[K/home/magne/ros2_ws/src/ur5_sem2_scripts/src/ChessMoves.cpp:327:12:[m[K [01;36m[Knote: [m[K‘[01m[Kdouble fraction[m[K’ previously declared here
+  327 |     double [01;36m[Kfraction[m[K = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory);
+      |            [01;36m[K^~~~~~~~[m[K
+gmake[2]: *** [CMakeFiles/ChessMoves.dir/build.make:79: CMakeFiles/ChessMoves.dir/src/ChessMoves.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:152: CMakeFiles/ChessMoves.dir/all] Error 2
+gmake: *** [Makefile:149: all] Error 2
