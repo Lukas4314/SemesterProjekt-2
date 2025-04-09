@@ -373,7 +373,7 @@ bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow,
     return true;
 }
 
-bool MoveValidator::underAttack(int row, int col, const string activeColor, const vector<vector<char>> &board)
+bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board)
 {
     for (int i = 0; i < 8; i++)
     {

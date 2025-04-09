@@ -212,6 +212,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
             bK = false;
             bQ = false;
         }
+        activeColor = (activeColor == "w") ? "b" : "w";
         return true;
     }
 
