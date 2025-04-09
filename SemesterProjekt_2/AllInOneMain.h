@@ -7,8 +7,8 @@ class AllInOneMain
 public:
 	AllInOneMain();
 	~AllInOneMain();
-	int getPieceMoved();
-	std::string getPieceMovedString();
+	int getPieceMoved(int depth = 0);
+	std::string getPieceMovedString(int depth = 0);
 
 private:
 	cv::VideoCapture cap;
@@ -18,6 +18,7 @@ private:
 	cv::Mat mask;
 	cv::Mat cheesWithMarkedCornors;
 	cv::Mat oldChessboard;
+	cv::Mat chessboard;
 	BoardCutter boardCutter;
 
 

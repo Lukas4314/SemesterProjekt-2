@@ -3,9 +3,10 @@
         {
             "name": "Linux",
             "includePath": [
-                "/usr/include/opencv4",
-                "/usr/include/opencv4/opencv2",
-                "${workspaceFolder}/**"
+                "/home/lukas/Documents/opencv-4.x/build/*",
+                "/home/lukas/Documents/opencv-4.x/include",
+                "${workspaceFolder}/**",
+                "/usr/local/include/opencv4"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

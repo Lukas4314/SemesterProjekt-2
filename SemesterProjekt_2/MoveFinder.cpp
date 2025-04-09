@@ -3,12 +3,15 @@
 #include <opencv2/imgproc.hpp>
 #include "ImageFinder.h"
 #include <vector>
-MoveFinder::MoveFinder(){}
+#include "Utill.h"
+#include "ImageDrawer.h"
+MoveFinder::MoveFinder() {}
 MoveFinder::~MoveFinder() {}
 
-
-int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth = 0) {
-	if (newChessBoard.cols < 8 || newChessBoard.rows < 8) {
+int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth = 0)
+{
+	if (newChessBoard.cols < 8 || newChessBoard.rows < 8)
+	{
 		std::cout << "Error: The new chessboard is too small." << std::endl;
 		return -1;
 	}
@@ -16,7 +19,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	cv::resize(oldChessBoard, oldChessBoard, newChessBoard.size());
 
-	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone());
+	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
 	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
 	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
 	int imageWidth = diffBoard.cols;
@@ -24,11 +27,14 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareWidth = imageWidth / 8;
 	int squareHeight = imageHeight / 8;
 
+	cv::imshow("diffBoardGrayscale", diffBoard);
+
 	int diffBoardArray[8][8];
 
-
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
 			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
 			cv::Mat squareImage = diffBoard(square);
 			int diff = cv::sum(squareImage)[0];
@@ -36,28 +42,71 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
+	// Vector to store {change value, row, col}
+	std::vector<std::tuple<int, int, int>> tileChanges;
+
+	// Populate the vector
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			tileChanges.emplace_back(diffBoardArray[i][j], i, j);
+		}
+	}
+
+	// Sort individual tiles in descending order based on their change value
+	std::sort(tileChanges.rbegin(), tileChanges.rend());
+
+	// Vector to store all tile pair combinations {combined score, row1, col1, row2, col2}
+	std::vector<std::tuple<int, int, int, int, int>> tilePairs;
+
+	// Generate all possible tile pairs
+	for (size_t a = 0; a < tileChanges.size(); a++)
+	{
+		for (size_t b = a + 1; b < tileChanges.size(); b++)
+		{
+			int scoreA = std::get<0>(tileChanges[a]);
+			int rowA = std::get<1>(tileChanges[a]);
+			int colA = std::get<2>(tileChanges[a]);
+
+			int scoreB = std::get<0>(tileChanges[b]);
+			int rowB = std::get<1>(tileChanges[b]);
+			int colB = std::get<2>(tileChanges[b]);
+
+			int combinedScore = scoreA + scoreB;
+
+			tilePairs.emplace_back(combinedScore, rowA, colA, rowB, colB);
+		}
+	}
+
+	int castleWeight = 1.5;
+	int castleScoreWQ = (diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) * castleWeight;
+	int castleScoreWK = (diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) * castleWeight;
+	int castleScoreBQ = (diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) * castleWeight;
+	int castleScoreBK = (diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) * castleWeight;
+
+	std::cout << "castleScoreWQ: " << castleScoreWQ << std::endl;
+	std::cout << "castleScoreWK: " << castleScoreWK << std::endl;
+	std::cout << "castleScoreBQ: " << castleScoreBQ << std::endl;
+	std::cout << "castleScoreBK: " << castleScoreBK << std::endl;
+	tilePairs.emplace_back(castleScoreWQ, 0, 0, 0, Utill::WQ);
+	tilePairs.emplace_back(castleScoreWK, 0, 0, 0, Utill::WK);
+	tilePairs.emplace_back(castleScoreBQ, 0, 0, 0, Utill::BQ);
+	tilePairs.emplace_back(castleScoreBK, 0, 0, 0, Utill::BK);
+
+	// Sort tile pairs by combined change score in descending order
+	std::sort(tilePairs.rbegin(), tilePairs.rend());
 
 
-    std::vector<std::tuple<int, int, int>> elements;
+	
 
-    // Populate vector with array values and indices
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            elements.push_back({diffBoardArray[i][j], i, j});
-        }
-    }
+	std::cout << "actualMoveScore = " << std::get<0>(tilePairs[depth]) << std::endl;
+	std::cout << "actualMoveRow1 = " << std::get<1>(tilePairs[depth]) << std::endl;
+	std::cout << "actualMoveCol1 = " << std::get<2>(tilePairs[depth]) << std::endl;
+	std::cout << "actualMoveRow2 = " << std::get<3>(tilePairs[depth]) << std::endl;
+	std::cout << "actualMoveCol2 = " << std::get<4>(tilePairs[depth]) << std::endl;
+	std::cout << "first tile score = " << diffBoardArray[std::get<1>(tilePairs[depth])][std::get<2>(tilePairs[depth])] << std::endl;
+	std::cout << "second tile score = " << diffBoardArray[std::get<3>(tilePairs[depth])][std::get<4>(tilePairs[depth])] << std::endl;
 
-    // Sort in descending order (max first)
-    std::sort(elements.rbegin(), elements.rend());
-
-    // Ensure depth doesn't exceed available elements
-    int size = elements.size();
-    if (depth >= size - 1) depth = size - 2;
-
-    // Extract required indices based on depth
-    auto [row1, col1] = std::make_pair(std::get<1>(elements[0]), std::get<2>(elements[0]));  // Highest
-    auto [row2, col2] = std::make_pair(std::get<1>(elements[depth + 1]), std::get<2>(elements[depth + 1]));  // Depth-based second
-
-    // Return calculated integer
-    return row1 * 1000 + col1 * 100 + row2 * 10 + col2;
+	return std::get<1>(tilePairs[depth]) * 1000 + std::get<2>(tilePairs[depth]) * 100 + std::get<3>(tilePairs[depth]) * 10 + std::get<4>(tilePairs[depth]);
 }

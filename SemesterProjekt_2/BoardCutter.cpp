@@ -42,14 +42,12 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
 	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
-	std::cout << "Green Center point: " << greenCenterPoint << std::endl;
-	std::cout << "Red Center point " << redCenterPoint << std::endl;
+
 
 
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
 
 	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90;
-	std::cout << angle << std::endl;
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 

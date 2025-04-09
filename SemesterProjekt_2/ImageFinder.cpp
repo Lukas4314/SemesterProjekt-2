@@ -296,7 +296,7 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
 
 
 
-void ImageFinder::showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2) {
+void ImageFinder::showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2, std::string name) {
     if (hsvImage.empty() || hsvImage2.empty()) {
         std::cerr << "Error: one of the images are empty!" << std::endl;
         return;
@@ -323,16 +323,16 @@ void ImageFinder::showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat 
 
  
 
-    cv::imshow("Summed HSV", diffImage);
-    cv::imshow("Hue Difference", hsvChannels[0]);
-    cv::imshow("Saturation Difference", hsvChannels[1]);
-    cv::imshow("Value Difference", hsvChannels[2]);
+    cv::imshow("Summed HSV "+name, diffImage);
+    cv::imshow("Hue Difference "+name, hsvChannels[0]);
+    cv::imshow("Saturation Difference "+name, hsvChannels[1]);
+    cv::imshow("Value Difference "+name, hsvChannels[2]);
 
 
-    cv::moveWindow("Hue Difference", 0, 0);
-    cv::moveWindow("Saturation Difference", 480, 0);
-    cv::moveWindow("Value Difference", 480 * 2, 0);
-    cv::moveWindow("Summed HSV", 0, 400);
+    cv::moveWindow("Hue Difference "+name, 0, 0);
+    cv::moveWindow("Saturation Difference "+name, 480, 0);
+    cv::moveWindow("Value Difference "+name, 480 * 2, 0);
+    cv::moveWindow("Summed HSV "+name, 0, 400);
 
 
 }

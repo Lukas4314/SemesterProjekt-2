@@ -1,5 +1,4 @@
 #include <opencv2/core.hpp>
-#pragma once
 class MoveFinder
 {
 public:
