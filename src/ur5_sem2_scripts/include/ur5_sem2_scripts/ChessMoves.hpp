@@ -13,6 +13,7 @@ class ChessMoves {
 public:
     explicit ChessMoves(const rclcpp::Node::SharedPtr& node);
     ~ChessMoves();
+    bool move_to_idle();
     bool move(moveStruct move, double TFchess[4][4]);
     bool remove_piece(moveStruct move, double TFchess[4][4]);
     bool add_piece(moveStruct move, double TFchess[4][4]);

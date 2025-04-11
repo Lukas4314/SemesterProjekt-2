@@ -21,6 +21,21 @@ ChessMoves::~ChessMoves() {
     RCLCPP_INFO(node_->get_logger(), "ChessMoves class destroyed");
 }
 
+bool ChessMoves::move_to_idle() {
+    RCLCPP_INFO(node_->get_logger(), "move_to_idle() called");
+    move_group_interface.setStartStateToCurrentState();
+    std::map<std::string, double> target_joints;
+    target_joints["shoulder_pan_joint"] = -21.0 * M_PI / 180.0;
+    target_joints["shoulder_lift_joint"] = -31.0 * M_PI / 180.0;
+    target_joints["elbow_joint"] = -131.0 * M_PI / 180.0;
+    target_joints["wrist_1_joint"] = -108.0 * M_PI / 180.0;
+    target_joints["wrist_2_joint"] = 90.0 * M_PI / 180.0;
+    target_joints["wrist_3_joint"] = 137.0 * M_PI / 180.0;
+    move_group_interface.setJointValueTarget(target_joints);
+    move_group_interface.move();
+    return true;
+}
+
 bool ChessMoves::move(moveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move() called");
     switch (move.type) {

@@ -27,7 +27,11 @@ int main(int argc, char * argv[])
   move.piece = 'p';
   move.type = 'k';
   
-  chessMoves.move(move, nullptr);
+  chessMoves.move_to_idle();
+  // chessMoves.move(move, nullptr);
+  // chessMoves.move(move, nullptr);
+  // chessMoves.move(move, nullptr);
+  // chessMoves.move(move, nullptr);
 
   // Shutdown ROS
   rclcpp::shutdown();
