@@ -22,7 +22,7 @@ public:
 
 	static void showHSVChannelDifferences(const cv::Mat& image, const cv::Scalar& bgrColor);
 
-	static void showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2);
+	static void showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2, std::string name = "default");
 
 
 	static void adjustHSVChannels(std::vector<cv::Mat>& hsvChannels,

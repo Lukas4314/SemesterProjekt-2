@@ -1,7 +1,6 @@
 #include "HueDifferenceProcessor.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
-#include <windows.h>
 
 HueDifferenceProcessor::HueDifferenceProcessor() {
     cap.open(0);
@@ -48,7 +47,6 @@ cv::Mat HueDifferenceProcessor::resizeToWidth(const cv::Mat& img, int newWidth) 
 
 void HueDifferenceProcessor::processFrames() {
     while (true) {
-        Sleep(100);
         if (cv::waitKey() == 'q') {
             break;
         }
