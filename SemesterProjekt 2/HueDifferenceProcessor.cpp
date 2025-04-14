@@ -1,7 +1,6 @@
 #include "HueDifferenceProcessor.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
-#include <windows.h>
 
 HueDifferenceProcessor::HueDifferenceProcessor() {
     cap.open(0);
@@ -44,32 +43,4 @@ cv::Mat HueDifferenceProcessor::resizeToWidth(const cv::Mat& img, int newWidth) 
     cv::Mat resizedImg;
     cv::resize(img, resizedImg, cv::Size(newWidth, newHeight), 0, 0, cv::INTER_AREA);
     return resizedImg;
-}
-
-void HueDifferenceProcessor::processFrames() {
-    while (true) {
-        Sleep(100);
-        if (cv::waitKey() == 'q') {
-            break;
-        }
-
-        cv::Mat currentFrame = captureFrame();
-        if (currentFrame.empty()) {
-            std::cerr << "Error: Captured empty frame." << std::endl;
-            break;
-        }
-
-        cv::Mat currentHue = extractHueChannel(currentFrame);
-        cv::Mat diffFrame = computeHueDifference(currentHue, lastHue);
-
-        std::vector<cv::Mat> frames = { currentFrame, lastFrame, diffFrame };
-        cv::Mat finalFrame;
-        cv::hconcat(frames, finalFrame);
-        finalFrame = resizeToWidth(finalFrame, 1536);
-
-        cv::imshow(windowName, finalFrame);
-
-        lastFrame = currentFrame.clone();
-        lastHue = currentHue.clone();
-    }
 }
