@@ -22,10 +22,6 @@ find_package(moveit_ros_planning_interface REQUIRED)
 find_package(moveit_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 
-# ChessMoves library
-# add_library(ChessMoves src/ChessMoves.cpp)
-# ament_target_dependencies(ChessMoves rclcpp moveit_ros_planning_interface geometry_msgs tf2_ros std_msgs)
-
 
 # === Moveplanner Library ===
 file(GLOB MOVE_SRCS CONFIGURE_DEPENDS src/moveplanner/*.cpp)
@@ -61,9 +57,6 @@ add_executable(square_move src/square_move.cpp)
 add_executable(readJoints src/readJoints.cpp)
 add_executable(robot_main src/robot_main.cpp)
 add_executable(vision_main src/vision_main.cpp)
-
-# Link executables with ChessMoves
-# target_link_libraries(robot_main ChessMoves)  # Example: Linking chess_frame to ChessMoves
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables
