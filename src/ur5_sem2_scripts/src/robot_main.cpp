@@ -7,7 +7,7 @@
 #include <moveit_msgs/msg/joint_constraint.h>
 #include <string>
 #include <vector>
-#include "ur5_sem2_scripts/ChessMoves.hpp"
+#include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
 #include "ur5_sem2_scripts/moveStruct.hpp"
 
 int main(int argc, char * argv[])

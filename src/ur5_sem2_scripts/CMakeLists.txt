@@ -23,31 +23,34 @@ find_package(moveit_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 
 # ChessMoves library
-add_library(ChessMoves src/ChessMoves.cpp)
-ament_target_dependencies(ChessMoves rclcpp moveit_ros_planning_interface geometry_msgs tf2_ros std_msgs)
+# add_library(ChessMoves src/ChessMoves.cpp)
+# ament_target_dependencies(ChessMoves rclcpp moveit_ros_planning_interface geometry_msgs tf2_ros std_msgs)
 
 
 # === Moveplanner Library ===
-file(GLOB MOVE_SRCS src/moveplanner/*.cpp)
+file(GLOB MOVE_SRCS CONFIGURE_DEPENDS src/moveplanner/*.cpp)
 add_library(MoveplannerModule ${MOVE_SRCS})
 target_include_directories(MoveplannerModule PUBLIC include)
 ament_target_dependencies(MoveplannerModule rclcpp geometry_msgs tf2_ros std_msgs moveit_ros_planning_interface)
 
 # === Vision Library ===
-file(GLOB VISION_SRCS src/vision/*.cpp)
+file(GLOB VISION_SRCS CONFIGURE_DEPENDS src/vision/*.cpp)
 add_library(VisionModule ${VISION_SRCS})
 target_include_directories(VisionModule PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include           # Your own library headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision           # Your own library headers
     ${OpenCV_INCLUDE_DIRS}                        # OpenCV headers
 )
-target_link_libraries(VisionModule PRIVATE ${OpenCV_LIBS})
+target_link_libraries(VisionModule ${OpenCV_LIBS})
 ament_target_dependencies(VisionModule rclcpp)
 
 # === Board Library ===
-file(GLOB BOARD_SRCS src/board/*.cpp)
-add_library(ControlModule ${CONTROL_SRCS})
-target_include_directories(ControlModule PUBLIC include)
-ament_target_dependencies(ControlModule rclcpp)
+file(GLOB BOARD_SRCS CONFIGURE_DEPENDS src/board/*.cpp)
+add_library(BoardModule ${BOARD_SRCS})
+target_include_directories(BoardModule PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    )
+ament_target_dependencies(BoardModule rclcpp)
 
 
 # Declare executables
@@ -56,13 +59,11 @@ add_executable(svejse_frame src/svejse_frame.cpp)
 add_executable(chess_frame src/chess_frame.cpp)
 add_executable(square_move src/square_move.cpp)
 add_executable(readJoints src/readJoints.cpp)
-add_executable(robot_main 
-  src/robot_main.cpp 
-  src/ChessMoves.cpp
-  )
+add_executable(robot_main src/robot_main.cpp)
+add_executable(vision_main src/vision_main.cpp)
 
 # Link executables with ChessMoves
-target_link_libraries(robot_main ChessMoves)  # Example: Linking chess_frame to ChessMoves
+# target_link_libraries(robot_main ChessMoves)  # Example: Linking chess_frame to ChessMoves
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables
@@ -72,15 +73,17 @@ ament_target_dependencies(chess_frame rclcpp ur_client_library tf2_ros geometry_
 ament_target_dependencies(square_move rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
 ament_target_dependencies(readJoints rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
 ament_target_dependencies(robot_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
-
+target_link_libraries(robot_main MoveplannerModule VisionModule BoardModule)  # Link with the libraries
+ament_target_dependencies(vision_main rclcpp)
+target_link_libraries(vision_main VisionModule BoardModule)  # Link with the libraries
 
 # Install executables
-install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main
+install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main
   DESTINATION lib/${PROJECT_NAME})
 
 # Install library (ChessMoves) properly
-install(TARGETS ChessMoves
-  DESTINATION lib/${PROJECT_NAME})
+ install(TARGETS MoveplannerModule VisionModule BoardModule
+   DESTINATION lib/${PROJECT_NAME})
 
 # Install launch files
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
