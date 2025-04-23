@@ -8,7 +8,15 @@
 
 using namespace std;
 
-int main(){
+int main(int argc, char *argv[]){
+
+    // Initialize RCLCPP
+    rclcpp::init(argc, argv);
+    rclcpp::Logger const logger = rclcpp::get_logger("vision_main");
+
+    RCLCPP_INFO(logger, "Starting chess program");
+    RCLCPP_DEBUG(logger, "Debugging started");
+
     ChessBoard chess; 
     StockfishUCI engine;
     int moveCounter = 0;
@@ -59,5 +67,7 @@ int main(){
         }
     }
 
+    
+    rclcpp::shutdown();
     return 0;
 }

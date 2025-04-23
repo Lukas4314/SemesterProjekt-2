@@ -23,7 +23,7 @@ AllInOneMain::AllInOneMain()
 	// cv::cvtColor(redCircle, redCircle, cv::COLOR_BGR2HSV);
 	// cv::cvtColor(blueCircle, blueCircle, cv::COLOR_BGR2HSV);
 
-	cap.open(0, cv::CAP_ANY);
+	cap.open(4, cv::CAP_ANY);
 	if (!cap.isOpened())
 	{
 		throw std::runtime_error("Error: Could not open the webcam.");
