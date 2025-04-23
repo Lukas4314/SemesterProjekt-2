@@ -26,7 +26,7 @@ private:
     static bool isValidQueen(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor);
     static bool underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board);
-    auto const logger = rclcpp::get_logger("Move_Validator")
+    
 };
 
 #endif

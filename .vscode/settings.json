@@ -89,7 +89,20 @@
     "cinttypes": "cpp",
     "typeindex": "cpp",
     "typeinfo": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "csetjmp": "cpp",
+    "any": "cpp",
+    "bitset": "cpp",
+    "charconv": "cpp",
+    "coroutine": "cpp",
+    "cuchar": "cpp",
+    "regex": "cpp",
+    "rope": "cpp",
+    "slist": "cpp",
+    "fstream": "cpp",
+    "scoped_allocator": "cpp",
+    "span": "cpp",
+    "valarray": "cpp"
 }
 
 }

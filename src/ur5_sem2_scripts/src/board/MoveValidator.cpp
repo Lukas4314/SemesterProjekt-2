@@ -12,9 +12,10 @@ MoveValidator::~MoveValidator() {}
 
 bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
     RCLCPP_DEBUG(logger, "MoveValidator::isValidMove function start");
     char piece = board[fromRow][fromCol];
-    RCLCPP_DEBUG(logger, "Activevoler is: " + activeColor);
+    RCLCPP_DEBUG(logger, std::string("Activecoler is: ").append(activeColor).c_str());
     RCLCPP_DEBUG(logger, "piece is: " + piece);
     RCLCPP_DEBUG(logger, "got the piece");
 
@@ -43,7 +44,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidRook(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Rook cooked")
+            RCLCPP_DEBUG(logger, "Rook cooked");
             return false;
         }
     }
@@ -90,12 +91,13 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
         return false;
     }
 
-    RCLCPP_DEBUG("moveValidator being a good boy");
+    RCLCPP_DEBUG(logger, "moveValidator being a good boy");
     return true;
 }
 
 bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string castle, const vector<vector<char>> &board)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
     if (activeColor == "w")
     {
 
@@ -120,7 +122,7 @@ bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string
         
         RCLCPP_DEBUG(logger, "castlewK = " + castlewK);
         RCLCPP_DEBUG(logger, "pathClearwK = " + pathClearwK);
-        RCLCPP_DEBUG(logger, "underAttackBoolwK = " + underAttakBoolwK);
+        RCLCPP_DEBUG(logger, "underAttackBoolwK = " + underAttackBoolwK);
 
         if (castlewK && pathClearwK && underAttackBoolwK)
         {
@@ -252,6 +254,7 @@ bool MoveValidator::isValidPawn(char piece, int fromRow, int fromCol, int toRow,
 
 bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
     RCLCPP_DEBUG(logger, "MoveValidator::isValidRook function start");
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
@@ -266,10 +269,10 @@ bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow,
     {
         RCLCPP_DEBUG(logger, "Rook cant move to own piece");
         RCLCPP_DEBUG(logger, "Piece detected is" + board[toRow][toCol]);
-        RCLCPP_DEBUG(logger, "Piece is at " + toRow + " " toCol);
+        RCLCPP_DEBUG(logger, "Piece is at %d %d", toRow, toCol);
         return false;
     }
-
+    
     // move in row direction
     int startR = min(fromRow, toRow);
     int endR = max(fromRow, toRow);
@@ -279,7 +282,8 @@ bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow,
         {
             RCLCPP_DEBUG(logger, "Rook path is blocked, along row");
             RCLCPP_DEBUG(logger, "Piece detected is" + board[startR][fromCol]);
-            RCLCPP_DEBUG(logger, "Piece is at " + startR + " " + fromCol);
+            RCLCPP_DEBUG(logger, "Piece is at %d %d", startR, fromCol);
+
             return false;
         }
     }
@@ -352,6 +356,7 @@ bool MoveValidator::isValidQueen(char piece, int fromRow, int fromCol, int toRow
 
 bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     char dest = board[toRow][toCol];

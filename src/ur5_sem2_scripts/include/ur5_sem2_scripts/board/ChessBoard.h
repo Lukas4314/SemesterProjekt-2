@@ -38,5 +38,5 @@ private:
 
     vector<string> moveHistory; // A vector with a string which contains the move history
 
-    auto const logger = rclcpp::get_logger("Board")
+    rclcpp::Logger const logger = rclcpp::get_logger("Board");
 };

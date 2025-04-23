@@ -272,7 +272,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
     bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor);
     if (!validMove)
     { // Uses the MoveValidator class to check if the move is valid
-        RCLCPP_DEBUG(logger, "MoveValidator siger nej")
+        RCLCPP_DEBUG(logger, "MoveValidator siger nej");
         return false;
     }
 
@@ -300,7 +300,7 @@ void ChessBoard::applyBestMoveFromEngine(StockfishUCI &engine, int depth)
     }
 
     string bestMove = output.substr(pos + 9, 4); // Here we use the substr function to extract the best move and skip past the "bestmove " string and straight to the important part ex. b2b3
-    RCLCPP_DEBUG(logger, "Bestmove: " + bestMove);
+    RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
 
     // This is how we convert a2a4 (example) to a move which can be applied by movePiece
     int fromCol = bestMove[0] - 'a';
