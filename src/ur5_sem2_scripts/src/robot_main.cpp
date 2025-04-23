@@ -10,7 +10,7 @@
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
 #include "ur5_sem2_scripts/moveStruct.hpp"
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
   // Initialize ROS and create the Node
   rclcpp::init(argc, argv);
@@ -21,12 +21,11 @@ int main(int argc, char * argv[])
   // Create a ROS logger
   auto const logger = rclcpp::get_logger("robot_main");
 
-  
   ChessMoves chessMoves(node);
   moveStruct move;
   move.piece = 'p';
   move.type = 'k';
-  
+
   chessMoves.move_to_idle();
   // chessMoves.move(move, nullptr);
   // chessMoves.move(move, nullptr);
@@ -37,7 +36,3 @@ int main(int argc, char * argv[])
   rclcpp::shutdown();
   return 0;
 }
-
-
-
-

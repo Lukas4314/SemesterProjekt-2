@@ -78,6 +78,9 @@ install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robo
  install(TARGETS MoveplannerModule VisionModule BoardModule
    DESTINATION lib/${PROJECT_NAME})
 
+# Install share files
+install(DIRECTORY pictures DESTINATION share/${PROJECT_NAME})
+   
 # Install launch files
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 

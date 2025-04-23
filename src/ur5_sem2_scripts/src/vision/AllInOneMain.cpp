@@ -8,13 +8,16 @@
 #include "MoveFinder.h"
 #include "Utill.h"
 #include <string>
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 AllInOneMain::AllInOneMain()
 {
-	greenCircle = cv::imread("../greenCircle.png", cv::IMREAD_COLOR);
-	redCircle = cv::imread("../redCircle.png", cv::IMREAD_COLOR);
-	blueCircle = cv::imread("../blueCircle.png", cv::IMREAD_COLOR);
-	mask = cv::imread("../circleMask.png", cv::IMREAD_GRAYSCALE);
+	std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
+
+	greenCircle = cv::imread(package_share_dir + "/pictures/greenCircle.png", cv::IMREAD_COLOR);
+	redCircle = cv::imread(package_share_dir + "/pictures/redCircle.png", cv::IMREAD_COLOR);
+	blueCircle = cv::imread(package_share_dir + "/pictures/blueCircle.png", cv::IMREAD_COLOR);
+	mask = cv::imread(package_share_dir + "/pictures/circleMask.png", cv::IMREAD_GRAYSCALE);
 
 	// cv::cvtColor(greenCircle, greenCircle, cv::COLOR_BGR2HSV);
 	// cv::cvtColor(redCircle, redCircle, cv::COLOR_BGR2HSV);
