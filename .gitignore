@@ -17,6 +17,7 @@ SemesterProjekt 2/x64*
 SemesterProjekt 2\SemesterProjekt 2.vcx*
 install/
 log/
+.vscode/
 
 # User-specific files
 *.rsuser
