@@ -1,6 +1,7 @@
 // Include libraries
 #include <string>
 #include "StockfishUCI.h"
+#include <rclcpp/rclcpp.hpp> // For git logger
 using namespace std;
 
 // ChessBoard class for handling terminal output, player moves, updating FEN, and for applying the best move from stockfish
@@ -36,4 +37,6 @@ private:
     int fullmoveNumber;
 
     vector<string> moveHistory; // A vector with a string which contains the move history
+
+    auto const logger = rclcpp::get_logger("Board")
 };

@@ -6,6 +6,7 @@
 #include "MoveValidator.h"
 #include "Utill.h"
 #include "ChessBoard.h"
+#include <rclcpp/rclcpp.hpp> // For git logger
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created
@@ -139,7 +140,7 @@ void ChessBoard::movePiece(int fromRow, int fromCol, int toRow, int toCol)
 bool ChessBoard::playerMove()
 {
     string move;
-    cout << "Enter your move (e.g., a2a4) or type 'quit' to exit: "; // Output to console
+    RCLCPP_INFO(logger, "Enter your move (e.g., a2a4) or type 'quit' to exit: ");
     cin >> move;                                                     // Input is the players move which is a string
 
     if (move == "quit")
@@ -176,10 +177,10 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         castleBools[Utill::BQcastleIndex] = bQ;
         castleBools[Utill::BKcastleIndex] = bK;
         bool validCastle = MoveValidator::isValidCastle(activeColor, castleBools, move, board);
-        std::cout << "validCastle = " << validCastle << std::endl;
+        RCLCPP_DEBUG(logger, "validCastle");
         if (!validCastle)
         {
-            std::cout << "MoveValidator siger nej til castle" << std::endl;
+            RCLCPP_DEBUG(logger, "MoveValidator siger nej til castle");
             return false;
         }
 
@@ -230,7 +231,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         toRow = 8 - (move[1] - '0');
         fromCol = move[2] - 'a';
         fromRow = 8 - (move[3] - '0');
-        cout << "Thought it was moving a blank piece and does the switch" << endl;
+        RCLCPP_DEBUG(logger, "Thought it was moving a blank piece and does the switch");
     }
 
     else if (activeColor == "w" && islower(piece1))
@@ -239,7 +240,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         fromRow = 8 - (move[1] - '0');
         toCol = move[2] - 'a';
         toRow = 8 - (move[3] - '0');
-        cout << "White moves on its turn but does not do the switch" << endl;
+        RCLCPP_DEBUG(logger, "White moves on its turn but does not do the switch");
     }
 
     else if (activeColor == "w" && isupper(piece1))
@@ -248,7 +249,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         toRow = 8 - (move[1] - '0');
         fromCol = move[2] - 'a';
         fromRow = 8 - (move[3] - '0');
-        cout << "Thought it was moving a black piece and does the switch" << endl;
+        RCLCPP_DEBUG(logger, "Thought it was moving a black piece and does the switch");
     }
 
     else
@@ -257,7 +258,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         fromRow = 8 - (move[1] - '0');
         toCol = move[2] - 'a';
         toRow = 8 - (move[3] - '0');
-        cout << "This does not do the switch" << endl;
+        RCLCPP_DEBUG(logger, "This does not do the switch");
     }
 
     /*
@@ -271,7 +272,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
     bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor);
     if (!validMove)
     { // Uses the MoveValidator class to check if the move is valid
-        std::cout << "MoveValidator siger nej" << std::endl;
+        RCLCPP_DEBUG(logger, "MoveValidator siger nej")
         return false;
     }
 
@@ -299,7 +300,7 @@ void ChessBoard::applyBestMoveFromEngine(StockfishUCI &engine, int depth)
     }
 
     string bestMove = output.substr(pos + 9, 4); // Here we use the substr function to extract the best move and skip past the "bestmove " string and straight to the important part ex. b2b3
-    cout << "Best move: " << bestMove << endl;
+    RCLCPP_DEBUG(logger, "Bestmove: " + bestMove);
 
     // This is how we convert a2a4 (example) to a move which can be applied by movePiece
     int fromCol = bestMove[0] - 'a';
@@ -337,5 +338,5 @@ void ChessBoard::checkPieces()
             }
         }
     }
-    cout << "Number of filled squares: " << count << endl;
+    RCLCPP_DEBUG(logger, "Number of filled squares: ");
 }
