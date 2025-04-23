@@ -15,7 +15,8 @@ install/trac_ik_kinematics/
 install/trac_ik_lib/
 SemesterProjekt 2/x64*
 SemesterProjekt 2\SemesterProjekt 2.vcx*
-
+install/
+log/
 
 # User-specific files
 *.rsuser
