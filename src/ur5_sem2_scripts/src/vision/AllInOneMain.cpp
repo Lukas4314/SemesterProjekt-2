@@ -10,7 +10,7 @@
 #include <string>
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
-AllInOneMain::AllInOneMain()
+AllInOneMain::AllInOneMain(int camera_index)
 {
 	std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
 
@@ -23,7 +23,7 @@ AllInOneMain::AllInOneMain()
 	// cv::cvtColor(redCircle, redCircle, cv::COLOR_BGR2HSV);
 	// cv::cvtColor(blueCircle, blueCircle, cv::COLOR_BGR2HSV);
 
-	cap.open(4, cv::CAP_ANY);
+	cap.open(camera_index, cv::CAP_ANY);
 	if (!cap.isOpened())
 	{
 		throw std::runtime_error("Error: Could not open the webcam.");

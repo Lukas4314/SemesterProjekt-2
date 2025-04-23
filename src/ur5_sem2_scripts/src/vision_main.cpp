@@ -8,25 +8,31 @@
 
 using namespace std;
 
-int main(int argc, char *argv[]){
+int main(int argc, char *argv[])
+{
 
+    
     // Initialize RCLCPP
     rclcpp::init(argc, argv);
     rclcpp::Logger const logger = rclcpp::get_logger("vision_main");
+    auto const node = std::make_shared<rclcpp::Node>(
+        "robot_main",
+        rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
 
     RCLCPP_INFO(logger, "Starting chess program");
     RCLCPP_DEBUG(logger, "Debugging started");
-
+    int camera_index;
+    node->get_parameter("camera_index", camera_index);  // Retrieve the parameter
     ChessBoard chess; 
     StockfishUCI engine;
     int moveCounter = 0;
     cout << "FEN is: " << chess.getFEN() <<endl;
 
-    AllInOneMain allInOneMain = AllInOneMain();
+    AllInOneMain allInOneMain = AllInOneMain(camera_index);
     allInOneMain.getPieceMovedString(0);
 
     cv::waitKey(0);
-    while (true) {
+    while (rclcpp::ok()) {
         string move = allInOneMain.getPieceMovedString(0);
         std::cout << "Move is: " << move << std::endl;
 

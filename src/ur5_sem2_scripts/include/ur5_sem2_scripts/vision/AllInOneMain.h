@@ -5,7 +5,7 @@
 class AllInOneMain
 {
 public:
-	AllInOneMain();
+	AllInOneMain(int camera_index);
 	~AllInOneMain();
 	int getPieceMoved(int depth = 0);
 	std::string getPieceMovedString(int depth = 0);
