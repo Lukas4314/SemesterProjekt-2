@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     rclcpp::init(argc, argv);
     rclcpp::Logger const logger = rclcpp::get_logger("vision_main");
     auto const node = std::make_shared<rclcpp::Node>(
-        "robot_main",
+        "vision_main",
         rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
 
     RCLCPP_INFO(logger, "Starting chess program");
