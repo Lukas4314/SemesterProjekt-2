@@ -26,6 +26,7 @@ ChessBoard::ChessBoard()
 ChessBoard::~ChessBoard()
 {
     // Destructor
+    
 }
 
 // Function for setting up board
