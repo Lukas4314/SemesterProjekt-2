@@ -3,6 +3,7 @@
 #include "ChessBoard.h"
 #include "MoveValidator.h"
 #include "Utill.h"
+#include <rclcpp/rclcpp.hpp>
 using namespace std;
 
 MoveValidator::MoveValidator() {}
@@ -11,21 +12,21 @@ MoveValidator::~MoveValidator() {}
 
 bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor)
 {
-    std::cout << "MoveValidator::isValidMove functions start" << std::endl;
+    RCLCPP_DEBUG(logger, "MoveValidator::isValidMove function start");
     char piece = board[fromRow][fromCol];
-    std::cout << "Activecolor is:" << activeColor << std::endl;
-    std::cout << "piece is: " << piece << std::endl; 
-    std::cout << "got the piece" << std::endl;
+    RCLCPP_DEBUG(logger, "Activevoler is: " + activeColor);
+    RCLCPP_DEBUG(logger, "piece is: " + piece);
+    RCLCPP_DEBUG(logger, "got the piece");
 
     if ((activeColor == "w") && isupper(piece))
     {
-        cout << "cant move white piece" << endl;
+        RCLCPP_DEBUG(logger, "cant move white piece");
         return false;
     }
 
     if ((activeColor == "b") && islower(piece))
     {
-        cout << "cant move black piece" << endl;
+        RCLCPP_DEBUG(logger, "cant move black piece");
         return false;
     }
 
@@ -33,7 +34,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidPawn(piece, fromRow, fromCol, toRow, toCol, board, activeColor))
         {
-            cout << "invalid pawn movement" << endl;
+            RCLCPP_DEBUG(logger, "invalid pawn movement");
             return false;
         }
     }
@@ -42,7 +43,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidRook(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            cout << "Rook cooked" << endl;
+            RCLCPP_DEBUG(logger, "Rook cooked")
             return false;
         }
     }
@@ -51,7 +52,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidKnight(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            cout << "Knight cooked" << endl;
+            RCLCPP_DEBUG(logger, "Knight cooked");
             return false;
         }
     }
@@ -60,7 +61,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidBishop(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            cout << "Bishop cooked" << endl;
+            RCLCPP_DEBUG(logger, "Bishop cooked");
             return false;
         }
     }
@@ -69,7 +70,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidQueen(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            cout << "Queen cooked" << endl;
+            RCLCPP_DEBUG(logger, "Queen cooked");
             return false;
         }
     }
@@ -78,18 +79,18 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor))
         {
-            cout << "King cooked" << endl;
+            RCLCPP_DEBUG(logger, "King cooked");
             return false;
         }
     }
 
     if (piece == '-')
     {
-        cout << "no piece at from position" << endl;
+        RCLCPP_DEBUG(logger, "no piece at from position");
         return false;
     }
 
-    cout << "moveValidator being a good boy" << endl;
+    RCLCPP_DEBUG("moveValidator being a good boy");
     return true;
 }
 
@@ -102,10 +103,10 @@ bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string
         bool pathClearwQ = board[7][1] == '-' && board[7][2] == '-' && board[7][3] == '-';
         bool castlewQ = castle == "wQ" && castleBools[Utill::WQcastleIndex];
 
-        cout << "castlewQ = " << castlewQ << endl;
-        cout << "pathClearwQ = " << pathClearwQ << endl;
-        cout << "underAttackBoolwQ = " << underAttackBoolwQ << endl;
-        
+        RCLCPP_DEBUG(logger, "castlewQ = " + castlewQ);
+        RCLCPP_DEBUG(logger, "pathClearwQ = " + pathClearwQ);
+        RCLCPP_DEBUG(logger, "underAttackBoolwQ = " + underAttackBoolwQ);
+
         if (castlewQ && pathClearwQ && underAttackBoolwQ)
         {
 
@@ -117,18 +118,18 @@ bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string
         bool pathClearwK = board[7][5] == '-' && board[7][6] == '-';
         bool castlewK = castle == "wK" && castleBools[Utill::WKcastleIndex];
         
-        cout << "castlewK = " << castlewK << endl;
-        cout << "pathClearwK = " << pathClearwK << endl;
-        cout << "underAttackBoolwK = " << underAttackBoolwK << endl;
+        RCLCPP_DEBUG(logger, "castlewK = " + castlewK);
+        RCLCPP_DEBUG(logger, "pathClearwK = " + pathClearwK);
+        RCLCPP_DEBUG(logger, "underAttackBoolwK = " + underAttakBoolwK);
 
         if (castlewK && pathClearwK && underAttackBoolwK)
         {
-            cout << "Castle is valid" << endl;
-            cout << "castleBools[Utill::WQcastleIndex] = " << castleBools[Utill::WQcastleIndex] << endl;
-            cout << "castleBools[Utill::WKcastleIndex] = " << castleBools[Utill::WKcastleIndex] << endl;
-            cout << "board[7][1] = " << board[7][1] << endl;
-            cout << "board[7][2] = " << board[7][2] << endl;
-            cout << "board[7][3] = " << board[7][3] << endl;
+            RCLCPP_DEBUG(logger, "Castle is valid");
+            RCLCPP_DEBUG(logger, "castleBools[Utill::WQcastleIndex] = " + castleBools[Utill::WQcastleIndex]);
+            RCLCPP_DEBUG(logger, "castleBools[Utill::WKcastleIndex] = " + castleBools[Utill::WKcastleIndex]);
+            RCLCPP_DEBUG(logger, "board[7][1] = " + board[7][1]);
+            RCLCPP_DEBUG(logger, "board[7][2] = " + board[7][2]);
+            RCLCPP_DEBUG(logger, "board[7][3] = " + board[7][3]); 
             return true;
         }  
     }
@@ -139,9 +140,9 @@ bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string
         bool pathClearbQ = board[0][1] == '-' && board[0][2] == '-' && board[0][3] == '-';
         bool castlebQ = castle == "bQ" && castleBools[Utill::BQcastleIndex];
         
-        cout << "castlebQ = " << castlebQ << endl;
-        cout << "pathClearbQ = " << pathClearbQ << endl;
-        cout << "underAttackBoolbQ = " << underAttackBoolbQ << endl;
+        RCLCPP_DEBUG(logger, "castlebQ = " + castlebQ);
+        RCLCPP_DEBUG(logger, "pathClearbQ = " + pathClearbQ);
+        RCLCPP_DEBUG(logger, "underAttackBoolbQ = " + underAttackBoolbQ);
         if (castlebQ && pathClearbQ && underAttackBoolbQ)
         {
             return true;
@@ -151,9 +152,9 @@ bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string
         bool pathClearbK = board[0][5] == '-' && board[0][6] == '-';
         bool castlebK = castle == "bK" && castleBools[Utill::BKcastleIndex];
 
-        cout << "castlebK = " << castlebK << endl;
-        cout << "pathClearbK = " << pathClearbK << endl;
-        cout << "underAttackBoolbK = " << underAttackBoolbK << endl;
+        RCLCPP_DEBUG(logger, "castlebK = " + castlebK);
+        RCLCPP_DEBUG(logger, "pathClearbK = " + pathClearbK);
+        RCLCPP_DEBUG(logger, "underAttackBoolbK = " + underAttackBoolbK);
 
         if (castlebK &&
             pathClearbK &&
@@ -251,21 +252,21 @@ bool MoveValidator::isValidPawn(char piece, int fromRow, int fromCol, int toRow,
 
 bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
 {
-    std::cout << "MoveValidator::isValidRook functions start" << std::endl;
+    RCLCPP_DEBUG(logger, "MoveValidator::isValidRook function start");
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
 
     if ((colDiff != 0) && (rowDiff != 0))
     {
-        cout << "Rook cant move in row direction and col direction" << endl;
+        RCLCPP_DEBUG(logger, "Rook cant move in row direction and col direction");
         return false; // Rook cant move in row direction and col direction
     }
 
     if (isupper(board[toRow][toCol]) == isupper(piece) && board[toRow][toCol] != '-')
     {
-        cout << "Rook cant move to own piece" << endl;
-        cout << "Piece detected is" << board[toRow][toCol] << endl;
-        cout << "Piece is at " << toRow << " " << toCol << endl;
+        RCLCPP_DEBUG(logger, "Rook cant move to own piece");
+        RCLCPP_DEBUG(logger, "Piece detected is" + board[toRow][toCol]);
+        RCLCPP_DEBUG(logger, "Piece is at " + toRow + " " toCol);
         return false;
     }
 
@@ -276,10 +277,9 @@ bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow,
     {
         if (board[startR][fromCol] != '-')
         {
-
-            cout << "Rook path is blocked, along row" << endl;
-            cout << "Piece detected is" << board[startR][fromCol] << endl;
-            cout << "Piece is at " << startR << " " << fromCol << endl;
+            RCLCPP_DEBUG(logger, "Rook path is blocked, along row");
+            RCLCPP_DEBUG(logger, "Piece detected is" + board[startR][fromCol]);
+            RCLCPP_DEBUG(logger, "Piece is at " + startR + " " + fromCol);
             return false;
         }
     }
@@ -291,7 +291,7 @@ bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow,
     {
         if (board[startC][fromRow] != '-')
         {
-            cout << "Rook path is blocked, along col" << endl;
+            RCLCPP_DEBUG(logger, "Rook path is blocked, along col");
             return false;
         }
     }
@@ -357,16 +357,16 @@ bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow,
     char dest = board[toRow][toCol];
 
     if (rowDiff > 1 || colDiff > 1)
-        cout << "King cannot move more than 1 square at once" << endl;
+        RCLCPP_DEBUG(logger, "King cannot move more than 1 square at once");
         return false;
     if (dest != '-' && ((activeColor == "w" && isupper(dest)) || (activeColor == "b" && islower(dest))))
-        cout << "King cannot into piece of own color" << endl;
+        RCLCPP_DEBUG(logger, "King cannot move into piece of own coler");
         return false;
 
     // Check king cannot move into chess
     if (underAttack)
     {
-        cout << "King cannot move into check" << endl;
+        RCLCPP_DEBUG(logger, "King cannot move into check");
         return false;
     }
 
