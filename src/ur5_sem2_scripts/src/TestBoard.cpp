@@ -1,4 +1,6 @@
 #include "MoveValidator.h"
+#include "Utill.h"
+#include "ChessBoard.h"
 #include <iostream>
 #include <string>
 #include <ChessBoard.h>
@@ -6,7 +8,7 @@
 using namespace std;
 
 int main() {
-    ChessBoard chessBoard;
+    ChessBoard chessBoard = ChessBoard();
     chessBoard.setBoard(
         // Example setup: You can modify this to set up the board in a specific state
         vector<vector<char>>{

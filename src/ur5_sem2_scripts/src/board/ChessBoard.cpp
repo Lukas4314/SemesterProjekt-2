@@ -302,7 +302,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
     }
     */
 
-    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor);
+    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory);
     if (!validMove)
     { // Uses the MoveValidator class to check if the move is valid
         RCLCPP_DEBUG(logger, "MoveValidator siger nej");

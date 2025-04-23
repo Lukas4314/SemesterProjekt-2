@@ -46,7 +46,10 @@ target_include_directories(BoardModule PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
     )
+target_link_libraries(BoardModule VisionModule)
 ament_target_dependencies(BoardModule rclcpp)
+
+
 
 
 # Declare executables
@@ -74,7 +77,7 @@ ament_target_dependencies(board_test_main rclcpp)
 target_link_libraries(board_test_main VisionModule BoardModule)  # Link with the libraries
 
 # Install executables
-install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main
+install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main
   DESTINATION lib/${PROJECT_NAME})
 
 # Install library (ChessMoves) properly

@@ -1,4 +1,5 @@
 // Include libraries
+#pragma once
 #include <string>
 #include "StockfishUCI.h"
 #include <rclcpp/rclcpp.hpp> // For git logger
@@ -10,7 +11,7 @@ class ChessBoard
 public:
     ChessBoard();                                                       // Constructor
     void setupBoard();
-    static vector<string> getMoveHistory();                                                  // Function for setting up the board
+    vector<string> getMoveHistory();                                                  // Function for setting up the board
     void updateFEN();                                                   // Function for updating the FEN notation
     string getFEN();                                                    // Function for returning current FEN
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);     // Function for moving pieces
@@ -38,7 +39,7 @@ private:
     int halfmoveClock;
     int fullmoveNumber;
 
-    static vector<string> moveHistory; // A vector with a string which contains the move history
+    vector<string> moveHistory; // A vector with a string which contains the move history
 
     rclcpp::Logger const logger = rclcpp::get_logger("Board");
 };
