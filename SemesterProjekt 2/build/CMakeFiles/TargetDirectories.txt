@@ -1,3 +1,0 @@
-/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt 2/build/CMakeFiles/main.dir
-/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt 2/build/CMakeFiles/edit_cache.dir
-/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt 2/build/CMakeFiles/rebuild_cache.dir
