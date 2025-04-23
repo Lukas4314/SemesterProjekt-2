@@ -57,6 +57,7 @@ add_executable(square_move src/square_move.cpp)
 add_executable(readJoints src/readJoints.cpp)
 add_executable(robot_main src/robot_main.cpp)
 add_executable(vision_main src/vision_main.cpp)
+add_executable(board_test_main src/TestBoard.cpp)
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables
@@ -69,6 +70,8 @@ ament_target_dependencies(robot_main rclcpp ur_client_library tf2_ros geometry_m
 target_link_libraries(robot_main MoveplannerModule VisionModule BoardModule)  # Link with the libraries
 ament_target_dependencies(vision_main rclcpp)
 target_link_libraries(vision_main VisionModule BoardModule)  # Link with the libraries
+ament_target_dependencies(board_test_main rclcpp)
+target_link_libraries(board_test_main VisionModule BoardModule)  # Link with the libraries
 
 # Install executables
 install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main

@@ -14,6 +14,7 @@ ChessBoard::ChessBoard()
 {                                                          // This is how we initialize the board. It takes 8 for 8 vectors, and then we specify that every element of each vector should be empty
     board = vector<vector<char>>(8, vector<char>(8, '-')); // A vector of vectors with characters
     setupBoard();                                          // Set up the board in the starting position
+    //setupTestBoard();                                      // Set up the board in the test position
     // Initiates variables for FEN notation
     activeColor = "w";
     castlingRights = "KQkq";
@@ -40,6 +41,32 @@ void ChessBoard::setupBoard()
         board[7][i] = tolower(pieces[i]); // Uses tolower function to make back row
     }
 }
+
+void ChessBoard::setBoard(const vector<vector<char>> &newBoard)
+{
+    board = newBoard; // Sets the board to the new board
+}
+
+/*
+void ChessBoard::setupTestBoard()
+{
+    string pieces = "RNBQKBNR"; // Shortcut string
+    for (int i = 0; i < 8; ++i)
+    {                                     // For loop that iterates from i = 0 to i = 8
+        board[0][i] = pieces[i];          // In the first loop R is added to board position 1
+        board[4][0] = 'P';
+        board[1][1] = 'P';
+        board[4][2] = 'P';
+        board[1][3] = 'P';
+        board[4][4] = 'P';
+        board[1][5] = 'P';
+        board[4][6] = 'P';
+        board[1][7] = 'P';                
+        board[6][i] = 'p';                // Same but for setting up black pieces
+        board[7][i] = tolower(pieces[i]); // Uses tolower function to make back row
+    }
+}
+*/
 
 // Function for updating the FEN notation
 void ChessBoard::updateFEN()
@@ -78,6 +105,11 @@ void ChessBoard::updateFEN()
 string ChessBoard::getFEN()
 {
     return FEN;
+}
+
+vector<string> ChessBoard::getMoveHistory() 
+{
+    return moveHistory;
 }
 
 // Function used to move pieces

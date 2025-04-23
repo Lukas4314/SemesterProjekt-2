@@ -15,7 +15,7 @@ public:
     static bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor);
     static bool isValidCastle(string activeColor, bool castleBools[], string castle, const vector<vector<char>> &board);
     static bool isValidPromotion(int fromRow, int fromCol, int toCol, const vector<vector<char>> &board);
-    //static bool isValidEnPassant(string lastMove, int fromRow, int fromCol, string activeColor, int toRow, int toCol, const vector<vector<char>> &board);
+    static bool isValidEnPassant(const string &activeColor, const vector<vector<char>> &board, string currentMove);
     ~MoveValidator();
 private:
     // Function for checking if pawn move is valid (Need to implement isPathClear function)

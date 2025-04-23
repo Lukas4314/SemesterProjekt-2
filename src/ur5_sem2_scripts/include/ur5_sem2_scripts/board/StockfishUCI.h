@@ -100,6 +100,21 @@ public:
 
         return readOutputUntil("bestmove");     // lastly we read until best move keyword is found at which point a string is returned by the function
     }
+
+    string getBestMoveFromFen(const string& fen, const string& moves = "", int depth = 15) {
+        writeCommand("uci");
+        readOutputUntil("uciok");
+    
+        writeCommand("isready");
+        readOutputUntil("readyok");
+    
+        writeCommand("ucinewgame");
+        writeCommand("position fen " + fen + " moves " + moves);
+        writeCommand("go depth " + to_string(depth));
+    
+        return readOutputUntil("bestmove");
+    }
+    
 };
 
 #endif // STOCKFISH_UCI_H

@@ -185,29 +185,39 @@ bool MoveValidator::isValidPromotion(int fromRow, int fromCol, int toCol, const 
     return false;
 }
 
-/*
-bool MoveValidator::isValidEnPassant(string lastMove, int fromRow, int fromCol, string activeColor, int toRow, int toCol, const vector<vector<char>> &board)
+bool MoveValidator::isValidEnPassant(const string &activeColor, const vector<vector<char>> &board, string currentMove)
 {
-    char piece = board[fromRow][fromCol];
-
-    if (piece == 'P') {
-        if (lastMove = )
-        {
+    vector<string> moveHistory = ChessBoard::getMoveHistory();
+    string lastMove = moveHistory.back();
+    
+    if (activeColor == "w" && 
+       ((lastMove == "b7b5" && currentMove == "a5b6") || 
+        (lastMove == "a7a5" && currentMove == "b5a6") || (lastMove == "c7c5" && currentMove == "b5c6") || 
+        (lastMove == "b7b5" && currentMove == "c5d6") || (lastMove == "d7d5" && currentMove == "c5d6") || 
+        (lastMove == "c7c5" && currentMove == "d5c6") || (lastMove == "e7e5" && currentMove == "d5e6") ||
+        (lastMove == "d7d5" && currentMove == "e5d6") || (lastMove == "f7f5" && currentMove == "e5f6") ||
+        (lastMove == "e7e5" && currentMove == "f5e6") || (lastMove == "g7g5" && currentMove == "f5g6") ||
+        (lastMove == "f7f5" && currentMove == "g5f6") || (lastMove == "h7h5" && currentMove == "g5h6") ||
+        (lastMove == "g7g5" && currentMove == "h5g6")))
+    {
         return true;
-        }
     }
 
-    if (piece == 'p') {
-        if (lastMove = )
-        {
+    if (activeColor == "b" && 
+       ((lastMove == "b2b4" && currentMove == "a4b3") || 
+        (lastMove == "a2a4" && currentMove == "b4a3") || (lastMove == "c2c4" && currentMove == "b4c3") ||
+        (lastMove == "b2b4" && currentMove == "c4d3") || (lastMove == "d2d4" && currentMove == "c4d3") ||
+        (lastMove == "c2c4" && currentMove == "d4c3") || (lastMove == "e2e4" && currentMove == "d4e3") ||
+        (lastMove == "d2d4" && currentMove == "e4d3") || (lastMove == "f2f4" && currentMove == "e4f3") ||
+        (lastMove == "e2e4" && currentMove == "f4e3") || (lastMove == "g2g4" && currentMove == "f4g3") ||
+        (lastMove == "f2f4" && currentMove == "g4f3") || (lastMove == "h2h4" && currentMove == "g4h3") ||
+        (lastMove == "g2g4" && currentMove == "h4g3")))
+    {
         return true;
-        }
-
     }
-
+    
     return false;
 }
-*/
 
 // Function for checking if pawn move is valid (Need to implement isPathClear function)
 bool MoveValidator::isValidPawn(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor)
@@ -217,39 +227,51 @@ bool MoveValidator::isValidPawn(char piece, int fromRow, int fromCol, int toRow,
     int colDiff = toCol - fromCol;
     char dest = board[toRow][toCol];
 
-    // Diagonal capture
-    if (abs(colDiff) == 1)
+
+    string stringMove = Utill::translateIntMoveToString(fromRow * 1000 + fromCol * 100 + toRow * 10 + toCol);
+    RCLCPP_DEBUG(rclcpp::get_logger("Move_Validator"), "I hope the move is %s", stringMove.c_str());
+
+    if (isValidEnPassant(activeColor, board, stringMove))
     {
-        if (activeColor == "w" && rowDiff == -1)
-            return isupper(dest);
-        if (activeColor == "b" && rowDiff == 1)
-            return islower(dest);
+        return true;
+    }
+
+    else
+    {
+        // Diagonal capture
+        if (abs(colDiff) == 1)
+        {
+            if (activeColor == "w" && rowDiff == -1)
+                return isupper(dest);
+            if (activeColor == "b" && rowDiff == 1)
+                return islower(dest);
+            return false;
+        }
+    
+        // Forward move (must be in same column)
+        if (colDiff != 0)
+            return false;
+    
+        // White forward
+        if (activeColor == "w")
+        {
+            if (rowDiff == -1 && dest == '-')
+                return true;
+            if (rowDiff == -2 && fromRow == 6 && board[fromRow - 1][fromCol] == '-' && dest == '-')
+                return true;
+        }
+    
+        // Black forward
+        if (activeColor == "b")
+        {
+            if (rowDiff == 1 && dest == '-')
+                return true;
+            if (rowDiff == 2 && fromRow == 1 && board[fromRow + 1][fromCol] == '-' && dest == '-')
+                return true;
+        }
+    
         return false;
     }
-
-    // Forward move (must be in same column)
-    if (colDiff != 0)
-        return false;
-
-    // White forward
-    if (activeColor == "w")
-    {
-        if (rowDiff == -1 && dest == '-')
-            return true;
-        if (rowDiff == -2 && fromRow == 6 && board[fromRow - 1][fromCol] == '-' && dest == '-')
-            return true;
-    }
-
-    // Black forward
-    if (activeColor == "b")
-    {
-        if (rowDiff == 1 && dest == '-')
-            return true;
-        if (rowDiff == 2 && fromRow == 1 && board[fromRow + 1][fromCol] == '-' && dest == '-')
-            return true;
-    }
-
-    return false;
 }
 
 bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)

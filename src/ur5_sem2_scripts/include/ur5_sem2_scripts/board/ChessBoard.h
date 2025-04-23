@@ -9,7 +9,8 @@ class ChessBoard
 {
 public:
     ChessBoard();                                                       // Constructor
-    void setupBoard();                                                  // Function for setting up the board
+    void setupBoard();
+    static vector<string> getMoveHistory();                                                  // Function for setting up the board
     void updateFEN();                                                   // Function for updating the FEN notation
     string getFEN();                                                    // Function for returning current FEN
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);     // Function for moving pieces
@@ -18,6 +19,7 @@ public:
     void applyBestMoveFromEngine(StockfishUCI &engine, int depth = 15); // Function for applying the best move from the engine
     void printBoard();                                                  // Function for printing the board
     void checkPieces();
+    void setBoard(const vector<vector<char>> &newBoard);             // Function for setting the board
     ~ChessBoard();                                                     // Destructor
 
 private:
@@ -36,7 +38,7 @@ private:
     int halfmoveClock;
     int fullmoveNumber;
 
-    vector<string> moveHistory; // A vector with a string which contains the move history
+    static vector<string> moveHistory; // A vector with a string which contains the move history
 
     rclcpp::Logger const logger = rclcpp::get_logger("Board");
 };
