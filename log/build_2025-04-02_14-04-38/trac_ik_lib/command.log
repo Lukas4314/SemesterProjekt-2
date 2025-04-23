@@ -1,3 +1,0 @@
-Invoking command in '/home/magne/ros2_ws/build/trac_ik_lib': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/magne/ros2_ws/src/trac_ik/trac_ik_lib -DCMAKE_INSTALL_PREFIX=/home/magne/ros2_ws/install/trac_ik_lib
-Invoked command in '/home/magne/ros2_ws/build/trac_ik_lib' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake /home/magne/ros2_ws/src/trac_ik/trac_ik_lib -DCMAKE_INSTALL_PREFIX=/home/magne/ros2_ws/install/trac_ik_lib
-Invoking command in '/home/magne/ros2_ws/build/trac_ik_lib': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/magne/ros2_ws/build/trac_ik_lib -- -j20 -l20
