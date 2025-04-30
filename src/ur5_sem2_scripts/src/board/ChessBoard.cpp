@@ -113,9 +113,80 @@ vector<string> ChessBoard::getMoveHistory()
     return moveHistory;
 }
 
-// Function used to move pieces
+void ChessBoard::movePieceEnPassant(int fromRow, int fromCol, int toRow, int toCol)
+{
+    RCLCPP_DEBUG(logger, "MovePieceEnPassant function start");
+
+    if (fromRow >= 0 && fromRow < 8 && fromCol >= 0 && fromCol < 8 &&
+        toRow >= 0 && toRow < 8 && toCol >= 0 && toCol < 8)
+    {
+        string move = "";
+        move += ('a' + fromCol);
+        move += ('8' - fromRow);
+        move += ('a' + toCol);
+        move += ('8' - toRow);
+
+        char piece = board[fromRow][fromCol];
+        board[toRow][toCol] = piece;
+        board[fromRow][fromCol] = '-';
+
+        int capturedPawnRow = (activeColor == "w") ? toRow + 1 : toRow - 1;
+        if (capturedPawnRow >= 0 && capturedPawnRow < 8)
+        {
+            board[capturedPawnRow][toCol] = '-';
+            RCLCPP_DEBUG(logger, "Removed captured pawn at %d, %d", capturedPawnRow, toCol);
+        }
+
+        moveHistory.push_back(move);
+
+        activeColor = (activeColor == "w") ? "b" : "w";
+        fullmoveNumber += (activeColor == "w") ? 1 : 0;
+        updateFEN();
+    }
+    else
+    {
+        cerr << "Invalid move!" << endl;
+    }
+}
+
+void ChessBoard::movePiecePromo(int fromRow, int fromCol, int toRow, int toCol) 
+{
+    RCLCPP_DEBUG(logger, "MovePieceEnPassant function start");
+
+    if (fromRow >= 0 && fromRow < 8 && fromCol >= 0 && fromCol < 8 &&
+        toRow >= 0 && toRow < 8 && toCol >= 0 && toCol < 8)
+    {
+        string move = "";
+        move += ('a' + fromCol);
+        move += ('8' - fromRow);
+        move += ('a' + toCol);
+        move += ('8' - toRow);
+        
+        //Promotion til dronning
+        move += ('q');
+
+        RCLCPP_DEBUG(logger, "The move is: %s", move.c_str());
+        
+        char piece = board[fromRow][fromCol];
+        board[toRow][toCol] = piece;
+        board[fromRow][fromCol] = '-';
+
+        moveHistory.push_back(move);
+
+        activeColor = (activeColor == "w") ? "b" : "w";
+        fullmoveNumber += (activeColor == "w") ? 1 : 0;
+        updateFEN();
+    }
+    else
+    {
+        cerr << "Invalid move!" << endl;
+    }
+}
+
+
 void ChessBoard::movePiece(int fromRow, int fromCol, int toRow, int toCol)
 {
+    RCLCPP_DEBUG(logger, "MovePiece function start");
     if (fromRow >= 0 && fromRow < 8 && fromCol >= 0 && fromCol < 8 &&
         toRow >= 0 && toRow < 8 && toCol >= 0 && toCol < 8)
     { // If statement that checks that the move is within the frame of the vector of vectors
@@ -129,6 +200,7 @@ void ChessBoard::movePiece(int fromRow, int fromCol, int toRow, int toCol)
         move += ('8' - fromRow);
         move += ('a' + toCol);
         move += ('8' - toRow);
+
         moveHistory.push_back(move);
 
         activeColor = (activeColor == "w") ? "b" : "w";
@@ -209,7 +281,7 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         castleBools[Utill::WKcastleIndex] = wK;
         castleBools[Utill::BQcastleIndex] = bQ;
         castleBools[Utill::BKcastleIndex] = bK;
-        bool validCastle = MoveValidator::isValidCastle(activeColor, castleBools, move, board);
+        bool validCastle = MoveValidator::isValidCastle(activeColor, castleBools, move, board, moveHistory);
         RCLCPP_DEBUG(logger, "validCastle");
         if (!validCastle)
         {
@@ -271,8 +343,10 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
     {
         fromCol = move[0] - 'a';
         fromRow = 8 - (move[1] - '0');
+        RCLCPP_DEBUG(logger, string("fromRow is: ").append(to_string(fromRow)).c_str());
         toCol = move[2] - 'a';
         toRow = 8 - (move[3] - '0');
+        RCLCPP_DEBUG(logger, string("toRow is: ").append(to_string(toRow)).c_str());
         RCLCPP_DEBUG(logger, "White moves on its turn but does not do the switch");
     }
 
@@ -309,8 +383,33 @@ bool ChessBoard::applyMoveStringCamera(const string &move)
         return false;
     }
 
+    bool isValidEnpassant = MoveValidator::isValidEnPassant(activeColor, board, move, moveHistory);
+    bool isValidPromotion = MoveValidator::isValidPromotion(fromRow, fromCol, toRow, board);
+
+    RCLCPP_DEBUG(logger, "isValidEnpassant: %s", isValidEnpassant ? "true" : "false");
+    RCLCPP_DEBUG(logger, "isValidPromotion: %s", isValidPromotion ? "true" : "false");
+
+    if (!isValidEnpassant && !isValidPromotion) 
+    {
     movePiece(fromRow, fromCol, toRow, toCol);
+    RCLCPP_DEBUG(logger, "MovePiece function called");
     return true;
+    } 
+
+    else if (isValidPromotion) 
+    {
+    movePiecePromo(fromRow, fromCol, toRow, toCol);
+    RCLCPP_DEBUG(logger, "MovePiecePromo function called from is promo");
+    return true;
+    }
+
+    else 
+    {
+    movePieceEnPassant(fromRow, fromCol, toRow, toCol);
+    RCLCPP_DEBUG(logger, "MovePieceEnPassant function called from isvalidenpassant");
+    return true;
+    }
+
 }
 
 // This function: 1. Sends all previous moves to stockfish. 2. Asks for the best move (using the stockfishUCI class). 3. Extracts the best move. 4. Applies it to your board

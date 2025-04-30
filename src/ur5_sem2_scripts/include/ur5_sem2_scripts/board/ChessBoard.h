@@ -14,9 +14,11 @@ public:
     vector<string> getMoveHistory();                                                  // Function for setting up the board
     void updateFEN();                                                   // Function for updating the FEN notation
     string getFEN();                                                    // Function for returning current FEN
+    void movePieceEnPassant(int fromRow, int fromCol, int toRow, int toCol); // Function for moving pieces
+    void movePiecePromo(int fromRow, int fromCol, int toRow, int toCol); 
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);     // Function for moving pieces
     bool playerMove();                                                  // Function for playing a move
-    bool applyMoveStringCamera(const std::string &move);                // Function for applying a move from the camera
+    bool applyMoveStringCamera(const string &move);                // Function for applying a move from the camera
     void applyBestMoveFromEngine(StockfishUCI &engine, int depth = 15); // Function for applying the best move from the engine
     void printBoard();                                                  // Function for printing the board
     void checkPieces();

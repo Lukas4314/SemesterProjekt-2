@@ -7,24 +7,55 @@
 
 using namespace std;
 
-int main() {
-    ChessBoard chessBoard = ChessBoard();
+int main(int argc, char *argv[]) {
+    rclcpp::init(argc, argv); // Initialize the ROS 2 client library
+    rclcpp::Logger const logger = rclcpp::get_logger("Test_Validator");
+    auto const node = std::make_shared<rclcpp::Node>(
+        "Test_Validator",
+        rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
+
+    ChessBoard chessBoard;
     chessBoard.setBoard(
         // Example setup: You can modify this to set up the board in a specific state
         vector<vector<char>>{
-            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
-            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', 'P', 'P', 'P', 'P', 'P', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
             {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
-            {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}
         }
     );
-    cout << chessBoard.applyMoveStringCamera("e4e5") << endl;
-    cout << chessBoard.applyMoveStringCamera("f2f4") << endl;
-    cout << chessBoard.applyMoveStringCamera("e5f4") << endl;
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e2e4"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("a7a5"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e4e5"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f7f5"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e5f6"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("g7g5"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f6f7"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f8h6"))).c_str());
+    chessBoard.printBoard();
+
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f7f8"))).c_str());
+    chessBoard.printBoard();
 
     return 0;
 }
