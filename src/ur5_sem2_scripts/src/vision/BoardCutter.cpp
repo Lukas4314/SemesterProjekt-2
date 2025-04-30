@@ -42,7 +42,8 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
 	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
-
+	greenPointCenter = greenCenterPoint;
+	redPointCenter = redCenterPoint;
 
 
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
@@ -91,6 +92,30 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	}
 	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
 	return cheesWithMarkedCornors;
+}
+
+std::array<std::array<double, 4>, 4> BoardCutter::getTFchess()
+{
+	// Initialize the transformation matrix
+	std::array<std::array<double, 4>, 4> TFchess = {{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1}
+	}};
+	// Set the transformation values based on the chessboard rotation and position
+	cv::Point2i difference = redPointCenter - greenPointCenter;
+
+	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90;
+	TFchess[0][0] = cos(angle * M_PI / 180);
+	TFchess[0][1] = -sin(angle * M_PI / 180);
+	TFchess[1][0] = sin(angle * M_PI / 180);
+	TFchess[1][1] = cos(angle * M_PI / 180);
+	TFchess[0][3] = greenPointCenter.x;
+	TFchess[1][3] = greenPointCenter.y;
+
+
+	return TFchess;
 }
 
 

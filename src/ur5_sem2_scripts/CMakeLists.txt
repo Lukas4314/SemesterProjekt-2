@@ -26,15 +26,22 @@ find_package(OpenCV REQUIRED)
 # === Moveplanner Library ===
 file(GLOB MOVE_SRCS CONFIGURE_DEPENDS src/moveplanner/*.cpp)
 add_library(MoveplannerModule ${MOVE_SRCS})
-target_include_directories(MoveplannerModule PUBLIC include)
+target_include_directories(MoveplannerModule PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/moveplanner
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${OpenCV_INCLUDE_DIRS}
+)
 ament_target_dependencies(MoveplannerModule rclcpp geometry_msgs tf2_ros std_msgs moveit_ros_planning_interface)
 
 # === Vision Library ===
 file(GLOB VISION_SRCS CONFIGURE_DEPENDS src/vision/*.cpp)
 add_library(VisionModule ${VISION_SRCS})
 target_include_directories(VisionModule PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision           # Your own library headers
-    ${OpenCV_INCLUDE_DIRS}                        # OpenCV headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    ${OpenCV_INCLUDE_DIRS}
 )
 target_link_libraries(VisionModule ${OpenCV_LIBS})
 ament_target_dependencies(VisionModule rclcpp)
