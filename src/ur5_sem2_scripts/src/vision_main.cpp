@@ -5,13 +5,14 @@
 #include <string>
 #include "ChessBoard.h"
 #include "StockfishUCI.h"
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
 
-    
+    std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
     // Initialize RCLCPP
     rclcpp::init(argc, argv);
     rclcpp::Logger const logger = rclcpp::get_logger("vision_main");
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     int camera_index;
     node->get_parameter("camera_index", camera_index);  // Retrieve the parameter
     ChessBoard chess; 
-    StockfishUCI engine;
+    StockfishUCI engine = StockfishUCI(package_share_dir + "/stockfish/stockfish");
     int moveCounter = 0;
     cout << "FEN is: " << chess.getFEN() <<endl;
 
