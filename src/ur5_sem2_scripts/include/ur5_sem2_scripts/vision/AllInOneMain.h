@@ -9,7 +9,7 @@ public:
 	~AllInOneMain();
 	int getPieceMoved(int depth = 0);
 	std::string getPieceMovedString(int depth = 0);
-
+	BoardCutter getBoardCutter();
 private:
 	cv::VideoCapture cap;
 	cv::Mat greenCircle;

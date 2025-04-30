@@ -8,6 +8,7 @@ private:
 	cv::Point2i oldRedPoint;
 	cv::Point2i greenPointCenter;
 	cv::Point2i redPointCenter;
+	double TFScale;
 public:
 	BoardCutter();
 	~BoardCutter();

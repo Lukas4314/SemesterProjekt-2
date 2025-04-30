@@ -107,3 +107,8 @@ std::string AllInOneMain::getPieceMovedString(int depth)
 	std::string move = Utill::translateIntMoveToString(getPieceMoved(depth));
 	return move;
 }
+
+BoardCutter AllInOneMain::getBoardCutter()
+{
+	return boardCutter;
+}
