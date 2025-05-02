@@ -7,6 +7,13 @@ BoardCutter::BoardCutter()
 	oldGreenPoint = cv::Point2i(0, 0);
 	oldRedPoint = cv::Point2i(0, 0);
 }
+BoardCutter::BoardCutter(std::string name)
+{
+	oldGreenPoint = cv::Point2i(0, 0);
+	oldRedPoint = cv::Point2i(0, 0);
+	this->name = name;
+}
+
 BoardCutter::~BoardCutter()
 {
 }

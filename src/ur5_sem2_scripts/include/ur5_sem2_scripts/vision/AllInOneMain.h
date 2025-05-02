@@ -17,7 +17,7 @@ private:
 	cv::Mat blueCircle;
 	cv::Mat yellowCircle;
 	cv::Mat mask;
-	cv::Mat cheesWithMarkedCornors;
+	cv::Mat chessWithMarkedCornors;
 	cv::Mat oldChessboard;
 	cv::Mat chessboard;
 	BoardCutter boardCutter;

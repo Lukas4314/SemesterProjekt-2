@@ -12,6 +12,7 @@ private:
 	double TFScale;
 	std::string name;
 public:
+	BoardCutter();
 	BoardCutter(std::string name = "BoardCutter");
 	~BoardCutter();
 

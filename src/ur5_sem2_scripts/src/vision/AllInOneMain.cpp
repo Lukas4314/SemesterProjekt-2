@@ -56,22 +56,22 @@ int AllInOneMain::getPieceMoved(int depth)
 		oldChessboard = chessboard.clone();
 	}
 
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
 
-	// cv::imshow("Original frame", cheesWithMarkedCornors);
+	// cv::imshow("Original frame", chessWithMarkedCornors);
 
 
 	/*
 	cv::Point2i boundingBoxStart = cv::Point2i(550, 220);
-	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, cheesWithMarkedCornors.rows - boundingBoxStart.y - 300);
-	std::cout << cheesWithMarkedCornors.size() << std::endl;
-	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
+	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, chessWithMarkedCornors.rows - boundingBoxStart.y - 300);
+	std::cout << chessWithMarkedCornors.size() << std::endl;
+	chessWithMarkedCornors = chessWithMarkedCornors(boundingBox);
 
 	*/
 
@@ -81,10 +81,10 @@ int AllInOneMain::getPieceMoved(int depth)
 
 	// cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0);		  // Get the first pixel (row=0, col=0)
 	// cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
-	// ImageFinder::showHSVChannelDifferences(cheesWithMarkedCornors, firstPixelColor);
+	// ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, firstPixelColor);
 
 	// Cut out chessboard
-	chessboard = boardCutter.cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode2);
+	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode2);
 
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);
