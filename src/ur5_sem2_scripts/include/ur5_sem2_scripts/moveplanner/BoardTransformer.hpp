@@ -7,15 +7,11 @@
 class BoardTransformer
 {
 private:
-    cv::Mat board_image;
 public:
     BoardTransformer();
-    BoardTransformer(const cv::Mat& image) : board_image(image) {}
-    void setBoardImage(const cv::Mat& image) { board_image = image; }
-    cv::Mat getBoardImage() const { return board_image; }
-    std::array<std::array<double, 4>, 4> getTFchess();
-
     ~BoardTransformer();
+    static std::array<std::array<double, 4>, 4> getInvTFchess(double TFchess[4][4]);
+    static std::array<std::array<double, 4>, 4> multiplyMatrices(double A[4][4], double B[4][4]);
 };
 
 BoardTransformer::BoardTransformer()

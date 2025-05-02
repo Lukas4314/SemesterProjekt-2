@@ -120,8 +120,8 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess()
 	TFchess[0][1] = -sin(angle * M_PI / 180);
 	TFchess[1][0] = sin(angle * M_PI / 180);
 	TFchess[1][1] = cos(angle * M_PI / 180);
-	TFchess[1][3] = translation.x/1100.0 + 0.375 ;
-	TFchess[0][3] = translation.y/1100.0 + 0.935 + 0.024;
+	TFchess[1][3] = translation.x/1100.0;
+	TFchess[0][3] = translation.y/1100.0;
 
 
 	return TFchess;
