@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     int camera_index;
     node->get_parameter("camera_index", camera_index);  // Retrieve the parameter
     ChessBoard chess; 
-    StockfishUCI engine = StockfishUCI(package_share_dir + "/stockfish/stockfish");
+    StockfishUCI engine;
     int moveCounter = 0;
     cout << "FEN is: " << chess.getFEN() <<endl;
 
