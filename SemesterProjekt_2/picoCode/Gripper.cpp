@@ -48,7 +48,7 @@ void Gripper::open(){
     putchar(1);
 
 }
-void Gripper:close(){
+void Gripper::close(){
     pwm_set_chan_level(slice_numPin1, PWM_CHAN_A, 5); // Pin 0 - 2ms pulse (close)
 
     while (adc.read() < 100) {
