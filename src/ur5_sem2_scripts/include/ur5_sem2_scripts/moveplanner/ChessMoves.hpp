@@ -8,6 +8,8 @@
 #include <geometry_msgs/msg/pose.h>
 #include <moveit_msgs/msg/joint_constraint.h>
 #include <string>
+#include <vector>
+#include <array>
 
 class ChessMoves {
 public:
@@ -23,16 +25,17 @@ public:
     bool castle(moveStruct move, double TFchess[4][4]);
     bool en_passant(moveStruct move, double TFchess[4][4]);
     bool playercapture(moveStruct move, double TFchess[4][4]);
-    bool execute_move(double start[2], double end[2]);
+    bool execute_move(std::array<double, 2> start, std::array<double, 2> end);
+    std::array<double, 2> applyTransformation(int point[2], double TFchess[4][4]);
 
 private:
     rclcpp::Node::SharedPtr node_;  // Store node reference
     moveit::planning_interface::MoveGroupInterface move_group_interface;  // MoveGroupInterface requires initialization
     const float TRANSFERHEIGHT = 0.35;  // Height to lift piece to transfer
-    const float BOARDHEIGHT = 0.2;  // Height to set piece down on board
+    const float BOARDHEIGHT = 0.1;  // Height to set piece down on board
 
     const float idle_position[3] = {0.15, 0.0, TRANSFERHEIGHT};  // Idle position of the robot
-    const float tile_size = 0.035;  // Size of each square on the chess board
+    const float tile_size = 0.0353;  // Size of each square on the chess board
 
     
     const float death_positionsleft[16][2] = {
