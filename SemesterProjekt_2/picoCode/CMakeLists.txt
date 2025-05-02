@@ -13,4 +13,4 @@ pico_enable_stdio_uart(picoMain 0)
 
 pico_add_extra_outputs(picoMain)
 
-target_link_libraries(picoMain pico_stdlib)
+target_link_libraries(picoMain pico_stdlib hardware_adc hardware_pwm)
