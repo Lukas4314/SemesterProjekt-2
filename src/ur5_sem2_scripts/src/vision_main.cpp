@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     AllInOneMain allInOneMain = AllInOneMain(camera_index);
     allInOneMain.getPieceMovedString(0);
     
-    std::array<std::array<double, 4>, 4> TF = allInOneMain.getBoardCutter().getTFchess();
+    std::array<std::array<double, 4>, 4> TF = allInOneMain.getBoardCutter(0).getTFchess();
 
     std::cout << "TF is: " << std::endl;
     for (int i = 0; i < 4; i++) {

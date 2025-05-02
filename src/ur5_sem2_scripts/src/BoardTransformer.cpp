@@ -2,7 +2,7 @@
 #include <array>
 
 
-std::array<std::array<double, 4>, 4> BoardTransformer::getInvTFchess(double TFchess[4][4]) {
+std::array<std::array<double, 4>, 4> BoardTransformer::getInverse(std::array<std::array<double, 4>, 4> TFchess) {
     std::array<std::array<double, 4>, 4> invTFchess = {{
         {TFchess[0][0], TFchess[1][0], TFchess[2][0], 0},
         {TFchess[0][1], TFchess[1][1], TFchess[2][1], 0},
@@ -21,7 +21,7 @@ std::array<std::array<double, 4>, 4> BoardTransformer::getInvTFchess(double TFch
     return invTFchess;
 }
 
-std::array<std::array<double, 4>, 4> BoardTransformer::multiplyMatrices(double A[4][4], double B[4][4]) {
+std::array<std::array<double, 4>, 4> BoardTransformer::multiplyMatrices(std::array<std::array<double, 4>, 4> A, std::array<std::array<double, 4>, 4> B) {
     std::array<std::array<double, 4>, 4> C = {{{0}}};
 
     for (int i = 0; i < 4; ++i) {
