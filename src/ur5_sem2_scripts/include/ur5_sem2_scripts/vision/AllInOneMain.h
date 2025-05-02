@@ -15,11 +15,13 @@ private:
 	cv::Mat greenCircle;
 	cv::Mat redCircle;
 	cv::Mat blueCircle;
+	cv::Mat yellowCircle;
 	cv::Mat mask;
 	cv::Mat cheesWithMarkedCornors;
 	cv::Mat oldChessboard;
 	cv::Mat chessboard;
 	BoardCutter boardCutter;
+	BoardCutter boardCutter2;
 
 
 };

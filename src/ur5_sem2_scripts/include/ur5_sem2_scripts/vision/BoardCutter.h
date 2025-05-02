@@ -1,5 +1,6 @@
 #pragma once
 #include <opencv2/opencv.hpp>
+#include <string>
 class BoardCutter
 {
 
@@ -9,8 +10,9 @@ private:
 	cv::Point2i greenPointCenter;
 	cv::Point2i redPointCenter;
 	double TFScale;
+	std::string name;
 public:
-	BoardCutter();
+	BoardCutter(std::string name = "BoardCutter");
 	~BoardCutter();
 
 	cv::Mat cutBoard(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode);
