@@ -13,7 +13,7 @@ private:
 	std::string name;
 public:
 	BoardCutter();
-	BoardCutter(std::string name = "BoardCutter");
+	BoardCutter(std::string name);
 	~BoardCutter();
 
 	cv::Mat cutBoard(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode);

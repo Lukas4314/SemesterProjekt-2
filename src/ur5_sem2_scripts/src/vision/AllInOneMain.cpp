@@ -64,7 +64,7 @@ int AllInOneMain::getPieceMoved(int depth)
 	cap >> chessWithMarkedCornors;
 	cap >> chessWithMarkedCornors;
 
-	// cv::imshow("Original frame", chessWithMarkedCornors);
+	cv::imshow("Original frame", chessWithMarkedCornors);
 
 
 	/*
@@ -76,8 +76,9 @@ int AllInOneMain::getPieceMoved(int depth)
 	*/
 
 
-	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, greenCircle, yellowCircle, mask, 1, ImageFinder::hsvMode2);
+	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
 
+	cv::imshow("cutBoard", chessWithMarkedCornors.clone());
 
 	// cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0);		  // Get the first pixel (row=0, col=0)
 	// cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
