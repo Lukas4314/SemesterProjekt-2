@@ -20,6 +20,7 @@ private:
 	cv::Mat oldChessboard;
 	cv::Mat chessboard;
 	BoardCutter boardCutter;
+	BoardCutter boardCutter2;
 
 
 };

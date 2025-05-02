@@ -10,7 +10,7 @@ BoardCutter::BoardCutter()
 BoardCutter::~BoardCutter()
 {
 }
-
+ 
 
 cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode)
 {
@@ -73,7 +73,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	);
 	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
 	//std::cout << boundingBox << std::endl;
-	cv::imshow("MarkedConorsDebug", chessWithMarkedCornorsDebug);
+	cv::imshow(name + ": " + "MarkedConorsDebug", chessWithMarkedCornorsDebug);
 
 
 
