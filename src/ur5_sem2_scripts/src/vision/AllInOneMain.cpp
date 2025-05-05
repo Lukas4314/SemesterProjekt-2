@@ -119,7 +119,19 @@ std::string AllInOneMain::getPieceMovedString(int depth)
 	return move;
 }
 
-BoardCutter AllInOneMain::getBoardCutter()
+BoardCutter AllInOneMain::getBoardCutter(int index)
 {
-	return boardCutter;
+	if (index == 0)
+	{
+		return boardCutter;
+	}
+	else if (index == 1)
+	{
+		return boardCutter2;
+	}
+	else
+	{
+		std::cout << "Invalid index" << std::endl;
+		return boardCutter;
+	}
 }

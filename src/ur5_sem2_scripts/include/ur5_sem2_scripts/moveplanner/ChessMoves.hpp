@@ -28,6 +28,17 @@ public:
     bool execute_move(std::array<double, 2> start, std::array<double, 2> end);
     std::array<double, 2> applyTransformation(int point[2], double TFchess[4][4]);
 
+    const std::array<std::array<double, 4>, 4> TFRed = 
+        {{{1.0, 0.0, 0.0, 90.0},
+        {0.0, 1.0, 0.0, -30.0},
+        {0.0, 0.0, 1.0, 0.0},
+        {0.0, 0.0, 0.0, 1.0}}};
+    const std::array<std::array<double, 4>, 4> TFYellow = 
+        {{{1.0, 0.0, 0.0, 35.0},
+        {0.0, 1.0, 0.0, 25.0},
+        {0.0, 0.0, 1.0, 0.0},
+        {0.0, 0.0, 0.0, 1.0}}};
+
 private:
     rclcpp::Node::SharedPtr node_;  // Store node reference
     moveit::planning_interface::MoveGroupInterface move_group_interface;  // MoveGroupInterface requires initialization
@@ -38,6 +49,8 @@ private:
     const float tile_size = 0.0353;  // Size of each square on the chess board
 
     
+
+
     const float death_positionsleft[16][2] = {
         {0.45, -0.30}, {0.45, -0.25}, {0.50, -0.30}, {0.50, -0.25},
         {0.55, -0.30}, {0.55, -0.25}, {0.60, -0.30}, {0.60, -0.25},

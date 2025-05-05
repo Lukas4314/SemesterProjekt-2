@@ -65,7 +65,7 @@ add_executable(svejse_frame src/svejse_frame.cpp)
 add_executable(chess_frame src/chess_frame.cpp)
 add_executable(square_move src/square_move.cpp)
 add_executable(readJoints src/readJoints.cpp)
-add_executable(robot_main src/robot_main.cpp)
+add_executable(robot_main src/robot_main.cpp src/BoardTransformer.cpp)
 add_executable(vision_main src/vision_main.cpp)
 add_executable(board_test_main src/TestBoard.cpp)
 

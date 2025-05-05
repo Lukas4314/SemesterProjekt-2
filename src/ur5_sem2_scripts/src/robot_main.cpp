@@ -10,6 +10,7 @@
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/vision/AllInOneMain.h"
+#include "ur5_sem2_scripts/BoardTransformer.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -32,10 +33,13 @@ int main(int argc, char *argv[])
   
   AllInOneMain allInOneMain = AllInOneMain(camera_index);
   allInOneMain.getPieceMovedString(0);
-  std::array<std::array<double, 4>, 4> TF = allInOneMain.getBoardCutter().getTFchess();
+  std::array<std::array<double, 4>, 4> TFcamchess = allInOneMain.getBoardCutter(0).getTFchess();
+  std::array<std::array<double, 4>, 4> TFcamPlokker = allInOneMain.getBoardCutter(1).getTFchess();
+  std::array<std::array<double, 4>, 4> TFPlokkerCam = BoardTransformer::getInverse(TFcamPlokker);
+  std::array<std::array<double, 4>, 4> TFPlokkerChess = BoardTransformer::multiplyMatrices(TFcamPlokker, TFcamchess);
+  std::array<std::array<double, 4>, 4> TF = BoardTransformer::multiplyMatrices(TFPlokkerChess,chessMoves.TFRed);
 
 
-  
   moveStruct move;
   move.piece = 'p';
   move.type = 'm';
@@ -46,6 +50,8 @@ int main(int argc, char *argv[])
   move.captured = '-';
   move.color = 'w';
 
+
+
   double raw_TF[4][4];
   for (size_t i = 0; i < 4; ++i) {
     for (size_t j = 0; j < 4; ++j) {
@@ -54,6 +60,8 @@ int main(int argc, char *argv[])
   }
 
   // output the transformation matrix
+
+
   RCLCPP_INFO(logger, "Transformation Matrix:");
   for (size_t i = 0; i < 4; ++i) {
     std::string row_str;
@@ -63,7 +71,7 @@ int main(int argc, char *argv[])
     RCLCPP_INFO(logger, "%s", row_str.c_str());
   }
 
-  chessMoves.move(move, raw_TF);
+  // chessMoves.move(move, raw_TF);
 
   // Shutdown ROS
   rclcpp::shutdown();
