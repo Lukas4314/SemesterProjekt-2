@@ -74,10 +74,10 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 
 	cv::Rect boundingBox(
-		std::min(greenCenterPoint.x, redCenterPoint.x) + mask.rows / 2,
-		std::min(greenCenterPoint.y, redCenterPoint.y) + mask.rows / 2,
-		abs(abs(greenCenterPoint.x - redCenterPoint.x) - mask.rows),
-		abs(abs(greenCenterPoint.y - redCenterPoint.y) - mask.rows)
+		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows*scale) / 2,
+		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows*scale) / 2,
+		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows*scale)),
+		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows*scale))
 	);
 	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
 	//std::cout << boundingBox << std::endl;

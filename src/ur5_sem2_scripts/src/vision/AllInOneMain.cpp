@@ -67,16 +67,16 @@ int AllInOneMain::getPieceMoved(int depth)
 	cv::imshow("Original frame", chessWithMarkedCornors);
 
 
-	/*
+	
 	cv::Point2i boundingBoxStart = cv::Point2i(550, 220);
 	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, chessWithMarkedCornors.rows - boundingBoxStart.y - 300);
 	std::cout << chessWithMarkedCornors.size() << std::endl;
 	chessWithMarkedCornors = chessWithMarkedCornors(boundingBox);
 
-	*/
+	
 
 
-	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
+	//chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
 
 	cv::imshow("cutBoard", chessWithMarkedCornors.clone());
 
