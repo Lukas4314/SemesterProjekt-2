@@ -18,10 +18,4 @@ public:
     
 };
 
-BoardTransformer::BoardTransformer()
-{
-}
 
-BoardTransformer::~BoardTransformer()
-{
-}
