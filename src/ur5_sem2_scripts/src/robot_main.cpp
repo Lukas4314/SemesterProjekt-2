@@ -61,8 +61,31 @@ int main(int argc, char *argv[])
 
   // output the transformation matrix
 
-
-  RCLCPP_INFO(logger, "Transformation Matrix:");
+  RCLCPP_INFO(logger, "TFPlokkerCam:");
+  for (size_t i = 0; i < 4; ++i) {
+    std::string row_str;
+    for (size_t j = 0; j < 4; ++j) {
+      row_str += std::to_string(TFPlokkerCam[i][j]) + " ";
+    }
+    RCLCPP_INFO(logger, "%s", row_str.c_str());
+  }
+  RCLCPP_INFO(logger, "TFCamChess:");
+  for (size_t i = 0; i < 4; ++i) {
+    std::string row_str;
+    for (size_t j = 0; j < 4; ++j) {
+      row_str += std::to_string(TFcamchess[i][j]) + " ";
+    }
+    RCLCPP_INFO(logger, "%s", row_str.c_str());
+  }
+  RCLCPP_INFO(logger, "TFPlokkerChess:");
+  for (size_t i = 0; i < 4; ++i) {
+    std::string row_str;
+    for (size_t j = 0; j < 4; ++j) {
+      row_str += std::to_string(TFPlokkerChess[i][j]) + " ";
+    }
+    RCLCPP_INFO(logger, "%s", row_str.c_str());
+  }
+  RCLCPP_INFO(logger, "TF:");
   for (size_t i = 0; i < 4; ++i) {
     std::string row_str;
     for (size_t j = 0; j < 4; ++j) {
@@ -71,6 +94,7 @@ int main(int argc, char *argv[])
     RCLCPP_INFO(logger, "%s", row_str.c_str());
   }
 
+  cv::waitKey(0);
   // chessMoves.move(move, raw_TF);
 
   // Shutdown ROS

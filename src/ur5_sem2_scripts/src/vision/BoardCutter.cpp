@@ -52,7 +52,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
 	greenPointCenter = greenCenterPoint;
 	redPointCenter = redCenterPoint;
-	TFScale = scale;
+	TFScale = (mask.rows * scale);
 
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
 
@@ -119,17 +119,16 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess()
 	double angle = 180 -(atan2(difference.y, difference.x) * 180 / 3.14159265 - 40);
 
 	// Calculate the translation values
-	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x + 550,greenPointCenter.y + 220);
-	cv::Point2i translationToCorner = cv::Point2i(500.0,180.0);
-	cv::Point2i translation = translationToCorner - translationFromCorner;
+	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x,greenPointCenter.y);
+	cv::Point2i translation = translationFromCorner;
 
 
 	TFchess[0][0] = cos(angle * M_PI / 180);
 	TFchess[0][1] = -sin(angle * M_PI / 180);
 	TFchess[1][0] = sin(angle * M_PI / 180);
 	TFchess[1][1] = cos(angle * M_PI / 180);
-	TFchess[1][3] = translation.x/1100.0;
-	TFchess[0][3] = translation.y/1100.0;
+	TFchess[1][3] = (translation.x + TFScale)/1100.0;
+	TFchess[0][3] = (translation.y + TFScale)/1100.0;
 
 
 	return TFchess;
@@ -145,4 +144,39 @@ void BoardCutter::zoom(cv::Mat inputImage, cv::Mat& outputImage, double zoomFact
 	// Crop the region of interest (ROI)
 	cv::Rect roi(centerX - newWidth / 2, centerY - newHeight / 2, newWidth, newHeight);
 	outputImage = inputImage(roi);
+}
+
+
+void BoardCutter::getCornorPoints(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode){
+	cv::Mat chessWithMarkedCornorsDebug = cheesWithMarkedCornors.clone();
+	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
+	cv::resize(greenCircle, greenCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
+	cv::resize(redCircle, redCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
+	cv::resize(mask, mask, cv::Size(), scale, scale, cv::INTER_LINEAR);
+
+	cv::Point2i greenPoint(0, 0);
+	cv::Point2i greenCenterPoint(0, 0);
+
+	cv::Point2i redPoint(0, 0);
+	cv::Point2i redCenterPoint(0, 0);
+
+
+	ImageFinder::findImageInImage(redCircle, cheesWithMarkedCornors, redPoint, mask, "redCirlce", mode);
+	ImageFinder::findImageInImage(greenCircle, cheesWithMarkedCornors, greenPoint, mask, "greenCircle", mode);
+
+	if (cv::norm(greenPoint - oldGreenPoint) < 10 && cv::norm(redPoint - oldRedPoint) < 10) {
+		greenPoint = oldGreenPoint;
+		redPoint = oldRedPoint;
+	}
+	else {
+		oldGreenPoint = greenPoint;
+		oldRedPoint = redPoint;
+	}
+
+
+	greenCenterPoint = cv::Point2i(greenPoint.x + greenCircle.cols / 2, greenPoint.y + greenCircle.rows / 2);
+	redCenterPoint = cv::Point2i(redPoint.x + redCircle.cols / 2, redPoint.y + redCircle.rows / 2);
+	greenPointCenter = greenCenterPoint;
+	redPointCenter = redCenterPoint;
+	TFScale = scale;
 }
