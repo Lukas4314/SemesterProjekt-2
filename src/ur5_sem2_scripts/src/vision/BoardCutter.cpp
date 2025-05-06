@@ -22,6 +22,7 @@ BoardCutter::BoardCutter(std::string name)
 
 cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode)
 {
+	imageSize = cv::Point2i(cheesWithMarkedCornors.cols, cheesWithMarkedCornors.rows);
 	cv::Mat chessWithMarkedCornorsDebug = cheesWithMarkedCornors.clone();
 	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
 	cv::resize(greenCircle, greenCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);
@@ -56,7 +57,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	cv::Point2i difference = redCenterPoint - greenCenterPoint;
 
-	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90;
+	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90 - 180;
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 
@@ -74,10 +75,10 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 
 	cv::Rect boundingBox(
-		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows*scale) / 2,
-		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows*scale) / 2,
-		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows*scale)),
-		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows*scale))
+		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows) / 2,
+		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
+		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows)),
+		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows))
 	);
 	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
 	//std::cout << boundingBox << std::endl;
@@ -102,7 +103,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	return cheesWithMarkedCornors;
 }
 
-std::array<std::array<double, 4>, 4> BoardCutter::getTFchess()
+std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
 {
 	// Initialize the transformation matrix
 	std::array<std::array<double, 4>, 4> TFchess = {{
@@ -116,19 +117,24 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess()
 
 	// Calculate the angle of rotation in degrees
 
-	double angle = 180 -(atan2(difference.y, difference.x) * 180 / 3.14159265 - 40);
+	double angle = atan2(difference.y, difference.x) * 180 / M_PI- 45 - 90 - 180;
 
 	// Calculate the translation values
 	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x,greenPointCenter.y);
-	cv::Point2i translation = translationFromCorner;
 
 
 	TFchess[0][0] = cos(angle * M_PI / 180);
 	TFchess[0][1] = -sin(angle * M_PI / 180);
 	TFchess[1][0] = sin(angle * M_PI / 180);
 	TFchess[1][1] = cos(angle * M_PI / 180);
-	TFchess[1][3] = (translation.x + TFScale)/1100.0;
-	TFchess[0][3] = (translation.y + TFScale)/1100.0;
+	TFchess[0][3] = translationFromCorner.x;
+	TFchess[1][3] = translationFromCorner.y;
+
+
+	if(mode == BUTTOMLEFTMODE){
+		std::cout << "Translation y: " << translationFromCorner.y << std::endl;
+		TFchess[1][3] = imageSize.y - translationFromCorner.y;
+	}
 
 
 	return TFchess;

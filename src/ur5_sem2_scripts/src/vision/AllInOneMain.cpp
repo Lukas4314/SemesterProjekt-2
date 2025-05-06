@@ -67,16 +67,23 @@ int AllInOneMain::getPieceMoved(int depth)
 	cv::imshow("Original frame", chessWithMarkedCornors);
 
 
-	
+	/*
 	cv::Point2i boundingBoxStart = cv::Point2i(550, 120);
 	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, chessWithMarkedCornors.rows - boundingBoxStart.y - 100);
 	std::cout << chessWithMarkedCornors.size() << std::endl;
 	chessWithMarkedCornors = chessWithMarkedCornors(boundingBox);
 
+
+
 	cv::imshow("chessWithMarkedCornors hard coded cutted", chessWithMarkedCornors.clone());
+
+*/
+
 
 	float circleScale2 = 1.2;
 	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
+	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
+
 
 	int redPointCenter = (mask.rows * circleScale2);
 
@@ -91,7 +98,10 @@ int AllInOneMain::getPieceMoved(int depth)
 	// ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, firstPixelColor);
 
 	// Cut out chessboard
-	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode2);
+	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.6, ImageFinder::hsvMode2);
+	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(chessboard.cols / 2, chessboard.rows / 2), 180, 1);
+	cv::warpAffine(chessboard, chessboard, rotationMatrix, chessboard.size());
+
 
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);
