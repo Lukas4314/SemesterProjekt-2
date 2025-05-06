@@ -14,15 +14,15 @@ public:
     explicit ChessMoves(const rclcpp::Node::SharedPtr& node);
     ~ChessMoves();
     bool move_to_idle();
-    bool move(moveStruct move, double TFchess[4][4]);
-    bool remove_piece(moveStruct move, double TFchess[4][4]);
-    bool add_piece(moveStruct move, double TFchess[4][4]);
-    bool move_piece(moveStruct move, double TFchess[4][4]);
-    bool capture_piece(moveStruct move, double TFchess[4][4]);
-    bool promote_pawn(moveStruct move, double TFchess[4][4]);
-    bool castle(moveStruct move, double TFchess[4][4]);
-    bool en_passant(moveStruct move, double TFchess[4][4]);
-    bool playercapture(moveStruct move, double TFchess[4][4]);
+    bool move(MoveStruct move, double TFchess[4][4]);
+    bool remove_piece(MoveStruct move, double TFchess[4][4]);
+    bool add_piece(MoveStruct move, double TFchess[4][4]);
+    bool move_piece(MoveStruct move, double TFchess[4][4]);
+    bool capture_piece(MoveStruct move, double TFchess[4][4]);
+    bool promote_pawn(MoveStruct move, double TFchess[4][4]);
+    bool castle(MoveStruct move, double TFchess[4][4]);
+    bool en_passant(MoveStruct move, double TFchess[4][4]);
+    bool playercapture(MoveStruct move, double TFchess[4][4]);
     bool execute_move(double start[2], double end[2]);
 
 private:

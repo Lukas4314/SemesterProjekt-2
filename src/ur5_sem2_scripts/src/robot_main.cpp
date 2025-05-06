@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
   auto const logger = rclcpp::get_logger("robot_main");
 
   ChessMoves chessMoves(node);
-  moveStruct move;
+  MoveStruct move;
   move.piece = 'p';
   move.type = 'k';
 

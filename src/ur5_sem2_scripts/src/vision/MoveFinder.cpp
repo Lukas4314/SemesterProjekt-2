@@ -21,6 +21,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
 	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
+	cv::imshow("difBoard", diffBoard);
 	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;

@@ -52,6 +52,7 @@ add_library(BoardModule ${BOARD_SRCS})
 target_include_directories(BoardModule PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 target_link_libraries(BoardModule VisionModule)
 ament_target_dependencies(BoardModule rclcpp)

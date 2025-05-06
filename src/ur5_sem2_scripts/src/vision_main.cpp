@@ -6,17 +6,18 @@
 #include "ChessBoard.h"
 #include "StockfishUCI.h"
 #include "ament_index_cpp/get_package_share_directory.hpp"
+#include "Utill.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-
-    std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
+    string activeColor = "w"; // White starts
+    string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
     // Initialize RCLCPP
     rclcpp::init(argc, argv);
     rclcpp::Logger const logger = rclcpp::get_logger("vision_main");
-    auto const node = std::make_shared<rclcpp::Node>(
+    auto const node = make_shared<rclcpp::Node>(
         "vision_main",
         rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true));
 
@@ -35,29 +36,52 @@ int main(int argc, char *argv[])
     cv::waitKey(0);
     while (rclcpp::ok()) {
         string move = allInOneMain.getPieceMovedString(0);
-        std::cout << "Move is: " << move << std::endl;
+        cout << "Move is: " << move << endl;
 
-        bool succesMove = chess.applyMoveStringCamera(move);
-        std::cout << "Succes move: " << succesMove << std::endl;
+        bool succesMove = chess.applyIfValidMove(move);
+        
+        cout << "Succes move: " << succesMove << endl;
 
 
         int moveDepth = 0;
         while (!succesMove){
             moveDepth++;
             move = allInOneMain.getPieceMovedString(moveDepth);
-            std::cout << "Move is: " << move << std::endl;
-            succesMove = chess.applyMoveStringCamera(move);
-            std::cout << "Succes move: " << succesMove << std::endl;
+            cout << "Move is: " << move << endl;
+            succesMove = chess.applyIfValidMove(move);
+            cout << "Succes move: " << succesMove << endl;
+        }
+        
+        cout << "Camera Move is: " << move << endl;
+        chess.printBoard();
+
+        // --- StockfishUCI;
+        int depth = 15;
+        vector<string> moveHistory = chess.getMoveHistory();
+        string allMoves = Utill::vectorStringToString(moveHistory);
+        string output = engine.getBestMove(allMoves, depth);
+    
+        size_t pos = output.find("bestmove "); 
+        
+        if (pos == string::npos)
+        {
+            cerr << "Failed to find bestmove in engine output!" << endl;
+            return -1;
         }
 
-        std::cout << "Camera Move is: " << move << std::endl;
+        size_t start = output.find("bestmove ") + 9;
+        size_t end = output.find(' ', start);
+        string bestMove = output.substr(start, end - start);
 
-        chess.printBoard();
-        
+        RCLCPP_DEBUG(logger, ("Applying engine move"));
+        RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
+        string translatedBestMove = Utill::translateEngineBestMove(bestMove);
+        //--- Stockfish end
 
-        cout << "Apllying engine move" << endl;
-        chess.applyBestMoveFromEngine(engine);
+        chess.applyIfValidMove(translatedBestMove);
+        RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
         chess.printBoard();
+        // --- Move end
 
 
 
@@ -65,15 +89,14 @@ int main(int argc, char *argv[])
         cv::waitKey(0);
 
         moveCounter++;
-        std::cout << "Move counter: " << moveCounter << std::endl;
+        cout << "Move counter: " << moveCounter << endl;
 
         allInOneMain.getPieceMovedString(0);
-        std::cout <<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << std::endl;
+        cout <<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
         if (cv::waitKey(0) == 'q') {
             break;
         }
     }
-
     
     rclcpp::shutdown();
     return 0;

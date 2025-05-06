@@ -14,6 +14,7 @@ BoardCutter::~BoardCutter()
 
 cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode)
 {
+	
 	cv::Mat chessWithMarkedCornorsDebug = cheesWithMarkedCornors.clone();
 	cv::resize(cheesWithMarkedCornors, cheesWithMarkedCornors, cv::Size(), 1, 1, cv::INTER_LINEAR);
 	cv::resize(greenCircle, greenCircle, cv::Size(), scale, scale, cv::INTER_LINEAR);

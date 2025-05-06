@@ -1,4 +1,9 @@
 #include <string>
+#include <vector>
+#include <rclcpp/rclcpp.hpp> // For git logger
+
+using namespace std;
+
 class Utill
 {
 public:
@@ -14,6 +19,8 @@ public:
 
 
 
-	static std::string translateIntMoveToString(int move);
+	static string translateIntMoveToString(int move);
+	static string translateEngineBestMove(string bestmove);
+	static string vectorStringToString(const vector<string> &moveHistory);
 };
 

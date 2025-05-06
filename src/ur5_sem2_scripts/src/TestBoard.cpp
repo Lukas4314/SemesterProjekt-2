@@ -28,34 +28,32 @@ int main(int argc, char *argv[]) {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}
         }
     );
+
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e2e4"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e2e4")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("a7a5"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("a7a5")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e4e5"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("d1h5")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f7f5"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("a5a4")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("e5f6"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("f1c4")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("g7g5"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("a4a3")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f6f7"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("h5f7")).c_str()); 
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f8h6"))).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("h7h5")).c_str()); 
     chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyMoveStringCamera(string("f7f8"))).c_str());
-    chessBoard.printBoard();
-
-    return 0;
+    
+    return 0;   
 }
