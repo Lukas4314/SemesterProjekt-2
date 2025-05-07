@@ -50,48 +50,51 @@ int main(int argc, char *argv[])
   cam_table_T_cm[1][3] = cam_table_T_cm[1][3] - preKnownYellowPointInCm.y;
 
   // Makes the transformation matrix from the table to the yellow plok with its rotation and then adds the translation
-	std::array<std::array<double, 4>, 4> table_yellowPlot_T = {{
+	std::array<std::array<double, 4>, 4> table_yellowPlok_T = {{
 		{1, 0, 0, 0},
 		{0, -1, 0, 0},
 		{0, 0, -1, 0},
 		{0, 0, 0, 1}
 	}};
-  table_yellowPlot_T[0][3] = preKnownYellowPointInCm.x;
-  table_yellowPlot_T[1][3] = preKnownYellowPointInCm.y;
+  table_yellowPlok_T[0][3] = preKnownYellowPointInCm.x;
+  table_yellowPlok_T[1][3] = preKnownYellowPointInCm.y;
 
   // Makes the transformation matrix from the cam to the yellow plok
-  std::array<std::array<double, 4>, 4> yellowPlot_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
   
-  std::array<std::array<double, 4>, 4> yellowPlot_boardGreen_T_cm = yellowPlot_boardGreen_T_pixels;
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = yellowPlok_boardGreen_T_pixels;
 
   // Makes it into cm
-  yellowPlot_boardGreen_T_cm[0][3] = yellowPlot_boardGreen_T_pixels[0][3] / pixelPerCm;
-  yellowPlot_boardGreen_T_cm[1][3] = yellowPlot_boardGreen_T_pixels[1][3] / pixelPerCm;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_pixels[0][3] / pixelPerCm;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_pixels[1][3] / pixelPerCm;
 
 
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
-  yellowPlot_boardGreen_T_cm[0][3] = yellowPlot_boardGreen_T_cm[0][3] + 2.5;
-  yellowPlot_boardGreen_T_cm[1][3] = yellowPlot_boardGreen_T_cm[1][3] + 2.5;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 2.5;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 2.5;
+
+  std::array<std::array<double, 4>, 4> base_yellowPlok_T = {{
+    {0, 1, 0, 35},
+    {-1, 0, 0, 25},
+    {0, 0, 1, 0},
+    {0, 0, 0, 1}
+  }};
+  
+  // Makes the transformation matrix from the base to the chessboard
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_cm = BoardTransformer::multiplyMatrices(base_yellowPlok_T, yellowPlok_boardGreen_T_cm);
+  std::array<std::array<double, 4>, 4> base_boardGreen_T = {{
+    {{base_boardGreen_T_cm[0][0], base_boardGreen_T_cm[0][1], base_boardGreen_T_cm[0][2], base_boardGreen_T_cm[0][3]/100.0}},
+    {{base_boardGreen_T_cm[1][0], base_boardGreen_T_cm[1][1], base_boardGreen_T_cm[1][2], base_boardGreen_T_cm[1][3]/100.0}},
+    {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
+    {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}
+  }};
+  
 
 
 
 
-  // IIIIIIIIIIIIIIIIIII
 
-  // next thing to do is to multiply the transformation matricies to achieve the desired transformation matrix and apply it, but i dont know what it want so it is magnes task
-
-  // IIIIIIIIIIIIII
-
-
-
-
-
-  /*
-  std::array<std::array<double, 4>, 4> TFcamPlokker = allInOneMain.getBoardCutter(1).getTFchess();
-  std::array<std::array<double, 4>, 4> TFPlokkerCam = BoardTransformer::getInverse(TFcamPlokker);
-  std::array<std::array<double, 4>, 4> TFPlokkerChess = BoardTransformer::multiplyMatrices(TFcamPlokker, TFcamchessCm);
-  std::array<std::array<double, 4>, 4> TF = BoardTransformer::multiplyMatrices(TFPlokkerChess, chessMoves.TFRed);
-
+  
   moveStruct move;
   move.piece = 'p';
   move.type = 'm';
@@ -102,15 +105,38 @@ int main(int argc, char *argv[])
   move.captured = '-';
   move.color = 'w';
 
+  moveStruct move1;
+  move1 = move;
+  move1.start[0] = 7;
+  move1.start[1] = 7;
+  move1.end[0] = 7;
+  move1.end[1] = 0;
+  move1.captured = 'b';
+
+  moveStruct move2;
+  move2 = move1;
+  move2.captured = 'q';
+
+  moveStruct move3;
+  move3 = move2;
+  move3.captured = 'k';
+
+  moveStruct move4;
+  move4 = move;
+  move4.type = 'a';
+  move4.piece = 'k';
+  move4.color = 'b';
+
+
   double raw_TF[4][4];
   for (size_t i = 0; i < 4; ++i)
   {
     for (size_t j = 0; j < 4; ++j)
     {
-      raw_TF[i][j] = TF[i][j];
+      raw_TF[i][j] = base_boardGreen_T[i][j];
     }
   }
-*/
+
 
   // output the transformation matrix
 
@@ -125,44 +151,36 @@ int main(int argc, char *argv[])
     RCLCPP_INFO(logger, "%s", row_str.c_str());
   }
 
-  RCLCPP_INFO(logger, "yellowPlot_boardGreen_T_cm:");
+  RCLCPP_INFO(logger, "yellowPlok_boardGreen_T_cm:");
   for (size_t i = 0; i < 4; ++i)
   {
     std::string row_str;
     for (size_t j = 0; j < 4; ++j)
     {
-      row_str += std::to_string(yellowPlot_boardGreen_T_cm[i][j]) + " ";
+      row_str += std::to_string(yellowPlok_boardGreen_T_cm[i][j]) + " ";
     }
     RCLCPP_INFO(logger, "%s", row_str.c_str());
   }
 
-  /*
-  RCLCPP_INFO(logger, "TFPlokkerChess:");
+  RCLCPP_INFO(logger, "base_boardGreen_T:");
   for (size_t i = 0; i < 4; ++i)
   {
     std::string row_str;
     for (size_t j = 0; j < 4; ++j)
     {
-      row_str += std::to_string(TFPlokkerChess[i][j]) + " ";
-    }
-    RCLCPP_INFO(logger, "%s", row_str.c_str());
-  }
-  RCLCPP_INFO(logger, "TF:");
-  for (size_t i = 0; i < 4; ++i)
-  {
-    std::string row_str;
-    for (size_t j = 0; j < 4; ++j)
-    {
-      row_str += std::to_string(raw_TF[i][j]) + " ";
+      row_str += std::to_string(base_boardGreen_T[i][j]) + " ";
     }
     RCLCPP_INFO(logger, "%s", row_str.c_str());
   }
 
 
-  */
+  //cv::waitKey(0);
+  chessMoves.move(move, raw_TF);
+  chessMoves.move(move1, raw_TF);
+  chessMoves.move(move2, raw_TF);
+  chessMoves.move(move3, raw_TF);
+  chessMoves.move(move4, raw_TF);
 
-  cv::waitKey(0);
-  // chessMoves.move(move, raw_TF);
 
   // Shutdown ROS
   rclcpp::shutdown();
