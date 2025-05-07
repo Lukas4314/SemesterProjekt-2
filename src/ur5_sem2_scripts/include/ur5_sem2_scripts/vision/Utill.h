@@ -21,6 +21,7 @@ public:
 
 	static string translateIntMoveToString(int move);
 	static string translateEngineBestMove(string bestmove);
+	static string translateToEngine(string move);
 	static string vectorStringToString(const vector<string> &moveHistory);
 };
 

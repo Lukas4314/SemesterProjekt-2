@@ -12,20 +12,27 @@ class MoveValidator
 public:
     // Entry point: validates any move
     MoveValidator();
-    static bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory);
-    static bool isValidCastle(string activeColor, bool castleBools[], string castle, const vector<vector<char>> &board, const vector<string>& moveHistory);
-    static bool isValidPromotion(int fromRow, int fromCol, int toRow, const vector<vector<char>> &board);
-    static bool isValidEnPassant(string &activeColor, const vector<vector<char>> &board, const string &currentMove, const vector<string> &moveHistory);
     ~MoveValidator();
+    static bool correctColor(char piece, string &activeColor);
+    static bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory);
+    static vector<int> findKing(string color, const vector<vector<char>> &board);
+    static bool checkHistoryForKingOrRookMovement(const string &move, const vector<string> &moveHistory);
+    static bool castlePathUnderAttack(const string &move, const vector<vector<char>> &board);
+    static bool emptySquaresForCastle(const string &move, const vector<vector<char>> &board);
+    static bool isValidCastle(string activeColor, string move, const vector<vector<char>> &board, const vector<string>& moveHistory);
+    static bool isValidEnPassant(string &activeColor, const string &currentMove, const vector<string> &moveHistory);
+    
 private:
     // Function for checking if pawn move is valid (Need to implement isPathClear function)
-    static bool isValidPawn(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory);
+    static bool isValidPawn(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory);
+    static bool pathClearBetweenOrthogonal(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
+    static bool pathClearBetweenDiagonal(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidKnight(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidBishop(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidQueen(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board);
     static bool isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor);
-    static bool underAttack(int row, int col, string &activeColor, const vector<vector<char>> &board, const vector<string>& moveHistory);
+    static bool underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board);
 };
 
 #endif

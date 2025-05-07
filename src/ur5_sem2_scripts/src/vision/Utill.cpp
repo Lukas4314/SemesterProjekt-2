@@ -30,36 +30,52 @@ std::string Utill::translateIntMoveToString(int move) {
 }
 
 string Utill::translateEngineBestMove(string bestmove) {
-	RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Hej");
-	RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is %s", bestmove.c_str());
-
 	if (bestmove == "e1g1")
 	{
-		RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is wK");
 		return "wK";
 	}
 	else if (bestmove == "e1c1")
 	{
-		RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is wQ");
 		return "wQ";
 	}
 	else if (bestmove == "e8g8")
 	{
-		RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is bK");
 		return "bK";
 	}
 	else if (bestmove == "e8c8")
 	{
-		RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is bQ");
 		return "bQ";
 	}
 	else 
 	{
-		RCLCPP_DEBUG(rclcpp::get_logger("Utill"), "Best move is %s", bestmove.c_str());
 		return bestmove;
 	}
-
 }
+
+string Utill::translateToEngine(string move) 
+{
+	if (move == "wK")
+	{
+		return "e1g1";
+	}
+	else if (move == "wQ")
+	{
+		return "e1c1";
+	}
+	else if (move == "bK")
+	{
+		return "e8g8";
+	}
+	else if (move == "bQ")
+	{
+		return "e8c8";
+	}
+	else 
+	{
+		return move;
+	}
+}
+
 
 string Utill::vectorStringToString(const vector<string> &moveHistory)
 {
