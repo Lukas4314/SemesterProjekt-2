@@ -55,6 +55,13 @@ int main(int argc, char *argv[])
         cout << "Camera Move is: " << move << endl;
         chess.printBoard();
 
+
+        if (chess.isMated(chess.getActiveColor())) {
+            cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
+            break;
+        }
+
+
         // --- StockfishUCI;
         int depth = 15;
         vector<string> moveHistory = chess.getMoveHistory();
@@ -83,6 +90,11 @@ int main(int argc, char *argv[])
         chess.printBoard();
         // --- Move end
 
+
+        if (chess.isMated(chess.getActiveColor())) {
+            cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
+            break;
+        }
 
 
         //robot moves and makes it move

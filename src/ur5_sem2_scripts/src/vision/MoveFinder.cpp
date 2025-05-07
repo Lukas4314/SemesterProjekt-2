@@ -5,6 +5,8 @@
 #include <vector>
 #include "Utill.h"
 #include "ImageDrawer.h"
+#include <math.h>  
+
 MoveFinder::MoveFinder() {}
 MoveFinder::~MoveFinder() {}
 
@@ -28,6 +30,8 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareWidth = imageWidth / 8;
 	int squareHeight = imageHeight / 8;
 
+
+
 	cv::imshow("diffBoardGrayscale", diffBoard);
 
 	int diffBoardArray[8][8];
@@ -38,7 +42,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		{
 			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
 			cv::Mat squareImage = diffBoard(square);
-			int diff = cv::sum(squareImage)[0];
+			int diff = pow(cv::sum(squareImage)[0], 2) / (255*255);
 			diffBoardArray[i][j] = diff;
 		}
 	}

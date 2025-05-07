@@ -14,7 +14,7 @@ public:
     MoveValidator();
     ~MoveValidator();
     static bool correctColor(char piece, string &activeColor);
-    static bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory);
+    static bool isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string>& moveHistory,  bool calledByUnderAttack);
     static vector<int> findKing(string color, const vector<vector<char>> &board);
     static bool checkHistoryForKingOrRookMovement(const string &move, const vector<string> &moveHistory);
     static bool castlePathUnderAttack(const string &move, const vector<vector<char>> &board);

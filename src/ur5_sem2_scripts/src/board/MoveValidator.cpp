@@ -25,7 +25,7 @@ bool MoveValidator::correctColor(char piece, string &activeColor)
     return true;
 }
 
-bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string> &moveHistory)
+bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string> &moveHistory, bool calledByUnderAttack)
 {
     rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
 
@@ -40,7 +40,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidPawn(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory))
         {
-            RCLCPP_DEBUG(logger, "Pawn cooked");
             return false;
         }
     }
@@ -49,7 +48,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidRook(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Rook cooked");
             return false;
         }
     }
@@ -58,7 +56,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidKnight(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Knight cooked");
             return false;
         }
     }
@@ -67,7 +64,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidBishop(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Bishop cooked");
             return false;
         }
     }
@@ -76,7 +72,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidQueen(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Queen cooked");
             return false;
         }
     }
@@ -85,15 +80,19 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor))
         {
-            RCLCPP_DEBUG(logger, "King cooked");
             return false;
         }
     }
 
     if (piece == '-')
     {
-        RCLCPP_DEBUG(logger, "no piece at from position");
         return false;
+    }
+
+    // Returns if called by under attack since it otherwise would leave a recoursion loop
+    if (calledByUnderAttack)
+    {
+        return true;
     }
 
     // Checks that moving a piece does not leave the king in check
@@ -102,9 +101,11 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     boardCopy[toRow][toCol] = boardCopy[fromRow][fromCol];
     boardCopy[fromRow][fromCol] = '-';
 
-    vector<int> kingPos = findKing(activeColor, board);
-    if (underAttack(kingPos[0], kingPos[1], activeColor, board))
+    vector<int> kingPos = findKing(activeColor, boardCopy);
+
+    if (underAttack(kingPos[0], kingPos[1], activeColor, boardCopy))
     {
+        RCLCPP_DEBUG(logger, "King is left in check");
         return false;
     }
     RCLCPP_DEBUG(logger, "MoveValidator says move is valid");
@@ -558,7 +559,6 @@ bool MoveValidator::isValidQueen(char piece, int fromRow, int fromCol, int toRow
 
 bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor)
 {
-
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     char dest = board[toRow][toCol];
@@ -567,10 +567,12 @@ bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow,
     {
         return false; // King can only move one square in any direction
     }
+
     if (dest != '-' && ((ChessBoard::isBlack(piece) == ChessBoard::isBlack(dest))))
     {
         return false; // Can't capture own piece
     }
+
     if (underAttack(toRow, toCol, activeColor, board))
     {
         return false; // Can't move into check
@@ -580,10 +582,13 @@ bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow,
 
 bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
+
             if (board[i][j] == '-')
             {
                 continue;
@@ -598,11 +603,12 @@ bool MoveValidator::underAttack(int row, int col, const string &activeColor, con
             }
 
             // Check if the opposite colorored piece can attack the target square
-            if (!isValidMove(i, j, row, col, board, pieceColor, {}))
+            if (!isValidMove(i, j, row, col, board, pieceColor, {}, true))
             {
                 continue;
             }
 
+            RCLCPP_DEBUG(logger, "Piece %c at %d, %d can attack %d, %d", piece, i, j, row, col);
             return true;
         }
     }

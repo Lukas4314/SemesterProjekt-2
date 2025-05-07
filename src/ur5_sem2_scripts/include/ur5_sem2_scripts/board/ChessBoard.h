@@ -10,6 +10,7 @@ class ChessBoard
 public:
     ChessBoard();                                                       
     void setupBoard();
+    string& getActiveColor();
     void setBoard(const vector<vector<char>> &newBoard);                                                              
     void updateFEN();                                                   
     string getFEN();                                                    
@@ -22,7 +23,8 @@ public:
     void doCastle(string &move);                                                      
     void doSwitch(string &move);
     bool shouldSwitch(char piece1);
-    void promoteAllEndRowPawns();                       
+    void promoteAllEndRowPawns();
+    bool isMated(string &color);                       
     bool applyIfValidMove(string move);
     void printBoard();                                                 
     void resetMoveStruct();

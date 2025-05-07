@@ -46,6 +46,10 @@ void ChessBoard::setupBoard()
     }
 }
 
+string& ChessBoard::getActiveColor() {
+    return activeColor;
+}
+
 void ChessBoard::setBoard(const vector<vector<char>> &newBoard)
 {
     board = newBoard; // Sets the board to the new board
@@ -133,14 +137,12 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 2); // Move the king
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
-        moveHistory.push_back("e1c1");
     }
     else if (move == "wK")
     {
         movePiece(7, 4, 7, 6); // Move the king
         movePiece(7, 7, 7, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1g1");
-        moveHistory.push_back("e1g1");
     }
 
     else if (move == "bQ")
@@ -148,14 +150,12 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 2); // Move the king
         movePiece(0, 0, 0, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8c8");
-        moveHistory.push_back("e8c8");
     }
     else if (move == "bK")
     {
         movePiece(0, 4, 0, 6); // Move the king
         movePiece(0, 7, 0, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8g8");
-        moveHistory.push_back("e8g8");
     }
 }
 
@@ -184,7 +184,7 @@ bool ChessBoard::shouldSwitch(char piece1)
 }
 
 // If promotion doesnt work: ISSUE is board[7] should maybe be board[0]
-void ChessBoard::promoteAllEndRowPawns() 
+void ChessBoard::promoteAllEndRowPawns()
 {
     for (int col = 0; col < 8; ++col)
     {
@@ -195,6 +195,32 @@ void ChessBoard::promoteAllEndRowPawns()
         else if (board[0][col] == 'p')
         {
             board[0][col] = 'q';
+        }
+    }
+}
+
+bool ChessBoard::isMated(string &color){
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            char piece = board[i][j];
+            if (piece != '-' && ((color == "w" && isWhite(piece)) || (color == "b" && isBlack(piece))))
+            {
+                // Check if the piece can make any valid moves
+                for (int toRow = 0; toRow < 8; ++toRow)
+                {
+                    for (int toCol = 0; toCol < 8; ++toCol)
+                    {
+                        if (MoveValidator::isValidMove(i, j, toRow, toCol, board, color, moveHistory, false))
+                        {
+                            return false; // Found a valid move, not mated
+                        }
+                    }
+                }
+            }
+
+            
         }
     }
 }
@@ -257,13 +283,14 @@ bool ChessBoard::applyIfValidMove(string move)
         {
             removePiece(toRow, toCol + 1);
         }
+
         activeColor = (activeColor == "w") ? "b" : "w";
         moveHistory.push_back(Utill::translateToEngine(move));
         RCLCPP_DEBUG(logger, "The en passant is valid");
         return true;
     }
 
-    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory);
+    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory, false);
     if (!validMove)
     {
         RCLCPP_DEBUG(logger, "MoveValidator returns false");
@@ -278,8 +305,6 @@ bool ChessBoard::applyIfValidMove(string move)
     promoteAllEndRowPawns();
     return true;
 }
-
-
 
 // Function which prints the board to the console
 void ChessBoard::printBoard()
