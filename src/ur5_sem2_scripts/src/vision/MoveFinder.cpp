@@ -5,7 +5,7 @@
 #include <vector>
 #include "Utill.h"
 #include "ImageDrawer.h"
-#include <math.h>  
+#include <math.h>
 
 MoveFinder::MoveFinder() {}
 MoveFinder::~MoveFinder() {}
@@ -30,8 +30,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareWidth = imageWidth / 8;
 	int squareHeight = imageHeight / 8;
 
-
-
 	cv::imshow("diffBoardGrayscale", diffBoard);
 
 	int diffBoardArray[8][8];
@@ -42,7 +40,27 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		{
 			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
 			cv::Mat squareImage = diffBoard(square);
-			int diff = pow(cv::sum(squareImage)[0], 2) / (255*255);
+
+			cv::Mat squareImageModified = squareImage.clone();
+
+			int diff = 0;
+			int rows = squareImage.rows;
+			int cols = squareImage.cols;
+
+			for (int i = 0; i < rows; i++)
+			{
+				for (int j = 0; j < cols; j++)
+				{
+					// Get the pixel value at (i, j)
+					cv::Vec3b pixel = squareImage.at<cv::Vec3b>(i, j);
+					int pixelValue = pixel[0] + pixel[1] + pixel[2]; // Sum of BGR channels
+
+					float wight = abs(i - rows / 2) * abs(j - cols / 2);
+					
+					diff += pixelValue * pow(wight, 2); // Weighted by distance from center
+				}
+			}
+
 			diffBoardArray[i][j] = diff;
 		}
 	}
@@ -101,9 +119,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	// Sort tile pairs by combined change score in descending order
 	std::sort(tilePairs.rbegin(), tilePairs.rend());
-
-
-	
 
 	std::cout << "actualMoveScore = " << std::get<0>(tilePairs[depth]) << std::endl;
 	std::cout << "actualMoveRow1 = " << std::get<1>(tilePairs[depth]) << std::endl;
