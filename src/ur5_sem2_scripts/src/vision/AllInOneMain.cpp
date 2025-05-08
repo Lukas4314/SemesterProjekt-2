@@ -84,10 +84,6 @@ int AllInOneMain::getPieceMoved(int depth)
 	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
 	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
 
-
-	int redPointCenter = (mask.rows * circleScale2);
-
-
 	//boardCutter2.getCornorPoints(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
 
 
