@@ -29,8 +29,43 @@ int main(int argc, char *argv[])
     StockfishUCI engine;
     int moveCounter = 0;
 
+    cout << "Do you want to play as white or black? (Enter 'w' for white, 'b' for black): ";
+    cin >> activeColor;
+
+    if (activeColor != "w" && activeColor != "b") {
+        cerr << "Invalid input! Defaulting to white." << endl;
+        activeColor = "w";
+    }
+
     AllInOneMain allInOneMain = AllInOneMain(camera_index);
     allInOneMain.getPieceMovedString(0);
+
+    // If the user chooses black, Stockfish makes the first move
+    if (activeColor == "b") {
+        int depth = 15;
+        vector<string> moveHistory = chess.getMoveHistory();
+        string allMoves = Utill::vectorStringToString(moveHistory);
+        string output = engine.getBestMove(allMoves, depth);
+
+        size_t pos = output.find("bestmove ");
+        if (pos == string::npos) {
+            cerr << "Failed to find bestmove in engine output!" << endl;
+            return -1;
+        }
+
+        size_t start = output.find("bestmove ") + 9;
+        size_t end = output.find(' ', start);
+        string bestMove = output.substr(start, end - start);
+
+        RCLCPP_DEBUG(logger, ("Applying engine move"));
+        RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
+        string translatedBestMove = Utill::translateEngineBestMove(bestMove);
+
+        chess.applyIfValidMove(translatedBestMove);
+        RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
+        chess.printBoard();
+    }
+    
 
     cv::waitKey(0);
     while (rclcpp::ok())
@@ -52,9 +87,6 @@ int main(int argc, char *argv[])
         cout << "Camera Move is: " << move << endl;
         chess.printBoard();
 
-
-
-
         if (chess.isMated(chess.getActiveColor()))
         {
             cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
@@ -66,8 +98,6 @@ int main(int argc, char *argv[])
             cout << "Remi! " << endl;
             break;
         }
-
-
 
         // --- StockfishUCI start;
         int depth = 15;

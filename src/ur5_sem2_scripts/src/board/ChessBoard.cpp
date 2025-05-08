@@ -196,7 +196,6 @@ bool ChessBoard::isMated(string &color)
                 {
                     for (int toCol = 0; toCol < 8; ++toCol)
                     {
-                        cout << "Checking move from " << i << ", " << j << " to " << toRow << ", " << toCol << endl;
                         if (MoveValidator::isValidMove(i, j, toRow, toCol, board, color, false, false))
                         {
                             return false; // Found a valid move, not mated
