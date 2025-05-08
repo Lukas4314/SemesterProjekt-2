@@ -25,7 +25,7 @@ bool MoveValidator::correctColor(char piece, string &activeColor)
     return true;
 }
 
-bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string> &moveHistory, bool calledByUnderAttack)
+bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByUnderAttack, bool calledByKing)
 {
     rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
 
@@ -36,9 +36,14 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
         return false;
     }
 
+    if (fromRow == toRow && fromCol == toCol)
+    {
+        return false; // No movement
+    }
+
     if (piece == 'P' || piece == 'p')
     {
-        if (!isValidPawn(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory))
+        if (!isValidPawn(fromRow, fromCol, toRow, toCol, board, activeColor, calledByUnderAttack))
         {
             return false;
         }
@@ -78,7 +83,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
 
     if (piece == 'K' || piece == 'k')
     {
-        if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor))
+        if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor, calledByKing))
         {
             return false;
         }
@@ -89,7 +94,7 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
         return false;
     }
 
-    // Returns if called by under attack since it otherwise would leave a recoursion loop
+    // Returns if called by under attack since it otherwise would leave a recursion loop
     if (calledByUnderAttack)
     {
         return true;
@@ -128,6 +133,7 @@ vector<int> MoveValidator::findKing(string color, const vector<vector<char>> &bo
             }
         }
     }
+    return {-1, -1}; // King not found
 }
 
 bool MoveValidator::checkHistoryForKingOrRookMovement(const string &move, const vector<string> &moveHistory)
@@ -160,6 +166,7 @@ bool MoveValidator::checkHistoryForKingOrRookMovement(const string &move, const 
             return true;
         }
     }
+    return false; // No king or rook movement found in history
 }
 
 bool MoveValidator::castlePathUnderAttack(const string &move, const vector<vector<char>> &board)
@@ -366,7 +373,7 @@ bool MoveValidator::isValidEnPassant(string &activeColor, const string &currentM
 }
 
 // Function for checking if pawn move is valid (Need to implement isPathClear function)
-bool MoveValidator::isValidPawn(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, const vector<string> &moveHistory)
+bool MoveValidator::isValidPawn(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByUnderAttack)
 {
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
@@ -392,6 +399,13 @@ bool MoveValidator::isValidPawn(int fromRow, int fromCol, int toRow, int toCol, 
         return false;
     }
 
+    // Ensures the pawn doesnt count as attacking a square that is infront of it
+    if (calledByUnderAttack)
+    {
+        return false;
+    }
+
+    
     // White forward
     if (activeColor == "w")
     {
@@ -465,7 +479,6 @@ bool MoveValidator::pathClearBetweenOrthogonal(int fromRow, int fromCol, int toR
 bool MoveValidator::pathClearBetweenDiagonal(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
 {
     int rowDiff = abs(toRow - fromRow);
-    int colDiff = abs(toCol - fromCol);
 
     // Check if the row and col should increase or decrease
     int rowStep = (toRow > fromRow) ? 1 : -1;
@@ -557,7 +570,7 @@ bool MoveValidator::isValidQueen(char piece, int fromRow, int fromCol, int toRow
     return false;
 }
 
-bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor)
+bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByKing)
 {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
@@ -573,14 +586,20 @@ bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow,
         return false; // Can't capture own piece
     }
 
-    if (underAttack(toRow, toCol, activeColor, board))
+
+    if (calledByKing)
+    {
+        return true; // Called by King underattack, so checking for underattack would become a infinite loop
+    }
+
+    if (underAttack(toRow, toCol, activeColor, board, true))
     {
         return false; // Can't move into check
     }
     return true;
 }
 
-bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board)
+bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board, bool calledByKing)
 {
     rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
 
@@ -603,7 +622,7 @@ bool MoveValidator::underAttack(int row, int col, const string &activeColor, con
             }
 
             // Check if the opposite colorored piece can attack the target square
-            if (!isValidMove(i, j, row, col, board, pieceColor, {}, true))
+            if (!isValidMove(i, j, row, col, board, pieceColor, true, calledByKing))
             {
                 continue;
             }

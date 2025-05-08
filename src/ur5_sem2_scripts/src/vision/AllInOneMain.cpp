@@ -74,7 +74,7 @@ int AllInOneMain::getPieceMoved(int depth)
 	// ImageFinder::showHSVChannelDifferences(cheesWithMarkedCornors, firstPixelColor);
 
 	// Cut out chessboard
-	chessboard = boardCutter.cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.5, ImageFinder::hsvMode2);
+	chessboard = boardCutter.cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.6, ImageFinder::hsvMode2);
 
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);

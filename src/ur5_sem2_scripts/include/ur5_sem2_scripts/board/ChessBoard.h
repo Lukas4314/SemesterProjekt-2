@@ -11,9 +11,8 @@ public:
     ChessBoard();                                                       
     void setupBoard();
     string& getActiveColor();
-    void setBoard(const vector<vector<char>> &newBoard);                                                              
-    void updateFEN();                                                   
-    string getFEN();                                                    
+    void updateHalfMoveClock(string move, vector<vector<char>> boardCopy);
+    void setBoard(const vector<vector<char>> &newBoard);                                                                                                                 
     vector<string> getMoveHistory();                                                 
     static bool isWhite(char piece);
     static bool isBlack(char piece);
@@ -24,9 +23,15 @@ public:
     void doSwitch(string &move);
     bool shouldSwitch(char piece1);
     void promoteAllEndRowPawns();
-    bool isMated(string &color);                       
+    bool isMated(string &color);
+    bool reachedFiftyMoveRule();
+    bool isInsufficientMaterial();
+    bool isStalemate(string &color);
+    bool isRemi(string &color);     
+    void updateTurn(string move, vector<vector<char>> boardCopy);                  
     bool applyIfValidMove(string move);
-    void printBoard();                                                 
+    void printBoard();
+    void updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion);                                                 
     void resetMoveStruct();
     MoveStruct getMoveStruct();
     ~ChessBoard();                                                   
@@ -34,12 +39,10 @@ public:
 private:
     vector<vector<char>> board;
 
-    string FEN;
     string activeColor;
     string castlingRights;
     string enPassant;
-    int halfmoveClock;
-    int fullmoveNumber;
+    int halfMoveClock;
 
     vector<string> moveHistory; 
 

@@ -24,52 +24,59 @@ int main(int argc, char *argv[])
     RCLCPP_INFO(logger, "Starting chess program");
     RCLCPP_DEBUG(logger, "Debugging started");
     int camera_index;
-    node->get_parameter("camera_index", camera_index);  // Retrieve the parameter
-    ChessBoard chess; 
+    node->get_parameter("camera_index", camera_index); // Retrieve the parameter
+    ChessBoard chess;
     StockfishUCI engine;
     int moveCounter = 0;
-    cout << "FEN is: " << chess.getFEN() <<endl;
 
     AllInOneMain allInOneMain = AllInOneMain(camera_index);
     allInOneMain.getPieceMovedString(0);
 
     cv::waitKey(0);
-    while (rclcpp::ok()) {
-        string move = allInOneMain.getPieceMovedString(0);
-        cout << "Move is: " << move << endl;
-
-        bool succesMove = chess.applyIfValidMove(move);
-        
-        cout << "Succes move: " << succesMove << endl;
-
-
+    while (rclcpp::ok())
+    {
+        string move;
+        bool succesMove;
         int moveDepth = 0;
-        while (!succesMove){
-            moveDepth++;
+
+        do
+        {
             move = allInOneMain.getPieceMovedString(moveDepth);
             cout << "Move is: " << move << endl;
             succesMove = chess.applyIfValidMove(move);
             cout << "Succes move: " << succesMove << endl;
-        }
-        
+            moveDepth++;
+
+        } while (!succesMove);
+
         cout << "Camera Move is: " << move << endl;
         chess.printBoard();
 
 
-        if (chess.isMated(chess.getActiveColor())) {
+
+
+        if (chess.isMated(chess.getActiveColor()))
+        {
             cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
             break;
         }
 
+        if (chess.isRemi(chess.getActiveColor()))
+        {
+            cout << "Remi! " << endl;
+            break;
+        }
 
-        // --- StockfishUCI;
+
+
+        // --- StockfishUCI start;
         int depth = 15;
         vector<string> moveHistory = chess.getMoveHistory();
         string allMoves = Utill::vectorStringToString(moveHistory);
         string output = engine.getBestMove(allMoves, depth);
-    
-        size_t pos = output.find("bestmove "); 
-        
+
+        size_t pos = output.find("bestmove ");
+
         if (pos == string::npos)
         {
             cerr << "Failed to find bestmove in engine output!" << endl;
@@ -83,33 +90,32 @@ int main(int argc, char *argv[])
         RCLCPP_DEBUG(logger, ("Applying engine move"));
         RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
         string translatedBestMove = Utill::translateEngineBestMove(bestMove);
-        //--- Stockfish end
+        //--- StockfishUCI end
 
         chess.applyIfValidMove(translatedBestMove);
         RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
         chess.printBoard();
-        // --- Move end
 
-
-        if (chess.isMated(chess.getActiveColor())) {
+        if (chess.isMated(chess.getActiveColor()))
+        {
             cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
             break;
         }
 
-
-        //robot moves and makes it move
+        // robot moves and makes it move
         cv::waitKey(0);
 
         moveCounter++;
         cout << "Move counter: " << moveCounter << endl;
 
         allInOneMain.getPieceMovedString(0);
-        cout <<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
-        if (cv::waitKey(0) == 'q') {
+        cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
+        if (cv::waitKey(0) == 'q')
+        {
             break;
         }
     }
-    
+
     rclcpp::shutdown();
     return 0;
 }

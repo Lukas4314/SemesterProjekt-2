@@ -15,17 +15,10 @@ ChessBoard::ChessBoard()
 {                                                          // This is how we initialize the board. It takes 8 for 8 vectors, and then we specify that every element of each vector should be empty
     board = vector<vector<char>>(8, vector<char>(8, '-')); // A vector of vectors with characters
     setupBoard();                                          // Set up the board in the starting position
-    // Initiates variables for FEN notation
     activeColor = "w";
     castlingRights = "KQkq";
     enPassant = "-";
-
-    // FEN THINGS
-    halfmoveClock = 0;
-    fullmoveNumber = 1;
-    updateFEN(); // Using the update FEN function it updates the FEN to reflect the boards setup
-
-    MoveStruct moveStruct;
+    halfMoveClock = 0;
     resetMoveStruct();
 }
 
@@ -46,52 +39,41 @@ void ChessBoard::setupBoard()
     }
 }
 
-string& ChessBoard::getActiveColor() {
+string &ChessBoard::getActiveColor()
+{
     return activeColor;
+}
+
+void ChessBoard::updateHalfMoveClock(string move, vector<vector<char>> boardCopy) 
+{
+    if (move == "wK" || move == "wQ" || move == "bK" || move == "bQ")
+    {
+        halfMoveClock = 0; // Reset the half-move clock if a castle is made
+        return;
+    }
+
+    int fromCol = move[0] - 'a';
+    int fromRow = 8 - (move[1] - '0');
+    int toCol = move[2] - 'a';
+    int toRow = 8 - (move[3] - '0');
+
+    if (boardCopy[fromRow][fromCol] == 'P' || boardCopy[fromRow][fromCol] == 'p')
+    {
+        halfMoveClock = 0; // Reset the half-move clock if a pawn move is made
+    }
+    else if (boardCopy[toRow][toCol] != '-')
+    {
+        halfMoveClock = 0; // Reset the half-move clock if a capture is made
+    }
+    else
+    {
+        halfMoveClock++; // Increment the half-move clock for other moves
+    }
 }
 
 void ChessBoard::setBoard(const vector<vector<char>> &newBoard)
 {
     board = newBoard; // Sets the board to the new board
-}
-
-// Function for updating the FEN notation
-void ChessBoard::updateFEN()
-{
-    FEN = "";
-    for (int i = 7; i >= 0; --i)
-    {
-        int emptyCount = 0;
-        for (int j = 0; j < 8; ++j)
-        {
-            if (board[i][j] == '-')
-            {
-                emptyCount++;
-            }
-            else
-            {
-                if (emptyCount > 0)
-                {
-                    FEN += to_string(emptyCount);
-                    emptyCount = 0;
-                }
-                FEN += board[i][j];
-            }
-        }
-        if (emptyCount > 0)
-        {
-            FEN += to_string(emptyCount);
-        }
-        if (i > 0)
-            FEN += "/";
-    }
-    FEN += " " + activeColor + " " + castlingRights + " " + enPassant + " " + to_string(halfmoveClock) + " " + to_string(fullmoveNumber);
-}
-
-// Function for returning current FEN
-string ChessBoard::getFEN()
-{
-    return FEN;
 }
 
 vector<string> ChessBoard::getMoveHistory()
@@ -199,7 +181,8 @@ void ChessBoard::promoteAllEndRowPawns()
     }
 }
 
-bool ChessBoard::isMated(string &color){
+bool ChessBoard::isMated(string &color)
+{
     for (int i = 0; i < 8; ++i)
     {
         for (int j = 0; j < 8; ++j)
@@ -207,27 +190,173 @@ bool ChessBoard::isMated(string &color){
             char piece = board[i][j];
             if (piece != '-' && ((color == "w" && isWhite(piece)) || (color == "b" && isBlack(piece))))
             {
+                cout << "Piece: " << piece << endl;
                 // Check if the piece can make any valid moves
                 for (int toRow = 0; toRow < 8; ++toRow)
                 {
                     for (int toCol = 0; toCol < 8; ++toCol)
                     {
-                        if (MoveValidator::isValidMove(i, j, toRow, toCol, board, color, moveHistory, false))
+                        cout << "Checking move from " << i << ", " << j << " to " << toRow << ", " << toCol << endl;
+                        if (MoveValidator::isValidMove(i, j, toRow, toCol, board, color, false, false))
                         {
                             return false; // Found a valid move, not mated
                         }
                     }
                 }
             }
-
-            
         }
     }
+    return true;
 }
 
-// Function for applying move from camere
+bool ChessBoard::reachedFiftyMoveRule()
+{
+    // Check if 50 moves have been made without a pawn move or capture
+    if (halfMoveClock >= 50)
+    {
+        return true; // Fifty-move rule reached
+    }
+    return false;
+}
+
+bool ChessBoard::isInsufficientMaterial()
+{
+    // Check for insufficient material
+    int whitePieces = 0;
+    int blackPieces = 0;
+    int whiteBishopCount = 0;
+    int blackBishopCount = 0;
+    int whiteKnightCount = 0;
+    int blackKnightCount = 0;
+
+    // - King vs King
+    // - King vs King + Bishop
+    // - King vs King + Knight
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            char piece = board[i][j];
+            if (piece != '-')
+            {
+                if (isWhite(piece))
+                {
+                    whitePieces++;
+                }
+                else
+                {
+                    blackPieces++;
+                }
+            }
+            if (piece == 'b')
+            {
+                whiteBishopCount++;
+            }
+            if (piece == 'B')
+            {
+                blackBishopCount++;
+            }
+            if (piece == 'n')
+            {
+                whiteKnightCount++;
+            }
+            if (piece == 'N')
+            {
+                blackKnightCount++;
+            }
+        }
+    }
+    if (whitePieces == 1 && blackPieces == 1)
+    {
+        return true; // Only kings left
+    }
+
+    if (whitePieces == 2 && blackPieces == 1 && (whiteBishopCount == 1 || whiteKnightCount == 1))
+    {
+        return true; // (white)King vs (black)King + Bishop or Knight
+    }
+    if (blackPieces == 2 && whitePieces == 1 && (blackBishopCount == 1 || blackKnightCount == 1))
+    {
+        return true; // (black)King vs (white)King + Bishop or Knight
+    }
+    return false;
+}
+
+bool ChessBoard::isStalemate(string &activeColor)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            char piece = board[i][j];
+            if (piece != '-' && ((activeColor == "w" && isWhite(piece)) || (activeColor == "b" && isBlack(piece))))
+            {
+                // Check if the piece can make any valid moves
+                for (int toRow = 0; toRow < 8; ++toRow)
+                {
+                    for (int toCol = 0; toCol < 8; ++toCol)
+                    {
+                        if (MoveValidator::isValidMove(i, j, toRow, toCol, board, activeColor, false))
+                        {
+                            return false; // Found a valid move, not mated
+                        }
+                    }
+                }
+            }
+        }
+    }
+    vector<int> kingPos = MoveValidator::findKing(activeColor, board);
+
+    cout << "1" << endl;
+    if (MoveValidator::underAttack(kingPos[0], kingPos[1], activeColor, board))
+    {
+        cout << "Calling all soldiers" << endl;
+        return false; 
+    }
+
+    return true;
+}
+
+// Active color is the color which is next to make the move, which means the color which is in stalemate for example
+bool ChessBoard::isRemi(string &activeColor)
+{
+    cout << "Checking for stalemate" << endl;
+    if (isStalemate(activeColor))
+    {
+        cout << "Stalemate" << endl;
+        return true;
+    }
+
+    // Check for stalemate && Check for 50 move rule (no pawn moves, no captures) && Check for insufficient material
+    cout << "Checking for fifty move rule" << endl;
+    if (reachedFiftyMoveRule())
+    {
+        cout << "Fifty move rule" << endl;
+        return true;
+    }
+    
+    cout << "Checking for insufficient material" << endl;
+    if(isInsufficientMaterial())
+    {
+        cout << "Insufficient material" << endl;
+        return true;
+    }
+    return false;
+}
+
+void ChessBoard::updateTurn(string move, vector<vector<char>> boardCopy)
+{
+    activeColor = (activeColor == "w") ? "b" : "w";
+    moveHistory.push_back(Utill::translateToEngine(move));
+    updateHalfMoveClock(move, boardCopy);
+    cout << "HalfMoveclock: " << halfMoveClock << endl;
+}
+
+// Function for applying move from camera
 bool ChessBoard::applyIfValidMove(string move)
 {
+    vector<vector<char>> boardCopy = board;
+    
     RCLCPP_DEBUG(logger, "Entered applyIfValidMove");
     RCLCPP_DEBUG(logger, "Move is: %s", move.c_str());
     RCLCPP_DEBUG(logger, "Active color is: %s", activeColor.c_str());
@@ -244,8 +373,7 @@ bool ChessBoard::applyIfValidMove(string move)
 
         RCLCPP_DEBUG(logger, "It is valid castle");
         doCastle(move);
-        activeColor = (activeColor == "w") ? "b" : "w";
-        moveHistory.push_back(Utill::translateToEngine(move));
+        updateTurn(move, boardCopy);
         return true;
     }
 
@@ -284,13 +412,12 @@ bool ChessBoard::applyIfValidMove(string move)
             removePiece(toRow, toCol + 1);
         }
 
-        activeColor = (activeColor == "w") ? "b" : "w";
-        moveHistory.push_back(Utill::translateToEngine(move));
+        updateTurn(move, boardCopy);
         RCLCPP_DEBUG(logger, "The en passant is valid");
         return true;
     }
 
-    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory, false);
+    bool validMove = MoveValidator::isValidMove(fromRow, fromCol, toRow, toCol, board, activeColor, false);
     if (!validMove)
     {
         RCLCPP_DEBUG(logger, "MoveValidator returns false");
@@ -298,8 +425,7 @@ bool ChessBoard::applyIfValidMove(string move)
     }
 
     movePiece(fromRow, fromCol, toRow, toCol);
-    activeColor = (activeColor == "w") ? "b" : "w";
-    moveHistory.push_back(Utill::translateToEngine(move));
+    updateTurn(move, boardCopy);
 
     // Handle all promotions
     promoteAllEndRowPawns();
@@ -319,9 +445,18 @@ void ChessBoard::printBoard()
     }
 }
 
-MoveStruct ChessBoard::getMoveStruct()
+
+void ChessBoard::updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion)
 {
-    return MoveStruct();
+    moveStruct.piece = piece;
+    moveStruct.captured = captured;
+    moveStruct.color = (activeColor == "w") ? 'b' : 'w'; // because we need last moves active color, and not next moves.
+    moveStruct.start[0] = fromRow;
+    moveStruct.start[1] = fromCol;
+    moveStruct.end[0] = toRow;
+    moveStruct.end[1] = toCol;
+    moveStruct.type = type;
+    moveStruct.promotion = (promotion) ? 'q' : '-';
 }
 
 void ChessBoard::resetMoveStruct()
@@ -335,4 +470,9 @@ void ChessBoard::resetMoveStruct()
     moveStruct.end[1] = -1;
     moveStruct.type = '-';
     moveStruct.promotion = '-';
+}
+
+MoveStruct ChessBoard::getMoveStruct()
+{
+    return moveStruct;
 }

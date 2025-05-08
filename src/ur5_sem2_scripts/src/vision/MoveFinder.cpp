@@ -31,36 +31,54 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareHeight = imageHeight / 8;
 
 	cv::imshow("diffBoardGrayscale", diffBoard);
-
 	int diffBoardArray[8][8];
+
+
+	cv::Mat diffBoardModified = diffBoard.clone();
+
+	int height = diffBoard.rows;
+	int width = diffBoard.cols;
+
+	// Grid configuration
+	int cellWidth = width / 8;
+	int cellHeight = height / 8;
+	int falloffDistance = 10; // Distance from grid line to start dimming
+
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			// Distance to nearest vertical grid line
+			int distX = std::min(x % cellWidth, cellWidth - (x % cellWidth));
+			// Distance to nearest horizontal grid line
+			int distY = std::min(y % cellHeight, cellHeight - (y % cellHeight));
+
+			int distToGrid = std::min(distX, distY);
+
+			double scale = 1.0;
+			if (distToGrid < falloffDistance)
+			{
+				scale = static_cast<double>(distToGrid) / falloffDistance;
+			}
+
+			uchar &pixel = diffBoardModified.at<uchar>(y, x);
+			pixel = static_cast<uchar>(pixel * scale);
+		}
+	}
+
+	std::cout << "Type: " << diffBoardModified.type() << ", Channels: " << diffBoardModified.channels() << std::endl;
+	cv::imshow("diffBoardModified", diffBoardModified);
+
+
 
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
 			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
-			cv::Mat squareImage = diffBoard(square);
+			cv::Mat squareImage = diffBoardModified(square);
 
-			cv::Mat squareImageModified = squareImage.clone();
-
-			int diff = 0;
-			int rows = squareImage.rows;
-			int cols = squareImage.cols;
-
-			for (int i = 0; i < rows; i++)
-			{
-				for (int j = 0; j < cols; j++)
-				{
-					// Get the pixel value at (i, j)
-					cv::Vec3b pixel = squareImage.at<cv::Vec3b>(i, j);
-					int pixelValue = pixel[0] + pixel[1] + pixel[2]; // Sum of BGR channels
-
-					float wight = abs(i - rows / 2) * abs(j - cols / 2);
-					
-					diff += pixelValue * pow(wight, 2); // Weighted by distance from center
-				}
-			}
-
+			int diff = pow(cv::sum(squareImage)[0], 2) / (255 * 255);
 			diffBoardArray[i][j] = diff;
 		}
 	}
