@@ -56,6 +56,13 @@ target_include_directories(BoardModule PUBLIC
 target_link_libraries(BoardModule VisionModule)
 ament_target_dependencies(BoardModule rclcpp)
 
+# === PicoComm Library ===
+file(GLOB PICOCOMM_SRCS CONFIGURE_DEPENDS src/pico_comm/*.cpp)
+add_library(PicoCommModule ${PICOCOMM_SRCS})
+target_include_directories(PicoCommModule PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/pico_comm
+)
+ament_target_dependencies(PicoCommModule rclcpp)
 
 
 
