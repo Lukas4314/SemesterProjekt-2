@@ -16,11 +16,3 @@ class Gripper
 private:
     int serialPort = -1;
 };
-
-Gripper::Gripper(/* args */)
-{
-}
-
-Gripper::~Gripper()
-{
-}
