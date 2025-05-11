@@ -4,7 +4,7 @@
 #include <errno.h>   // errno
 #include <termios.h> // termios
 #include <unistd.h>  // write, read, close
-#include <iostream>
+#include <rclcpp/rclcpp.hpp>
 #include <cstring> // std::strerror
 #include <cstdint> // uint8_t
 
@@ -13,27 +13,27 @@
 #define CLOSE_GRIPPER 0x01
 #define OPEN_GRIPPER 0x02
 #define GRIPPER_STATUS 0x03
+#define GRIPPER_OPENING 0x13
+#define GRIPPER_CLOSING 0x14
 #define GRIPPER_ERROR 0x04
 #define GRIPPER_ACK 0x06
 #define GRIPPER_NACK 0x15
 #define GRIPPER_TIMEOUT 1000 // milliseconds
 
-
-
-
 Gripper::Gripper()
+    : logger_(rclcpp::get_logger("Gripper"))
 {
     serialPort = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
     if (serialPort == -1)
     {
-        std::cerr << "Failed to open serial port: " << std::strerror(errno) << std::endl;
+        RCLCPP_ERROR(logger_, "Failed to open serial port: %s", std::strerror(errno));
         return;
     }
 
     struct termios tty;
     if (tcgetattr(serialPort, &tty) != 0)
     {
-        std::cerr << "Error getting terminal attributes: " << std::strerror(errno) << std::endl;
+        RCLCPP_ERROR(logger_, "Error getting terminal attributes: %s", std::strerror(errno));
         close(serialPort);
         serialPort = -1;
         return;
@@ -82,9 +82,87 @@ int Gripper::receiveByte()
 
     if (bytesRead != 1)
     {
-        std::cerr << "Failed to read 1 byte from serial port: " << std::strerror(errno) << std::endl;
+        RCLCPP_DEBUG(logger_, "Failed to read 1 byte from serial port: %s", std::strerror(errno));
         return -1;
     }
     
     return buffer[0]; // Return the received byte
+}
+
+void Gripper::sendCommand(uint8_t command)
+{
+    sendByte(command);
+    int response = receiveByte();
+    if (response == GRIPPER_ACK)
+    {
+        RCLCPP_DEBUG(logger_, "Command acknowledged");
+    }
+    else if (response == GRIPPER_NACK)
+    {
+        RCLCPP_ERROR(logger_, "Command not acknowledged");
+    }
+    else
+    {
+        RCLCPP_DEBUG(logger_, "Unexpected response: %d", response);
+    }
+}
+
+bool Gripper::openGripper()
+{
+    sendCommand(OPEN_GRIPPER);
+
+    while (true)
+    {
+        sendCommand(GRIPPER_STATUS);
+        int status = receiveByte();
+        if (status == GRIPPER_OPENING)
+        {
+            RCLCPP_INFO(logger_, "Gripper is opening");
+        }
+        else if (status == GRIPPER_ACK)
+        {
+            RCLCPP_DEBUG(logger_, "Gripper opened successfully");
+            return true;
+        }
+        else if (status == GRIPPER_ERROR)
+        {
+            RCLCPP_ERROR(logger_, "Gripper error occurred");
+            return false;
+        }
+        else
+        {
+            RCLCPP_DEBUG(logger_, "Unexpected status: %d", status);
+            return false;
+        }
+    }
+}
+
+bool Gripper::closeGripper()
+{
+    sendCommand(CLOSE_GRIPPER);
+
+    while (true)
+    {
+        sendCommand(GRIPPER_STATUS);
+        int status = receiveByte();
+        if (status == GRIPPER_CLOSING)
+        {
+            RCLCPP_INFO(logger_, "Gripper is closing");
+        }
+        else if (status == GRIPPER_ACK)
+        {
+            RCLCPP_DEBUG(logger_, "Gripper closed successfully");
+            return true;
+        }
+        else if (status == GRIPPER_ERROR)
+        {
+            RCLCPP_ERROR(logger_, "Gripper error occurred");
+            return false;
+        }
+        else
+        {
+            RCLCPP_DEBUG(logger_, "Unexpected status: %d", status);
+            return false;
+        }
+    }
 }
