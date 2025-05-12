@@ -35,6 +35,7 @@ target_include_directories(MoveplannerModule PUBLIC
     ${OpenCV_INCLUDE_DIRS}
 )
 ament_target_dependencies(MoveplannerModule rclcpp geometry_msgs tf2_ros std_msgs moveit_ros_planning_interface)
+target_link_libraries(MoveplannerModule PicoCommModule)
 
 # === Vision Library ===
 file(GLOB VISION_SRCS CONFIGURE_DEPENDS src/vision/*.cpp)

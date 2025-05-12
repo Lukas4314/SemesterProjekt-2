@@ -18,6 +18,9 @@
 #define GRIPPER_ERROR 0x04
 #define GRIPPER_ACK 0x06
 #define GRIPPER_NACK 0x15
+#define GRIPPER_OPEN 0x07
+#define GRIPPER_CLOSED 0x08
+
 #define GRIPPER_TIMEOUT 1000 // milliseconds
 
 Gripper::Gripper()
@@ -119,7 +122,7 @@ bool Gripper::openGripper()
         {
             RCLCPP_INFO(logger_, "Gripper is opening");
         }
-        else if (status == GRIPPER_ACK)
+        else if (status == GRIPPER_OPEN)
         {
             RCLCPP_DEBUG(logger_, "Gripper opened successfully");
             return true;
@@ -149,7 +152,7 @@ bool Gripper::closeGripper()
         {
             RCLCPP_INFO(logger_, "Gripper is closing");
         }
-        else if (status == GRIPPER_ACK)
+        else if (status == GRIPPER_OPEN)
         {
             RCLCPP_DEBUG(logger_, "Gripper closed successfully");
             return true;
