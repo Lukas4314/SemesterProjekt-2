@@ -16,6 +16,7 @@ public:
     ~Gripper();
     void open();
     void close();
+    void stop();
 
 private:
     uint slice_numPin0;
