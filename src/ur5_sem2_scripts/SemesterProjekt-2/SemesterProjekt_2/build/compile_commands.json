@@ -1,0 +1,57 @@
+[
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/AllInOneMain.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/AllInOneMain.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/AllInOneMain.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/BoardCutter.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/BoardCutter.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/BoardCutter.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/ChessBoard.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ChessBoard.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ChessBoard.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/HueDifferenceProcessor.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/HueDifferenceProcessor.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/HueDifferenceProcessor.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/ImageDrawer.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageDrawer.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageDrawer.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/ImageFinder.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageFinder.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/ImageFinder.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/MoveFinder.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveFinder.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveFinder.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/MoveValidator.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveValidator.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/MoveValidator.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/StockfishEngine.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/StockfishEngine.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/StockfishEngine.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/Utill.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/Utill.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/Utill.cpp"
+},
+{
+  "directory": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/build",
+  "command": "/usr/bin/g++ -isystem /usr/local/include/opencv4 -g -o CMakeFiles/main.dir/main.cpp.o -c /home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/main.cpp",
+  "file": "/home/lukas/Documents/codes/SemesterProjekt-2/SemesterProjekt_2/main.cpp"
+}
+]

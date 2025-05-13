@@ -3,6 +3,23 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+
+.vs*
+x64*
+SemesterProjekt-2.sln
+src/trak_ik*
+build/
+install/trac_ik/
+install/trac_ik_examples/
+install/trac_ik_kinematics/
+install/trac_ik_lib/
+SemesterProjekt 2/x64*
+SemesterProjekt 2\SemesterProjekt 2.vcx*
+install/
+log/
+.vscode/
+
+
 # User-specific files
 *.rsuser
 *.suo
