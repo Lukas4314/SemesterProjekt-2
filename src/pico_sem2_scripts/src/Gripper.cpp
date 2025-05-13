@@ -31,20 +31,15 @@ Gripper::~Gripper()
 void Gripper::open()
 {
     gpio_put(PIN0, 1);
-    sleep_ms(1000);
-    gpio_put(PIN0, 0);
-    putchar(1);
 }
 void Gripper::close()
 {
     gpio_put(PIN1, 1);
 
-    while (adc.read() < 100)
-    {
+}
 
-        sleep_ms(10);
-    }
-
+void Gripper::stop()
+{
+    gpio_put(PIN0, 0);
     gpio_put(PIN1, 0);
-    putchar(1);
 }
