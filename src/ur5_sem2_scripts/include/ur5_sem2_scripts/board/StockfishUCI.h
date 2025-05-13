@@ -76,7 +76,7 @@ public:
     // Function for reading output from stockfish until a keyword is passed to the function
     string readOutputUntil(const string& token) {
         string output;  // A string variable to store all the output from stockfish
-        char buffer[256];   // Temporary char (character) array to hold chuncks of data coming from stockfish
+        char buffer[512];   // Temporary char (character) array to hold chuncks of data coming from stockfish
         while (true) {      // Initiates while true loop
             ssize_t count = read(fromEngine[0], buffer, sizeof(buffer) - 1);    // Low level system call which reads data fromEngine[0] which would be the end of the pipe that the parent uses.
             if (count <= 0) break;  // If we get less than 0 or nothing (so 0) from stockfish break this loop

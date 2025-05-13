@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
             cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
             break;
         }
-
+      
         if (chess.isRemi(chess.getActiveColor()))
         {
             cout << "Remi! " << endl;
@@ -116,6 +116,12 @@ int main(int argc, char *argv[])
         size_t start = output.find("bestmove ") + 9;
         size_t end = output.find(' ', start);
         string bestMove = output.substr(start, end - start);
+
+        // Validate the bestMove string
+        if (bestMove.length() < 4 || bestMove.length() > 5) {
+            cerr << "Invalid move received from Stockfish: " << bestMove << endl;
+            return -1;
+        }
 
         RCLCPP_DEBUG(logger, ("Applying engine move"));
         RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());

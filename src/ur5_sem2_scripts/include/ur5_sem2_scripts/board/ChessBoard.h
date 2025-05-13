@@ -12,7 +12,9 @@ public:
     void setupBoard();
     string& getActiveColor();
     void updateHalfMoveClock(string move, vector<vector<char>> boardCopy);
-    void setBoard(const vector<vector<char>> &newBoard);                                                                                                                 
+    bool isThreefoldRule();
+    void setBoard(const vector<vector<char>> &newBoard);
+    vector<vector<char>> getBoard();                                                                                                                 
     vector<string> getMoveHistory();                                                 
     static bool isWhite(char piece);
     static bool isBlack(char piece);
@@ -45,6 +47,8 @@ private:
     int halfMoveClock;
 
     vector<string> moveHistory; 
+
+    vector<vector<vector<char>>> boardHistory; // History of the board states
 
     MoveStruct moveStruct;
 

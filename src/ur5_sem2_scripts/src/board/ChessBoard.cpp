@@ -71,9 +71,31 @@ void ChessBoard::updateHalfMoveClock(string move, vector<vector<char>> boardCopy
     }
 }
 
+bool ChessBoard::isThreefoldRule() 
+{
+    int count = 0;
+
+    for (size_t i = 0; i < boardHistory.size(); i++) 
+    {
+        if (boardHistory[i] == board) {
+
+            count++;
+        }
+    }
+
+    cout << "Counter for isThreeFoldRule is: " << count << endl;
+
+    return count >= 3;
+}
+
 void ChessBoard::setBoard(const vector<vector<char>> &newBoard)
 {
     board = newBoard; // Sets the board to the new board
+}
+
+vector<vector<char>> ChessBoard::getBoard()
+{
+    return board;
 }
 
 vector<string> ChessBoard::getMoveHistory()
@@ -340,21 +362,29 @@ bool ChessBoard::isRemi(string &activeColor)
         cout << "Insufficient material" << endl;
         return true;
     }
+    
+    cout << "Checking for threefold rule" << endl;
+    if(isThreefoldRule())
+    {
+        cout << "Threefold rule" << endl;
+        return true;
+    }
     return false;
 }
 
-void ChessBoard::updateTurn(string move, vector<vector<char>> boardCopy)
+void ChessBoard::updateTurn(string move, vector<vector<char>> originalBoard)
 {
     activeColor = (activeColor == "w") ? "b" : "w";
     moveHistory.push_back(Utill::translateToEngine(move));
-    updateHalfMoveClock(move, boardCopy);
+    updateHalfMoveClock(move, originalBoard);
     cout << "HalfMoveclock: " << halfMoveClock << endl;
+    boardHistory.push_back(board);
 }
 
 // Function for applying move from camera
 bool ChessBoard::applyIfValidMove(string move)
 {
-    vector<vector<char>> boardCopy = board;
+    vector<vector<char>> originalBoard = board;
     
     RCLCPP_DEBUG(logger, "Entered applyIfValidMove");
     RCLCPP_DEBUG(logger, "Move is: %s", move.c_str());
@@ -372,7 +402,7 @@ bool ChessBoard::applyIfValidMove(string move)
 
         RCLCPP_DEBUG(logger, "It is valid castle");
         doCastle(move);
-        updateTurn(move, boardCopy);
+        updateTurn(move, originalBoard);
         return true;
     }
 
@@ -411,7 +441,7 @@ bool ChessBoard::applyIfValidMove(string move)
             removePiece(toRow, toCol + 1);
         }
 
-        updateTurn(move, boardCopy);
+        updateTurn(move, originalBoard);
         RCLCPP_DEBUG(logger, "The en passant is valid");
         return true;
     }
@@ -424,7 +454,7 @@ bool ChessBoard::applyIfValidMove(string move)
     }
 
     movePiece(fromRow, fromCol, toRow, toCol);
-    updateTurn(move, boardCopy);
+    updateTurn(move, originalBoard);
 
     // Handle all promotions
     promoteAllEndRowPawns();
