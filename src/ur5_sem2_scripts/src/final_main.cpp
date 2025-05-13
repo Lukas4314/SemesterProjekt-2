@@ -11,6 +11,7 @@
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/vision/AllInOneMain.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
+#include "ur5_sem2_scripts/board/ChessBoard.h"
 
 void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger)
 {
@@ -25,8 +26,10 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
   }
 }
 
-void getTransformationMatrix(AllInOneMain &allInOneMain, double &raw_TF[4][4])
+std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allInOneMain)
 {
+  // Create a logger
+  auto logger = rclcpp::get_logger("final_main");
   // Types in the preknown yellow point for callibrating the offset to the table cornor
   cv::Point2f preKnownYellowPointInCm(17.5, 57.5);
   double pixelPerCm = 11.2;
@@ -86,14 +89,7 @@ void getTransformationMatrix(AllInOneMain &allInOneMain, double &raw_TF[4][4])
   RCLCPP_INFO(logger, "base_boardGreen_T_m:");
   printMatrix(base_boardGreen_T_m, logger);
 
-  double raw_TF[4][4];
-  for (size_t i = 0; i < 4; ++i)
-  {
-    for (size_t j = 0; j < 4; ++j)
-    {
-      raw_TF[i][j] = base_boardGreen_T_m[i][j];
-    }
-  }
+  return base_boardGreen_T_m;
 }
 
 int main(int argc, char *argv[])
@@ -112,6 +108,9 @@ int main(int argc, char *argv[])
   ChessMoves chessMoves(node);
   chessMoves.move_to_idle();
 
+  // Create a chessboard object
+  ChessBoard chess;
+
   AllInOneMain allInOneMain = AllInOneMain(camera_index);
   allInOneMain.getPieceMovedString(0);
 
@@ -123,7 +122,16 @@ int main(int argc, char *argv[])
     // Variable to hold the transformation matrix
     double raw_TF[4][4];
     // Loads the transformation matrix into the variable because it is a pointer (i think)
-    getTransformationMatrix(allInOneMain, raw_TF);
+    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(allInOneMain);
+
+    double raw_TF[4][4];
+    for (size_t i = 0; i < 4; ++i)
+    {
+      for (size_t j = 0; j < 4; ++j)
+      {
+        raw_TF[i][j] = TF[i][j];
+      }
+    }
 
     // Gets a move from the camera and checks if it is valid and repeats until it is
     std::string move;
@@ -145,12 +153,18 @@ int main(int argc, char *argv[])
     // IIIIIIIIIIIIIIIIIII
 
     // Now it needs to get the move from the chessengine and apply it, but the chessboard.cpp class needs to be ready for that so meanwhile:
-    moveStruct move;
-
+        
     // IIIIIIIIIIIIIIIIIII
 
+    
+    // Here it needs to get 
+    moveStruct movePlan;
+
+    
+    
+
     // robot moves and makes it move
-    chessMoves.move(move, raw_TF);
+    chessMoves.move(movePlan, raw_TF);
 
     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
     cv::waitKey(0);
