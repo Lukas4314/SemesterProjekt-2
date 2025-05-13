@@ -152,7 +152,7 @@ bool Gripper::closeGripper()
         {
             RCLCPP_INFO(logger_, "Gripper is closing");
         }
-        else if (status == GRIPPER_OPEN)
+        else if (status == GRIPPER_CLOSED)
         {
             RCLCPP_DEBUG(logger_, "Gripper closed successfully");
             return true;

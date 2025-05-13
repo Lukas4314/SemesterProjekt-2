@@ -28,10 +28,12 @@ int main()
 
     Gripper gripper;
     __uint8_t status = 0;
+    int timeindex = 0;
 
     while (true) {
         __uint8_t ch = getchar_timeout_us(0);
 
+        // Check comms from the pc
         if (ch == PICO_ERROR_TIMEOUT) {
             // No input, continue
         }
@@ -42,6 +44,7 @@ int main()
                 gripper.open();
                 putchar(GRIPPER_ACK);
                 status = GRIPPER_OPENING;
+                timeindex = 200; // Set the time index to 200 ms
             }
             else if (status == GRIPPER_OPEN)
             {
@@ -80,12 +83,26 @@ int main()
             
         }
         else if (ch == GRIPPER_STATUS) {
+            putchar(GRIPPER_ACK);
             putchar(status);
         }
 
+        // Check if the gripper is closed
         if (adc.read() < 100 && status == GRIPPER_CLOSING) {
             status = GRIPPER_CLOSED;
             gripper.stop();
+        }
+
+        // Check if the gripper is opening
+        if (status == GRIPPER_OPENING) {
+            if (timeindex <= 0) {
+                gripper.stop();
+                status = GRIPPER_OPEN;
+            }
+
+            else {
+                timeindex--;
+            }
         }
         
         
