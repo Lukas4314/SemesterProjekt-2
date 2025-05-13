@@ -19,6 +19,8 @@ std::string Utill::translateIntMoveToString(int move) {
 	if (move == Utill::BK) return "bK";
 
 	
+
+	
 	std::string moveString = "";
 	moveString += (char)(move % 1000 / 100 + 97);
 	moveString += (char)(7-move / 1000 + 49);

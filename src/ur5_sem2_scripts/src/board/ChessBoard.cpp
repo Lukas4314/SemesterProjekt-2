@@ -434,11 +434,11 @@ bool ChessBoard::applyIfValidMove(string move)
         movePiece(fromRow, fromCol, toRow, toCol);
         if (activeColor == "w")
         {
-            removePiece(toRow, toCol - 1);
+            removePiece(toRow + 1, toCol);
         }
         else
         {
-            removePiece(toRow, toCol + 1);
+            removePiece(toRow - 1, toCol);
         }
 
         updateTurn(move, originalBoard);

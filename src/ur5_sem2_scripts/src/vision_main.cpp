@@ -28,11 +28,16 @@ int main(int argc, char *argv[])
     ChessBoard chess;
     StockfishUCI engine;
     int moveCounter = 0;
+    int choice;
+    bool vsPlayer = true;
 
+    cout << "Do you want opponent to be '0' (stockfish) or '1' (player): " << endl;
+    cin >> choice;
     cout << "Do you want to play as white or black? (Enter 'w' for white, 'b' for black): ";
     cin >> activeColor;
 
-    if (activeColor != "w" && activeColor != "b") {
+    if (activeColor != "w" && activeColor != "b")
+    {
         cerr << "Invalid input! Defaulting to white." << endl;
         activeColor = "w";
     }
@@ -41,14 +46,16 @@ int main(int argc, char *argv[])
     allInOneMain.getPieceMovedString(0);
 
     // If the user chooses black, Stockfish makes the first move
-    if (activeColor == "b") {
+    if (activeColor == "b" && choice == 0)
+    {
         int depth = 15;
         vector<string> moveHistory = chess.getMoveHistory();
         string allMoves = Utill::vectorStringToString(moveHistory);
         string output = engine.getBestMove(allMoves, depth);
 
         size_t pos = output.find("bestmove ");
-        if (pos == string::npos) {
+        if (pos == string::npos)
+        {
             cerr << "Failed to find bestmove in engine output!" << endl;
             return -1;
         }
@@ -65,10 +72,54 @@ int main(int argc, char *argv[])
         RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
         chess.printBoard();
     }
-    
 
-    cv::waitKey(0);
-    while (rclcpp::ok())
+    if (choice == 1)
+    {
+        cv::waitKey(0);
+        while (rclcpp::ok() && vsPlayer)
+        {
+            // Camera move (white)
+            string move;
+            bool succesMove;
+            int moveDepth = 0;
+
+            do
+            {
+                move = allInOneMain.getPieceMovedString(moveDepth);
+                cout << "Move is: " << move << endl;
+                succesMove = chess.applyIfValidMove(move);
+                cout << "Succes move: " << succesMove << endl;
+                moveDepth++;
+
+            } while (!succesMove);
+
+            cout << "Camera Move is: " << move << endl;
+            chess.printBoard();
+
+            if (chess.isMated(chess.getActiveColor()))
+            {
+                cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
+                break;
+            }
+
+            if (chess.isRemi(chess.getActiveColor()))
+            {
+                cout << "Remi! " << endl;
+                break;
+            }
+            
+            moveCounter++;
+            cout << "Move counter: " << moveCounter << endl;
+
+            cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
+            if (cv::waitKey(0) == 'q')
+            {
+                break;
+            }
+        }
+    }
+
+    while (rclcpp::ok() && !vsPlayer)
     {
         string move;
         bool succesMove;
@@ -92,7 +143,7 @@ int main(int argc, char *argv[])
             cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
             break;
         }
-      
+
         if (chess.isRemi(chess.getActiveColor()))
         {
             cout << "Remi! " << endl;
@@ -118,7 +169,8 @@ int main(int argc, char *argv[])
         string bestMove = output.substr(start, end - start);
 
         // Validate the bestMove string
-        if (bestMove.length() < 4 || bestMove.length() > 5) {
+        if (bestMove.length() < 4 || bestMove.length() > 5)
+        {
             cerr << "Invalid move received from Stockfish: " << bestMove << endl;
             return -1;
         }
