@@ -1,45 +1,56 @@
-// Include libraries
 #pragma once
 #include <string>
 #include "StockfishUCI.h"
 #include <rclcpp/rclcpp.hpp> // For git logger
+#include "ur5_sem2_scripts/moveStruct.hpp"
 using namespace std;
 
-// ChessBoard class for handling terminal output, player moves, updating FEN, and for applying the best move from stockfish
 class ChessBoard
 {
 public:
-    ChessBoard();                                                       // Constructor
+    ChessBoard();                                                       
     void setupBoard();
-    vector<string> getMoveHistory();                                                  // Function for setting up the board
-    void updateFEN();                                                   // Function for updating the FEN notation
-    string getFEN();                                                    // Function for returning current FEN
-    void movePiece(int fromRow, int fromCol, int toRow, int toCol);     // Function for moving pieces
-    bool playerMove();                                                  // Function for playing a move
-    bool applyMoveStringCamera(const std::string &move);                // Function for applying a move from the camera
-    void applyBestMoveFromEngine(StockfishUCI &engine, int depth = 15); // Function for applying the best move from the engine
-    void printBoard();                                                  // Function for printing the board
-    void checkPieces();
-    void setBoard(const vector<vector<char>> &newBoard);             // Function for setting the board
-    ~ChessBoard();                                                     // Destructor
+    string& getActiveColor();
+    void updateHalfMoveClock(string move, vector<vector<char>> boardCopy);
+    bool isThreefoldRule();
+    void setBoard(const vector<vector<char>> &newBoard);
+    vector<vector<char>> getBoard();                                                                                                                 
+    vector<string> getMoveHistory();                                                 
+    static bool isWhite(char piece);
+    static bool isBlack(char piece);
+    void movePiece(int fromRow, int fromCol, int toRow, int toCol);
+    void removePiece(int row, int col);
+    void setPiece(int row, int col, char piece);
+    void doCastle(string &move);                                                      
+    void doSwitch(string &move);
+    bool shouldSwitch(char piece1);
+    void promoteAllEndRowPawns();
+    bool isMated(string &color);
+    bool reachedFiftyMoveRule();
+    bool isInsufficientMaterial();
+    bool isStalemate(string &color);
+    bool isRemi(string &color);     
+    void updateTurn(string move, vector<vector<char>> boardCopy);                  
+    bool applyIfValidMove(string move);
+    void printBoard();
+    void updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion);                                                 
+    void resetMoveStruct();
+    MoveStruct getMoveStruct();
+    ~ChessBoard();                                                   
 
 private:
-    vector<vector<char>> board; // A vector of vectors with characters
+    vector<vector<char>> board;
 
-    bool bQ = true;
-    bool bK = true;
-    bool wQ = true;
-    bool wK = true;
-
-    // Variables
-    string FEN;
     string activeColor;
     string castlingRights;
     string enPassant;
-    int halfmoveClock;
-    int fullmoveNumber;
+    int halfMoveClock;
 
-    vector<string> moveHistory; // A vector with a string which contains the move history
+    vector<string> moveHistory; 
+
+    vector<vector<vector<char>>> boardHistory; // History of the board states
+
+    MoveStruct moveStruct;
 
     rclcpp::Logger const logger = rclcpp::get_logger("Board");
 };

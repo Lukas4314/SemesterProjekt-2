@@ -52,6 +52,7 @@ add_library(BoardModule ${BOARD_SRCS})
 target_include_directories(BoardModule PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 target_link_libraries(BoardModule VisionModule)
 ament_target_dependencies(BoardModule rclcpp)
@@ -99,6 +100,9 @@ install(DIRECTORY pictures DESTINATION share/${PROJECT_NAME})
    
 # Install launch files
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+
+# Install stockfish files
+install(DIRECTORY stockfish DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

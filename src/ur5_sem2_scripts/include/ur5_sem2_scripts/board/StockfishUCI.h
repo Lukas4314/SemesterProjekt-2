@@ -15,6 +15,7 @@ a function for URL encoder), allows better costumization, and lastly it works of
 #include <unistd.h>     // IMPORTANT: Here we include various different functions for writing to files etc. A lot of what we use in the code isnt c++ features, instead we use the linux functionallity to communicate directly with the OS (Operating System)
 #include <sys/types.h>   // Later we use pid_t as a data type that saves an ID. This comes from this lib
 #include <sys/wait.h>   // Library used for waiting (Delays)
+#include "rclcpp/rclcpp.hpp" // For logging
 
 using namespace std;
 
@@ -75,7 +76,7 @@ public:
     // Function for reading output from stockfish until a keyword is passed to the function
     string readOutputUntil(const string& token) {
         string output;  // A string variable to store all the output from stockfish
-        char buffer[256];   // Temporary char (character) array to hold chuncks of data coming from stockfish
+        char buffer[512];   // Temporary char (character) array to hold chuncks of data coming from stockfish
         while (true) {      // Initiates while true loop
             ssize_t count = read(fromEngine[0], buffer, sizeof(buffer) - 1);    // Low level system call which reads data fromEngine[0] which would be the end of the pipe that the parent uses.
             if (count <= 0) break;  // If we get less than 0 or nothing (so 0) from stockfish break this loop
@@ -97,7 +98,7 @@ public:
         writeCommand("ucinewgame");     // Start a new game (Resets everything)
         writeCommand("position startpos moves " + moves);   // Tells stockfish to start from the start position "position startpos moves" and then to one after the other apply everything from the string moves
         writeCommand("go depth " + to_string(depth));   // This is the actual search command which tells stockfish to then calculate the bestmove based on the depth
-
+        RCLCPP_DEBUG(rclcpp::get_logger("StockfishUCI"), "Moves are: %s", moves.c_str());
         return readOutputUntil("bestmove");     // lastly we read until best move keyword is found at which point a string is returned by the function
     }
 

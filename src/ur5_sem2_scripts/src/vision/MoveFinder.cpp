@@ -5,6 +5,8 @@
 #include <vector>
 #include "Utill.h"
 #include "ImageDrawer.h"
+#include <math.h>
+
 MoveFinder::MoveFinder() {}
 MoveFinder::~MoveFinder() {}
 
@@ -21,6 +23,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
 	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
+	cv::imshow("difBoard", diffBoard);
 	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;
@@ -28,16 +31,51 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareHeight = imageHeight / 8;
 
 	cv::imshow("diffBoardGrayscale", diffBoard);
-
 	int diffBoardArray[8][8];
+
+	cv::Mat diffBoardModified = diffBoard.clone();
+
+	int height = diffBoard.rows;
+	int width = diffBoard.cols;
+
+	// Grid configuration
+	int cellWidth = width / 8;
+	int cellHeight = height / 8;
+	int falloffDistance = 10; // Distance from grid line to start dimming
+
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			// Distance to nearest vertical grid line
+			int distX = std::min(x % cellWidth, cellWidth - (x % cellWidth));
+			// Distance to nearest horizontal grid line
+			int distY = std::min(y % cellHeight, cellHeight - (y % cellHeight));
+
+			int distToGrid = std::min(distX, distY);
+
+			double scale = 1.0;
+			if (distToGrid < falloffDistance)
+			{
+				scale = static_cast<double>(distToGrid) / falloffDistance;
+			}
+
+			uchar &pixel = diffBoardModified.at<uchar>(y, x);
+			pixel = static_cast<uchar>(pixel * scale);
+		}
+	}
+
+	std::cout << "Type: " << diffBoardModified.type() << ", Channels: " << diffBoardModified.channels() << std::endl;
+	cv::imshow("diffBoardModified", diffBoardModified);
 
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
 			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
-			cv::Mat squareImage = diffBoard(square);
-			int diff = cv::sum(squareImage)[0];
+			cv::Mat squareImage = diffBoardModified(square);
+
+			int diff = pow(cv::sum(squareImage)[0], 2) / (255 * 255);
 			diffBoardArray[i][j] = diff;
 		}
 	}
@@ -79,11 +117,56 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
-	int castleWeight = 1.5;
-	int castleScoreWQ = (diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) * castleWeight;
-	int castleScoreWK = (diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) * castleWeight;
-	int castleScoreBQ = (diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) * castleWeight;
-	int castleScoreBK = (diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) * castleWeight;
+	float castleWeight = 1.5f;
+	int castleScoreWQ = (float)(diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
+	int castleScoreWK = (float)(diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
+	int castleScoreBQ = (float)(diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) / castleWeight;
+	int castleScoreBK = (float)(diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) / castleWeight;
+
+	float enPassantWeight = 1.5f;
+
+	for (int file = 0; file < 8; file++)
+	{
+		// The king and queen side corresponds to the side which the pawn is taken from.
+		int enPassantWQSide;
+		int enPassantWKSide;
+		int enPassantBQSide;
+		int enPassantBKSide;
+		if (file == 0)
+		{
+			// Since file 0 is the A column the pawn can only be taken fom the kingside since the queen side is off the board.
+			enPassantWKSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
+			enPassantBKSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
+
+			// Places the values for the kingside into the tilePairs and with the according squares.
+			tilePairs.emplace_back(enPassantWKSide, 4, file + 1, 5, file);
+			tilePairs.emplace_back(enPassantBKSide, 3, file + 1, 2, file);
+		}
+		else if (file == 7)
+		{
+			// Since file 7 (0 indexed) is the H row, the pawn can only be taken from the queenside since the king side is off the board.
+			enPassantWQSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
+			enPassantBQSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
+
+			// Places the values for the queenside into the tilePairs and with the according squares.
+			tilePairs.emplace_back(enPassantWQSide, 4, file - 1, 5, file);
+			tilePairs.emplace_back(enPassantBQSide, 3, file - 1, 2, file);
+		}
+		else
+			// If the file is not 0 or 7, the pawn can be taken from both sides.
+		{
+			enPassantWKSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
+			enPassantBKSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
+
+			enPassantWQSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
+			enPassantBQSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
+
+			tilePairs.emplace_back(enPassantWKSide, 4, file + 1, 5, file);
+			tilePairs.emplace_back(enPassantBKSide, 3, file + 1, 2, file);
+			tilePairs.emplace_back(enPassantWQSide, 4, file - 1, 5, file);
+			tilePairs.emplace_back(enPassantBQSide, 3, file - 1, 2, file);
+		}
+	}
 
 	std::cout << "castleScoreWQ: " << castleScoreWQ << std::endl;
 	std::cout << "castleScoreWK: " << castleScoreWK << std::endl;
@@ -96,9 +179,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	// Sort tile pairs by combined change score in descending order
 	std::sort(tilePairs.rbegin(), tilePairs.rend());
-
-
-	
 
 	std::cout << "actualMoveScore = " << std::get<0>(tilePairs[depth]) << std::endl;
 	std::cout << "actualMoveRow1 = " << std::get<1>(tilePairs[depth]) << std::endl;
