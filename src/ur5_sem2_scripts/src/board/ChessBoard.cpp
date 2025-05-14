@@ -44,7 +44,7 @@ string &ChessBoard::getActiveColor()
     return activeColor;
 }
 
-void ChessBoard::updateHalfMoveClock(string move, vector<vector<char>> boardCopy) 
+void ChessBoard::updateHalfMoveClock(string move, vector<vector<char>> boardCopy)
 {
     if (move == "wK" || move == "wQ" || move == "bK" || move == "bQ")
     {
@@ -71,13 +71,14 @@ void ChessBoard::updateHalfMoveClock(string move, vector<vector<char>> boardCopy
     }
 }
 
-bool ChessBoard::isThreefoldRule() 
+bool ChessBoard::isThreefoldRule()
 {
     int count = 0;
 
-    for (size_t i = 0; i < boardHistory.size(); i++) 
+    for (size_t i = 0; i < boardHistory.size(); i++)
     {
-        if (boardHistory[i] == board) {
+        if (boardHistory[i] == board)
+        {
 
             count++;
         }
@@ -141,12 +142,20 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 2); // Move the king
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
+        moveStruct.start[0] = 4;
+        moveStruct.start[1] = 0;
+        moveStruct.end[0] = 2;
+        moveStruct.end[1] = 0;
     }
     else if (move == "wK")
     {
         movePiece(7, 4, 7, 6); // Move the king
         movePiece(7, 7, 7, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1g1");
+        moveStruct.start[0] = 4;
+        moveStruct.start[1] = 0;
+        moveStruct.end[0] = 6;
+        moveStruct.end[1] = 0;
     }
 
     else if (move == "bQ")
@@ -154,12 +163,20 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 2); // Move the king
         movePiece(0, 0, 0, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8c8");
+        moveStruct.start[0] = 4;
+        moveStruct.start[1] = 8;
+        moveStruct.end[0] = 2;
+        moveStruct.end[1] = 8;
     }
     else if (move == "bK")
     {
         movePiece(0, 4, 0, 6); // Move the king
         movePiece(0, 7, 0, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8g8");
+        moveStruct.start[0] = 4;
+        moveStruct.start[1] = 8;
+        moveStruct.end[0] = 6;
+        moveStruct.end[1] = 8;
     }
 }
 
@@ -194,11 +211,33 @@ void ChessBoard::promoteAllEndRowPawns()
     {
         if (board[7][col] == 'P')
         {
-            board[7][col] = 'Q';
+            if (promotedTo == '-')
+            {
+                board[7][col] = 'Q';
+                moveStruct.type = 'p';
+                moveStruct.promotion = 'q';
+            }
+            else
+            {
+                board[7][col] = toupper(promotedTo);
+                moveStruct.type = 'p';
+                moveStruct.promotion = 'q';
+            }
         }
         else if (board[0][col] == 'p')
         {
-            board[0][col] = 'q';
+            if (promotedTo == '-')
+            {
+                board[0][col] = 'q';
+                moveStruct.type = 'p';
+                moveStruct.promotion = 'q';
+            }
+            else
+            {
+                board[0][col] = tolower(promotedTo);
+                moveStruct.type = 'p';
+                moveStruct.promotion = 'q';
+            }
         }
     }
 }
@@ -328,11 +367,10 @@ bool ChessBoard::isStalemate(string &activeColor)
     }
     vector<int> kingPos = MoveValidator::findKing(activeColor, board);
 
-    cout << "1" << endl;
     if (MoveValidator::underAttack(kingPos[0], kingPos[1], activeColor, board))
     {
         cout << "Calling all soldiers" << endl;
-        return false; 
+        return false;
     }
 
     return true;
@@ -341,7 +379,6 @@ bool ChessBoard::isStalemate(string &activeColor)
 // Active color is the color which is next to make the move, which means the color which is in stalemate for example
 bool ChessBoard::isRemi(string &activeColor)
 {
-    cout << "Checking for stalemate" << endl;
     if (isStalemate(activeColor))
     {
         cout << "Stalemate" << endl;
@@ -349,22 +386,19 @@ bool ChessBoard::isRemi(string &activeColor)
     }
 
     // Check for stalemate && Check for 50 move rule (no pawn moves, no captures) && Check for insufficient material
-    cout << "Checking for fifty move rule" << endl;
     if (reachedFiftyMoveRule())
     {
         cout << "Fifty move rule" << endl;
         return true;
     }
-    
-    cout << "Checking for insufficient material" << endl;
-    if(isInsufficientMaterial())
+
+    if (isInsufficientMaterial())
     {
         cout << "Insufficient material" << endl;
         return true;
     }
-    
-    cout << "Checking for threefold rule" << endl;
-    if(isThreefoldRule())
+
+    if (isThreefoldRule())
     {
         cout << "Threefold rule" << endl;
         return true;
@@ -374,8 +408,16 @@ bool ChessBoard::isRemi(string &activeColor)
 
 void ChessBoard::updateTurn(string move, vector<vector<char>> originalBoard)
 {
+    // Puts the color (as a char) into the moveStrut before updating the color
+    moveStruct.color = activeColor[0];
     activeColor = (activeColor == "w") ? "b" : "w";
+
+    if (promotedTo != '-')
+    {
+        move += promotedTo;
+    }
     moveHistory.push_back(Utill::translateToEngine(move));
+
     updateHalfMoveClock(move, originalBoard);
     cout << "HalfMoveclock: " << halfMoveClock << endl;
     boardHistory.push_back(board);
@@ -384,11 +426,18 @@ void ChessBoard::updateTurn(string move, vector<vector<char>> originalBoard)
 // Function for applying move from camera
 bool ChessBoard::applyIfValidMove(string move)
 {
+    resetMoveStruct();
     vector<vector<char>> originalBoard = board;
-    
+
     RCLCPP_DEBUG(logger, "Entered applyIfValidMove");
     RCLCPP_DEBUG(logger, "Move is: %s", move.c_str());
     RCLCPP_DEBUG(logger, "Active color is: %s", activeColor.c_str());
+
+    if (move.length() == 5)
+    {
+        promotedTo = move.substr(4, 1)[0];
+        move = move.substr(0, 4);
+    }
 
     if (move == "wQ" || move == "wK" || move == "bQ" || move == "bK")
     {
@@ -419,11 +468,18 @@ bool ChessBoard::applyIfValidMove(string move)
     }
 
     piece1 = board[8 - (move[1] - '0')][move[0] - 'a'];
-
+    char piece2 = board[8 - (move[3] - '0')][move[2] - 'a'];
     fromCol = move[0] - 'a';
     fromRow = 8 - (move[1] - '0');
     toCol = move[2] - 'a';
     toRow = 8 - (move[3] - '0');
+
+    moveStruct.piece = piece1;
+    moveStruct.captured = piece2;
+    moveStruct.start[0] = fromRow;
+    moveStruct.start[1] = fromCol;
+    moveStruct.end[0] = toRow;
+    moveStruct.end[1] = toCol;
 
     // Always checks for an enpassant move, since it is the easiest way to check if the move is a enpassant move is to check if the move
     // Is a valid enpassant move
@@ -440,6 +496,8 @@ bool ChessBoard::applyIfValidMove(string move)
         {
             removePiece(toRow - 1, toCol);
         }
+        moveStruct.captured = 'p';
+        moveStruct.type = 'e';
 
         updateTurn(move, originalBoard);
         RCLCPP_DEBUG(logger, "The en passant is valid");
@@ -455,6 +513,8 @@ bool ChessBoard::applyIfValidMove(string move)
 
     movePiece(fromRow, fromCol, toRow, toCol);
     updateTurn(move, originalBoard);
+
+    moveStruct.type = 'm';
 
     // Handle all promotions
     promoteAllEndRowPawns();
@@ -473,7 +533,6 @@ void ChessBoard::printBoard()
         cout << endl;
     }
 }
-
 
 void ChessBoard::updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion)
 {
@@ -503,5 +562,8 @@ void ChessBoard::resetMoveStruct()
 
 MoveStruct ChessBoard::getMoveStruct()
 {
+    // Flips the rows
+    moveStruct.start[0] = 7 - moveStruct.start[0];
+    moveStruct.end[0] = 7 - moveStruct.end[0];
     return moveStruct;
 }

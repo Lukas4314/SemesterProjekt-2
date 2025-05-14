@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 
     AllInOneMain allInOneMain = AllInOneMain(camera_index);
     allInOneMain.getPieceMovedString(0);
+    
 
     // If the user chooses black, Stockfish makes the first move
     if (activeColor == "b" && choice == 0)

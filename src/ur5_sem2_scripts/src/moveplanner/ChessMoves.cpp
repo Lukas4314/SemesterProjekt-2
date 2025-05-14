@@ -40,7 +40,6 @@ bool ChessMoves::move(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move() called");
     switch (move.type) {
         case 'm':
-
             if (move.captured != '-') {
                 return capture_piece(move, TFchess);
             } else {
@@ -87,9 +86,10 @@ bool ChessMoves::remove_piece(MoveStruct move, double TFchess[4][4]) {
         }
     }
     // apply transformation to start position
-    double start[2] = {move.start[0]*TFchess[0][0]*tile_size+move.start[1]*TFchess[0][1]*tile_size+TFchess[0][3], move.start[0]*TFchess[1][0]*tile_size+move.start[1]*TFchess[1][1]*tile_size+TFchess[1][3]};
-    double end[2] = {deathposition[0],deathposition[1]};
+    std::array<double, 2> start = applyTransformation(move.start, TFchess);
+    std::array<double, 2> end = {deathposition[0],deathposition[1]};
     
+    RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
     // Execute the move
     if(execute_move(start, end))
     {
@@ -104,29 +104,45 @@ bool ChessMoves::remove_piece(MoveStruct move, double TFchess[4][4]) {
 bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "add_piece() called");
     double deathposition[2] = {0, 0};
+
+    //output the dead pieces
+    RCLCPP_INFO(node_->get_logger(), "dead pieces left: ");
+    for (int i = 0; i < 16; i++) {
+        RCLCPP_INFO(node_->get_logger(), "%c", deadPiecesLeft[i]);
+    }
+    RCLCPP_INFO(node_->get_logger(), "dead pieces right: ");
+    for (int i = 0; i < 16; i++) {
+        RCLCPP_INFO(node_->get_logger(), "%c", deadPiecesRight[i]);
+    }
+
     if (move.color == 'w') {
         for (int i = 0; i < 16; i++) {
-            if (deadPiecesLeft[i] == move.piece) {
+            if (toupper(deadPiecesLeft[i]) == toupper(move.piece)) {
                 deadPiecesLeft[i] = '-';
                 deathposition[0] = death_positionsleft[i][0];
                 deathposition[1] = death_positionsleft[i][1];
+                RCLCPP_INFO(node_->get_logger(), "dead piece: %c", deadPiecesLeft[i]);
+                RCLCPP_INFO(node_->get_logger(), "deathposition: %f, %f", deathposition[0], deathposition[1]);
                 break;
             }
         }
 
     } else {
         for (int i = 0; i < 16; i++) {
-            if (deadPiecesRight[i] == move.piece) {
+            if (toupper(deadPiecesRight[i]) == toupper(move.piece)) {
                 deadPiecesRight[i] = '-';
                 deathposition[0] = death_positionsright[i][0];
                 deathposition[1] = death_positionsright[i][1];
+                RCLCPP_INFO(node_->get_logger(), "dead piece: %c", deadPiecesRight[i]);
+                RCLCPP_INFO(node_->get_logger(), "deathposition: %f, %f", deathposition[0], deathposition[1]);
                 break;
             }
         }
     }
-    double start[2] = {deathposition[0], deathposition[1]};
-    double end[2] = {move.end[0]*TFchess[0][0]*tile_size+move.end[1]*TFchess[0][1]+TFchess[0][3], move.end[0]*TFchess[1][0]*tile_size+move.end[1]*TFchess[1][1]*tile_size+TFchess[1][3]};
+    std::array<double, 2> start = {deathposition[0], deathposition[1]};
+    std::array<double, 2> end = applyTransformation(move.end, TFchess);
 
+    RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
     if(execute_move(start, end))
     {
         return true;
@@ -144,9 +160,9 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4]) {
 bool ChessMoves::move_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move_piece() called");
     // apply transformation to start position
-    double start[4] = {move.start[0]*TFchess[0][0]*tile_size+move.start[1]*TFchess[0][1]*tile_size+TFchess[0][3], move.start[0]*TFchess[1][0]*tile_size+move.start[1]*TFchess[1][1]*tile_size+TFchess[1][3]};
+    std::array<double, 2> start = applyTransformation(move.start, TFchess);
     // apply transformation to end position
-    double end[2] = {move.end[0]*TFchess[0][0]*tile_size+move.end[1]*TFchess[0][1]*tile_size+TFchess[0][3], move.end[0]*TFchess[1][0]*tile_size+move.end[1]*TFchess[1][1]*tile_size+TFchess[1][3]};
+    std::array<double, 2> end = applyTransformation(move.end, TFchess);
 
 
     if (execute_move(start, end)) {
@@ -286,7 +302,7 @@ bool ChessMoves::en_passant(MoveStruct move, double TFchess[4][4]) {
 bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "playercapture() called");
     double deathposition[2] = {0, 0};
-    if (move.color == 'w') {
+    if (move.color == 'b') {
         for (int i = 0; i < 16; i++) {
             if (deadPiecesLeft[i] == '-') {
                 deadPiecesLeft[i] = move.piece;
@@ -309,8 +325,8 @@ bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     
     // set start position to player capture position
     // apply transformation to start position
-    double start[2] = {player_capture_position[0], player_capture_position[1]};
-    double end[2] = {deathposition[0], deathposition[1]};
+    std::array<double, 2> start = {player_capture_position[0], player_capture_position[1]};
+    std::array<double, 2> end = {deathposition[0], deathposition[1]};
 
     execute_move(start, end);
 
@@ -318,7 +334,7 @@ bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::execute_move(double start[2], double end[2]) {
+bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end) {
     RCLCPP_INFO(node_->get_logger(), "execute_move() called");
 
     
@@ -372,7 +388,7 @@ bool ChessMoves::execute_move(double start[2], double end[2]) {
 
     // Pick up the piece
     // gripper.closeGripper();
-    rclcpp::sleep_for(std::chrono::seconds(1));
+    rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to the end position
     waypoints.clear();
@@ -391,7 +407,7 @@ bool ChessMoves::execute_move(double start[2], double end[2]) {
     moveit_msgs::msg::RobotTrajectory trajectory1;
     fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory1);
 
-    rclcpp::sleep_for(std::chrono::seconds(3));
+    rclcpp::sleep_for(std::chrono::seconds(1));
     if (fraction > 0.99)
     {
         RCLCPP_INFO(node_->get_logger(), "Executing Cartesian path");
@@ -406,7 +422,7 @@ bool ChessMoves::execute_move(double start[2], double end[2]) {
     // Set the piece down
     // gripper.openGripper();
 
-    rclcpp::sleep_for(std::chrono::seconds(1));
+    rclcpp::sleep_for(std::chrono::seconds(0));
 
 
     // Move to idle position
@@ -429,7 +445,7 @@ bool ChessMoves::execute_move(double start[2], double end[2]) {
     moveit_msgs::msg::RobotTrajectory trajectory2;
     fraction = move_group_interface.computeCartesianPath(waypoints, eef_step, jump_threshold, trajectory2);
 
-    rclcpp::sleep_for(std::chrono::seconds(3));
+    rclcpp::sleep_for(std::chrono::seconds(1));
     if (fraction > 0.99)
     {
         RCLCPP_INFO(node_->get_logger(), "Executing Cartesian path");
@@ -442,4 +458,15 @@ bool ChessMoves::execute_move(double start[2], double end[2]) {
 
 
     return true;
+}
+
+std::array<double, 2> ChessMoves::applyTransformation(int point[2], double TFchess[4][4]) {
+    RCLCPP_INFO(node_->get_logger(), "applyTransformation() called");
+    std::array<double, 2> transformed_point;
+    transformed_point[0] = TFchess[0][0] * (point[0] * tile_size + 0.024) + TFchess[0][1] * (point[1] * tile_size + 0.024) + TFchess[0][3];
+    transformed_point[1] = TFchess[1][0] * (point[0] * tile_size + 0.024) + TFchess[1][1] * (point[1] * tile_size + 0.024) + TFchess[1][3];
+    RCLCPP_INFO(node_->get_logger(), "Original point: (%d, %d)", point[0], point[1]);
+    RCLCPP_INFO(node_->get_logger(), "TF values: (%f, %f, %f, %f)", TFchess[0][0], TFchess[0][1], TFchess[0][3], TFchess[1][3]);
+    RCLCPP_INFO(node_->get_logger(), "Transformed point: (%f, %f)", transformed_point[0], transformed_point[1]);
+    return transformed_point;
 }

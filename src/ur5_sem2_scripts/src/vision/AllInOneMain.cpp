@@ -17,6 +17,7 @@ AllInOneMain::AllInOneMain(int camera_index)
 	greenCircle = cv::imread(package_share_dir + "/pictures/greenCircle.png", cv::IMREAD_COLOR);
 	redCircle = cv::imread(package_share_dir + "/pictures/redCircle.png", cv::IMREAD_COLOR);
 	blueCircle = cv::imread(package_share_dir + "/pictures/blueCircle.png", cv::IMREAD_COLOR);
+	yellowCircle = cv::imread(package_share_dir + "/pictures/yellowCircle.png", cv::IMREAD_COLOR);
 	mask = cv::imread(package_share_dir + "/pictures/circleMask.png", cv::IMREAD_GRAYSCALE);
 
 	// cv::cvtColor(greenCircle, greenCircle, cv::COLOR_BGR2HSV);
@@ -31,6 +32,7 @@ AllInOneMain::AllInOneMain(int camera_index)
 	cap.set(cv::CAP_PROP_FRAME_WIDTH, 1920);
 	cap.set(cv::CAP_PROP_FRAME_HEIGHT, 1080);
 	boardCutter = BoardCutter();
+	boardCutter2 = BoardCutter("BoardCutter2");
 }
 AllInOneMain::~AllInOneMain() {}
 
@@ -54,27 +56,48 @@ int AllInOneMain::getPieceMoved(int depth)
 		oldChessboard = chessboard.clone();
 	}
 
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
-	cap >> cheesWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
+	cap >> chessWithMarkedCornors;
 
-	// cv::imshow("Original frame", cheesWithMarkedCornors);
+	cv::imshow("Original frame", chessWithMarkedCornors);
 
-	cv::Point2i boundingBoxStart = cv::Point2i(550, 220);
-	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, cheesWithMarkedCornors.rows - boundingBoxStart.y - 300);
-	std::cout << cheesWithMarkedCornors.size() << std::endl;
-	cheesWithMarkedCornors = cheesWithMarkedCornors(boundingBox);
 
-	cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0);		  // Get the first pixel (row=0, col=0)
-	cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
-	// ImageFinder::showHSVChannelDifferences(cheesWithMarkedCornors, firstPixelColor);
+	/*
+	cv::Point2i boundingBoxStart = cv::Point2i(550, 120);
+	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, chessWithMarkedCornors.rows - boundingBoxStart.y - 100);
+	std::cout << chessWithMarkedCornors.size() << std::endl;
+	chessWithMarkedCornors = chessWithMarkedCornors(boundingBox);
+
+
+
+	cv::imshow("chessWithMarkedCornors hard coded cutted", chessWithMarkedCornors.clone());
+
+*/
+
+
+	float circleScale2 = 1.2;
+	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
+	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
+
+	//boardCutter2.getCornorPoints(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
+
+
+	// cv::imshow("cutBoard", chessWithMarkedCornors2.clone());
+
+	// cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0);		  // Get the first pixel (row=0, col=0)
+	// cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
+	// ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, firstPixelColor);
 
 	// Cut out chessboard
-	chessboard = boardCutter.cutBoard(cheesWithMarkedCornors, greenCircle, redCircle, mask, 0.6, ImageFinder::hsvMode2);
+	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.6, ImageFinder::hsvMode2);
+	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(chessboard.cols / 2, chessboard.rows / 2), 180, 1);
+	cv::warpAffine(chessboard, chessboard, rotationMatrix, chessboard.size());
+
 
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);
@@ -106,4 +129,21 @@ std::string AllInOneMain::getPieceMovedString(int depth)
 {
 	std::string move = Utill::translateIntMoveToString(getPieceMoved(depth));
 	return move;
+}
+
+BoardCutter AllInOneMain::getBoardCutter(int index)
+{
+	if (index == 0)
+	{
+		return boardCutter;
+	}
+	else if (index == 1)
+	{
+		return boardCutter2;
+	}
+	else
+	{
+		std::cout << "Invalid index" << std::endl;
+		return boardCutter;
+	}
 }
