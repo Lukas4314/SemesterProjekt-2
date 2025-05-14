@@ -19,7 +19,10 @@ install/
 log/
 .vscode/
 SemesterProjekt_2/
-
+frames_*
+src/vs*
+src/trac_ik/
+src/ur5_sem2_scripts/SemesterProjekt-2/
 
 # User-specific files
 *.rsuser
@@ -27,9 +30,6 @@ SemesterProjekt_2/
 *.user
 *.userosscache
 *.sln.docstates
-build/
-picoCode/build/
-*.vscode*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
