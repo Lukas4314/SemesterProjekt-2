@@ -518,6 +518,7 @@ bool ChessBoard::applyIfValidMove(string move)
 
     // Handle all promotions
     promoteAllEndRowPawns();
+    promotedTo = '-';
     return true;
 }
 

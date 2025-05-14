@@ -18,14 +18,14 @@ int main(int argc, char *argv[])
     ChessBoard chessBoard = ChessBoard();
     chessBoard.setBoard(
         vector<vector<char>>{
-            {'R', '-', '-', '-', 'K', '-', '-', 'R'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', '-', '-', '-', '-'},
-            {'r', '-', '-', 'k', '-', '-', '-', 'r'}});
+            {'R', '-', 'B', 'Q', 'K', 'B', 'N', 'R'},
+            {'-', '-', '-', 'P', 'P', 'P', 'P', 'P'},
+            {'-', '-', 'N', '-', '-', '-', '-', '-'},
+            {'-', '-', 'P', '-', '-', '-', '-', '-'},
+            {'-', '-', '-', '-', 'p', 'b', '-', '-'},
+            {'-', '-', '-', 'p', '-', 'n', '-', '-'},
+            {'p', 'P', 'p', '-', '-', 'p', 'p', 'p'},
+            {'r', '-', '-', 'q', '-', 'r', 'k', '-'}});
         
 
     chessBoard.printBoard();
@@ -35,37 +35,15 @@ int main(int argc, char *argv[])
     RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("d1e1")).c_str());
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e8f8")).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("b2a1n")).c_str());
     chessBoard.printBoard();
 
-    cout << "Remi!" << chessBoard.isRemi(chessBoard.getActiveColor()) << endl;
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e1f1")).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e1e3")).c_str());
     chessBoard.printBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("f8e8")).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("a1e1")).c_str());
     chessBoard.printBoard();
-
-    cout << "Remi!" << chessBoard.isRemi(chessBoard.getActiveColor()) << endl;
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("f1e1")).c_str());
-    chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e8f8")).c_str());
-    chessBoard.printBoard();
-
-    cout << "Remi!" << chessBoard.isRemi(chessBoard.getActiveColor()) << endl;
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e1f1")).c_str());
-    chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("f8e8")).c_str());
-    chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("f1e1")).c_str());
-    chessBoard.printBoard();
-
-    cout << "Remi!" << chessBoard.isRemi(chessBoard.getActiveColor()) << endl;
 
     return 0;
 

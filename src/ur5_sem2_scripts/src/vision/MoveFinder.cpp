@@ -31,7 +31,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int squareHeight = imageHeight / 8;
 
 	cv::imshow("diffBoardGrayscale", diffBoard);
-	int diffBoardArray[8][8];
+	float diffBoardArray[8][8];
 
 	cv::Mat diffBoardModified = diffBoard.clone();
 
@@ -80,8 +80,53 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
+	// Finds the highest difference
+	int maxDiff = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			if (diffBoardArray[i][j] > maxDiff)
+			{
+				maxDiff = diffBoardArray[i][j];
+			}
+		}
+	}
+
+
+	// normalize everthing to 0-5
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			diffBoardArray[i][j] = diffBoardArray[i][j] / maxDiff * 5;
+		}
+	}
+
+
+	// Square root of the normalized value
+	float exponent = 0.33f;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			diffBoardArray[i][j] = pow(diffBoardArray[i][j], exponent);
+		}
+	}
+
+	// Print the boardvalues
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			std::cout << diffBoardArray[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
+
+
 	// Vector to store {change value, row, col}
-	std::vector<std::tuple<int, int, int>> tileChanges;
+	std::vector<std::tuple<float, int, int>> tileChanges;
 
 	// Populate the vector
 	for (int i = 0; i < 8; i++)
@@ -96,47 +141,53 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	std::sort(tileChanges.rbegin(), tileChanges.rend());
 
 	// Vector to store all tile pair combinations {combined score, row1, col1, row2, col2}
-	std::vector<std::tuple<int, int, int, int, int>> tilePairs;
+	std::vector<std::tuple<float, int, int, int, int>> tilePairs;
 
 	// Generate all possible tile pairs
 	for (size_t a = 0; a < tileChanges.size(); a++)
 	{
 		for (size_t b = a + 1; b < tileChanges.size(); b++)
 		{
-			int scoreA = std::get<0>(tileChanges[a]);
+			float scoreA = std::get<0>(tileChanges[a]);
 			int rowA = std::get<1>(tileChanges[a]);
 			int colA = std::get<2>(tileChanges[a]);
 
-			int scoreB = std::get<0>(tileChanges[b]);
+			float scoreB = std::get<0>(tileChanges[b]);
 			int rowB = std::get<1>(tileChanges[b]);
 			int colB = std::get<2>(tileChanges[b]);
 
-			int combinedScore = scoreA + scoreB;
+			float combinedScore = scoreA + scoreB;
 
 			tilePairs.emplace_back(combinedScore, rowA, colA, rowB, colB);
 		}
 	}
 
+
+	
+
+
+
+
 	float castleWeight = 1.2f;
-	int castleScoreWQ = (float)(diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
-	int castleScoreWK = (float)(diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
-	int castleScoreBQ = (float)(diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) / castleWeight;
-	int castleScoreBK = (float)(diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) / castleWeight;
+	float castleScoreWQ = (diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
+	float castleScoreWK = (diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
+	float castleScoreBQ = (diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) / castleWeight;
+	float castleScoreBK = (diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) / castleWeight;
 
 	float enPassantWeight = 1.2f;
 
 	for (int file = 0; file < 8; file++)
 	{
 		// The king and queen side corresponds to the side which the pawn is taken from.
-		int enPassantWQSide;
-		int enPassantWKSide;
-		int enPassantBQSide;
-		int enPassantBKSide;
+		float enPassantWQSide;
+		float enPassantWKSide;
+		float enPassantBQSide;
+		float enPassantBKSide;
 		if (file == 0)
 		{
 			// Since file 0 is the A column the pawn can only be taken fom the kingside since the queen side is off the board.
-			enPassantWKSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
-			enPassantBKSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
+			enPassantWKSide = (diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
+			enPassantBKSide = (diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
 
 			// Places the values for the kingside into the tilePairs and with the according squares.
 			tilePairs.emplace_back(enPassantWKSide, 4, file + 1, 5, file);
@@ -145,8 +196,8 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		else if (file == 7)
 		{
 			// Since file 7 (0 indexed) is the H row, the pawn can only be taken from the queenside since the king side is off the board.
-			enPassantWQSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
-			enPassantBQSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
+			enPassantWQSide = (diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
+			enPassantBQSide = (diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
 
 			// Places the values for the queenside into the tilePairs and with the according squares.
 			tilePairs.emplace_back(enPassantWQSide, 4, file - 1, 5, file);
@@ -155,11 +206,11 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		else
 			// If the file is not 0 or 7, the pawn can be taken from both sides.
 		{
-			enPassantWKSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
-			enPassantBKSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
+			enPassantWKSide = (diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
+			enPassantBKSide = (diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
 
-			enPassantWQSide = (float)(diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
-			enPassantBQSide = (float)(diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
+			enPassantWQSide = (diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file - 1]) / enPassantWeight;
+			enPassantBQSide = (diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file - 1]) / enPassantWeight;
 
 			tilePairs.emplace_back(enPassantWKSide, 4, file + 1, 5, file);
 			tilePairs.emplace_back(enPassantBKSide, 3, file + 1, 2, file);

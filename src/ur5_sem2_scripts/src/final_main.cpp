@@ -32,29 +32,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
 {
   // Create a logger
   auto logger = rclcpp::get_logger("final_main");
-  // Types in the preknown yellow point for callibrating the offset to the table cornor
-  cv::Point2f preKnownYellowPointInCm(17.5, 57.5);
   double pixelPerCm = 11.2;
-
-  // Gets the transformation matrix form the topleft of the original image to the yellow plok
-  std::array<std::array<double, 4>, 4> cam_table_T_pixel = allInOneMain.getBoardCutter(1).getTFchess(TOPLEFTMODE);
-
-  // Makes it into cm
-  std::array<std::array<double, 4>, 4> cam_table_T_cm = cam_table_T_pixel;
-  cam_table_T_cm[0][3] = cam_table_T_pixel[0][3] / pixelPerCm;
-  cam_table_T_cm[1][3] = cam_table_T_pixel[1][3] / pixelPerCm;
-
-  // substract the preknown yellow point in cm from the transformation matrix to achieve an transformation matrix form the cam to the table cornor top left
-  cam_table_T_cm[0][3] = cam_table_T_cm[0][3] - preKnownYellowPointInCm.x;
-  cam_table_T_cm[1][3] = cam_table_T_cm[1][3] - preKnownYellowPointInCm.y;
-
-  // Makes the transformation matrix from the table to the yellow plok with its rotation and then adds the translation
-  std::array<std::array<double, 4>, 4> table_yellowPlok_T = {{{1, 0, 0, 0},
-                                                              {0, -1, 0, 0},
-                                                              {0, 0, -1, 0},
-                                                              {0, 0, 0, 1}}};
-  table_yellowPlok_T[0][3] = preKnownYellowPointInCm.x;
-  table_yellowPlok_T[1][3] = preKnownYellowPointInCm.y;
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
@@ -82,15 +60,16 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
                                                                {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
 
-  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, 0.295},
-                                                                   {-1, 0, 0, 0.295},
+  float boardSize = 0.288;
+  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize},
+                                                                   {-1, 0, 0, boardSize},
                                                                    {0, 0, -1, 0},
                                                                    {0, 0, 0, 1}}};
 
   std::array<std::array<double, 4>, 4> base_boardRed_T_m = BoardTransformer::multiplyMatrices(base_boardGreen_T_m, boardGreen_boardRed_T_m);
 
   RCLCPP_INFO(logger, "cam_table_T_cm:");
-  printMatrix(cam_table_T_cm, logger);
+  // printMatrix(cam_table_T_cm, logger);
 
   RCLCPP_INFO(logger, "yellowPlok_boardGreen_T_cm:");
   printMatrix(yellowPlok_boardGreen_T_cm, logger);
@@ -126,8 +105,7 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
   cout << "Camera Move is: " << move << endl;
   chess.printBoard();
 
-
-    // Here it needs to get movestruct
+  // Here it needs to get movestruct
   MoveStruct movePlan;
   movePlan = chess.getMoveStruct();
   if (movePlan.captured != '-')
@@ -150,6 +128,7 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
   vector<string> moveHistory = chess.getMoveHistory();
   string allMoves = Utill::vectorStringToString(moveHistory);
   string output = engine.getBestMove(allMoves, depth);
+  cout << "Output from engine: " << output << endl;
 
   size_t pos = output.find("bestmove ");
 
@@ -172,11 +151,13 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
   RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
 
   char promotedTo = '-';
-  if (bestMove.length() == 5){
+  if (bestMove.length() == 5)
+  {
     promotedTo = bestMove.substr(4, 1)[0];
   }
 
   string translatedBestMove = Utill::translateEngineBestMove(bestMove);
+  cout << "translatedBestmove is: " << translatedBestMove << endl;
   //--- StockfishUCI end
   chess.applyIfValidMove(translatedBestMove);
   RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
@@ -221,10 +202,14 @@ int main(int argc, char *argv[])
     applyStockfishMove(engine, chess);
   }
 
-  // Waits for the user to make the first move and therefore expect him to be white
-  cv::waitKey(0);
 
-  while (true)
+  bool instaQuit = false;
+  if (cv::waitKey(0) == 'q')
+  {
+    instaQuit = true;
+  }
+
+  while (!instaQuit)
   {
     // Gets the transformation matrix
     std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(allInOneMain);
@@ -254,8 +239,6 @@ int main(int argc, char *argv[])
       break;
     }
     chessMoves.move(movePlanCamera, raw_TF);
-
-
 
     // Applies the move from stokfish
     MoveStruct movePlan;
@@ -288,7 +271,8 @@ int main(int argc, char *argv[])
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
     std::cout << "Press a button when the robot has made its move" << std::endl;
-    if (cv::waitKey(0) == 'q'){
+    if (cv::waitKey(0) == 'q')
+    {
       break;
     }
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
