@@ -126,6 +126,11 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
 
   int depth = 15;
   vector<string> moveHistory = chess.getMoveHistory();
+  cout << "Move history: " << endl;
+  for (const auto &move : moveHistory)
+  {
+    cout << move << endl;
+  }
   string allMoves = Utill::vectorStringToString(moveHistory);
   string output = engine.getBestMove(allMoves, depth);
   cout << "Output from engine: " << output << endl;
