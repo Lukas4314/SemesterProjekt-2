@@ -12,6 +12,22 @@
 #include "ur5_sem2_scripts/vision/AllInOneMain.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
 
+
+
+void printMatrix(const std::array<std::array<double, 4>, 4>& matrix, auto logger)
+{
+  for (size_t i = 0; i < 4; ++i)
+  {
+    std::string row_str;
+    for (size_t j = 0; j < 4; ++j)
+    {
+      row_str += std::to_string(matrix[i][j]) + " ";
+    }
+    RCLCPP_INFO(logger, "%s", row_str.c_str());
+  }
+}
+
+
 int main(int argc, char *argv[])
 {
   // Initialize ROS and create the Node
@@ -73,7 +89,8 @@ int main(int argc, char *argv[])
   yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 2.5;
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 2.5;
 
-  std::array<std::array<double, 4>, 4> base_yellowPlok_T = {{
+
+  std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{
     {0, 1, 0, 35},
     {-1, 0, 0, 25},
     {0, 0, 1, 0},
@@ -81,8 +98,9 @@ int main(int argc, char *argv[])
   }};
   
   // Makes the transformation matrix from the base to the chessboard
-  std::array<std::array<double, 4>, 4> base_boardGreen_T_cm = BoardTransformer::multiplyMatrices(base_yellowPlok_T, yellowPlok_boardGreen_T_cm);
-  std::array<std::array<double, 4>, 4> base_boardGreen_T = {{
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_cm = BoardTransformer::multiplyMatrices(base_yellowPlok_T_cm, yellowPlok_boardGreen_T_cm);
+  
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_m = {{
     {{base_boardGreen_T_cm[0][0], base_boardGreen_T_cm[0][1], base_boardGreen_T_cm[0][2], base_boardGreen_T_cm[0][3]/100.0}},
     {{base_boardGreen_T_cm[1][0], base_boardGreen_T_cm[1][1], base_boardGreen_T_cm[1][2], base_boardGreen_T_cm[1][3]/100.0}},
     {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
@@ -94,8 +112,9 @@ int main(int argc, char *argv[])
 
 
 
+
   
-  moveStruct move;
+  MoveStruct move;
   move.piece = 'p';
   move.type = 'm';
   move.start[0] = 0;
@@ -105,7 +124,7 @@ int main(int argc, char *argv[])
   move.captured = '-';
   move.color = 'w';
 
-  moveStruct move1;
+  MoveStruct move1;
   move1 = move;
   move1.start[0] = 7;
   move1.start[1] = 7;
@@ -113,15 +132,15 @@ int main(int argc, char *argv[])
   move1.end[1] = 0;
   move1.captured = 'b';
 
-  moveStruct move2;
+  MoveStruct move2;
   move2 = move1;
   move2.captured = 'q';
 
-  moveStruct move3;
+  MoveStruct move3;
   move3 = move2;
   move3.captured = 'k';
 
-  moveStruct move4;
+  MoveStruct move4;
   move4 = move;
   move4.type = 'a';
   move4.piece = 'k';
@@ -133,7 +152,7 @@ int main(int argc, char *argv[])
   {
     for (size_t j = 0; j < 4; ++j)
     {
-      raw_TF[i][j] = base_boardGreen_T[i][j];
+      raw_TF[i][j] = base_boardGreen_T_m[i][j];
     }
   }
 
@@ -141,37 +160,13 @@ int main(int argc, char *argv[])
   // output the transformation matrix
 
   RCLCPP_INFO(logger, "cam_table_T_cm:");
-  for (size_t i = 0; i < 4; ++i)
-  {
-    std::string row_str;
-    for (size_t j = 0; j < 4; ++j)
-    {
-      row_str += std::to_string(cam_table_T_cm[i][j]) + " ";
-    }
-    RCLCPP_INFO(logger, "%s", row_str.c_str());
-  }
+  printMatrix(cam_table_T_cm, logger);
 
   RCLCPP_INFO(logger, "yellowPlok_boardGreen_T_cm:");
-  for (size_t i = 0; i < 4; ++i)
-  {
-    std::string row_str;
-    for (size_t j = 0; j < 4; ++j)
-    {
-      row_str += std::to_string(yellowPlok_boardGreen_T_cm[i][j]) + " ";
-    }
-    RCLCPP_INFO(logger, "%s", row_str.c_str());
-  }
+  printMatrix(yellowPlok_boardGreen_T_cm, logger);
 
   RCLCPP_INFO(logger, "base_boardGreen_T:");
-  for (size_t i = 0; i < 4; ++i)
-  {
-    std::string row_str;
-    for (size_t j = 0; j < 4; ++j)
-    {
-      row_str += std::to_string(base_boardGreen_T[i][j]) + " ";
-    }
-    RCLCPP_INFO(logger, "%s", row_str.c_str());
-  }
+  printMatrix(base_boardGreen_T_m, logger);
 
 
   //cv::waitKey(0);
@@ -186,3 +181,6 @@ int main(int argc, char *argv[])
   rclcpp::shutdown();
   return 0;
 }
+
+
+

@@ -18,6 +18,11 @@ SemesterProjekt 2\SemesterProjekt 2.vcx*
 install/
 log/
 .vscode/
+SemesterProjekt_2/
+frames_*
+src/vs*
+src/trac_ik/
+src/ur5_sem2_scripts/SemesterProjekt-2/
 
 # User-specific files
 *.rsuser

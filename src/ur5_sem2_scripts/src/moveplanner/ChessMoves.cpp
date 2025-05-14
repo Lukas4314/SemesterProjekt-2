@@ -36,11 +36,10 @@ bool ChessMoves::move_to_idle() {
     return true;
 }
 
-bool ChessMoves::move(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::move(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move() called");
     switch (move.type) {
         case 'm':
-
             if (move.captured != '-') {
                 return capture_piece(move, TFchess);
             } else {
@@ -63,7 +62,7 @@ bool ChessMoves::move(moveStruct move, double TFchess[4][4]) {
     }
 }
 
-bool ChessMoves::remove_piece(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::remove_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "remove_piece() called");
     double deathposition[2] = {0, 0};
     if (move.color == 'w') {
@@ -103,7 +102,7 @@ bool ChessMoves::remove_piece(moveStruct move, double TFchess[4][4]) {
     }
 }
 
-bool ChessMoves::add_piece(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "add_piece() called");
     double deathposition[2] = {0, 0};
 
@@ -160,7 +159,7 @@ bool ChessMoves::add_piece(moveStruct move, double TFchess[4][4]) {
 
 }
 
-bool ChessMoves::move_piece(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::move_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move_piece() called");
     // apply transformation to start position
     std::array<double, 2> start = applyTransformation(move.start, TFchess);
@@ -177,9 +176,9 @@ bool ChessMoves::move_piece(moveStruct move, double TFchess[4][4]) {
 
 }
 
-bool ChessMoves::capture_piece(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::capture_piece(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "capture_piece() called");
-    moveStruct removeMove;
+    MoveStruct removeMove;
     removeMove.piece = move.captured;
     if (move.color == 'w') {
         removeMove.color = 'b';
@@ -198,11 +197,11 @@ bool ChessMoves::capture_piece(moveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::promote_pawn(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::promote_pawn(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "promote_pawn() called");
 
     if (move.captured != '-') {
-        moveStruct removeMove;
+        MoveStruct removeMove;
         removeMove.piece = move.captured;
         if (move.color == 'w') {
             removeMove.color = 'b';
@@ -218,11 +217,11 @@ bool ChessMoves::promote_pawn(moveStruct move, double TFchess[4][4]) {
     }
 
     
-    moveStruct removeMove = move;
+    MoveStruct removeMove = move;
     removeMove.type = 'r';
     remove_piece(removeMove, TFchess);
 
-    moveStruct addMove = move;
+    MoveStruct addMove = move;
     addMove.type = 'a';
     addMove.piece = move.promotion;
     add_piece(addMove, TFchess);
@@ -233,11 +232,11 @@ bool ChessMoves::promote_pawn(moveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::castle(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::castle(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "castle() called");
 
     if (move.end[1] == 2) {
-        moveStruct rookMove;
+        MoveStruct rookMove;
         rookMove.piece = 'r';
         rookMove.color = move.color;
         rookMove.start[0] = move.start[0];
@@ -246,7 +245,7 @@ bool ChessMoves::castle(moveStruct move, double TFchess[4][4]) {
         rookMove.end[1] = 3;
         rookMove.type = 'm';
         move_piece(rookMove, TFchess);
-        moveStruct kingMove;
+        MoveStruct kingMove;
         kingMove.piece = 'k';
         kingMove.color = move.color;
         kingMove.start[0] = move.start[0];
@@ -256,7 +255,7 @@ bool ChessMoves::castle(moveStruct move, double TFchess[4][4]) {
         kingMove.type = 'm';
         move_piece(kingMove, TFchess);
     } else {
-        moveStruct rookMove;
+        MoveStruct rookMove;
         rookMove.piece = 'r';
         rookMove.color = move.color;
         rookMove.start[0] = move.start[0];
@@ -265,7 +264,7 @@ bool ChessMoves::castle(moveStruct move, double TFchess[4][4]) {
         rookMove.end[1] = 5;
         rookMove.type = 'm';
         move_piece(rookMove, TFchess);
-        moveStruct kingMove;
+        MoveStruct kingMove;
         kingMove.piece = 'k';
         kingMove.color = move.color;
         kingMove.start[0] = move.start[0];
@@ -279,10 +278,10 @@ bool ChessMoves::castle(moveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::en_passant(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::en_passant(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "en_passant() called");
 
-    moveStruct removeMove;
+    MoveStruct removeMove;
     removeMove.piece = 'p';
     if (move.color == 'w') {
         removeMove.color = 'b';
@@ -302,10 +301,10 @@ bool ChessMoves::en_passant(moveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::playercapture(moveStruct move, double TFchess[4][4]) {
+bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "playercapture() called");
     double deathposition[2] = {0, 0};
-    if (move.color == 'w') {
+    if (move.color == 'b') {
         for (int i = 0; i < 16; i++) {
             if (deadPiecesLeft[i] == '-') {
                 deadPiecesLeft[i] = move.piece;

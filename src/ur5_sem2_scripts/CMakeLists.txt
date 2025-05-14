@@ -53,6 +53,7 @@ add_library(BoardModule ${BOARD_SRCS})
 target_include_directories(BoardModule PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/board
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 target_link_libraries(BoardModule VisionModule)
 ament_target_dependencies(BoardModule rclcpp)
@@ -76,6 +77,7 @@ add_executable(readJoints src/readJoints.cpp)
 add_executable(robot_main src/robot_main.cpp src/BoardTransformer.cpp)
 add_executable(vision_main src/vision_main.cpp)
 add_executable(board_test_main src/TestBoard.cpp)
+add_executable(final_main src/final_main.cpp src/BoardTransformer.cpp)
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables
@@ -90,9 +92,11 @@ ament_target_dependencies(vision_main rclcpp)
 target_link_libraries(vision_main VisionModule BoardModule)  # Link with the libraries
 ament_target_dependencies(board_test_main rclcpp)
 target_link_libraries(board_test_main VisionModule BoardModule)  # Link with the libraries
+ament_target_dependencies(final_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
+target_link_libraries(final_main MoveplannerModule VisionModule BoardModule)  # Link with the libraries
 
 # Install executables
-install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main
+install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main final_main
   DESTINATION lib/${PROJECT_NAME})
 
 # Install library (ChessMoves) properly
@@ -104,6 +108,9 @@ install(DIRECTORY pictures DESTINATION share/${PROJECT_NAME})
    
 # Install launch files
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+
+# Install stockfish files
+install(DIRECTORY stockfish DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

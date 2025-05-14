@@ -4,42 +4,47 @@
 #include "MoveValidator.h"
 #include "Utill.h"
 #include <rclcpp/rclcpp.hpp>
+
 using namespace std;
 
 MoveValidator::MoveValidator() {}
 
 MoveValidator::~MoveValidator() {}
 
-bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor, vector<string> moveHistory)
+bool MoveValidator::correctColor(char piece, string &activeColor)
 {
-    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
-    RCLCPP_DEBUG(logger, "MoveValidator::isValidMove function start");
-    char piece = board[fromRow][fromCol];
-    RCLCPP_DEBUG(logger, std::string("Activecoler is: ").append(activeColor).c_str());
-    RCLCPP_DEBUG(logger, "piece is: " + piece);
-    RCLCPP_DEBUG(logger, "got the piece");
-
-    if ((activeColor == "w") && isupper(piece))
+    if ((activeColor == "w") && ChessBoard::isBlack(piece))
     {
-        RCLCPP_DEBUG(logger, "cant move white piece");
         return false;
     }
 
-    if ((activeColor == "b") && islower(piece))
+    if ((activeColor == "b") && ChessBoard::isWhite(piece))
     {
-        RCLCPP_DEBUG(logger, "cant move black piece");
         return false;
+    }
+    return true;
+}
+
+bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByUnderAttack, bool calledByKing)
+{
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
+
+    char piece = board[fromRow][fromCol];
+
+    if (!correctColor(piece, activeColor))
+    {
+        return false;
+    }
+
+    if (fromRow == toRow && fromCol == toCol)
+    {
+        return false; // No movement
     }
 
     if (piece == 'P' || piece == 'p')
     {
-        if (!isValidPawn(piece, fromRow, fromCol, toRow, toCol, board, activeColor, moveHistory))
+        if (!isValidPawn(fromRow, fromCol, toRow, toCol, board, activeColor, calledByUnderAttack))
         {
-            RCLCPP_DEBUG(logger, "invalid pawn movement");
-            return false;
-        }
-        {
-            RCLCPP_DEBUG(logger, "invalid pawn movement");
             return false;
         }
     }
@@ -48,7 +53,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidRook(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Rook cooked");
             return false;
         }
     }
@@ -57,7 +61,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidKnight(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Knight cooked");
             return false;
         }
     }
@@ -66,7 +69,6 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidBishop(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Bishop cooked");
             return false;
         }
     }
@@ -75,254 +77,448 @@ bool MoveValidator::isValidMove(int fromRow, int fromCol, int toRow, int toCol, 
     {
         if (!isValidQueen(piece, fromRow, fromCol, toRow, toCol, board))
         {
-            RCLCPP_DEBUG(logger, "Queen cooked");
             return false;
         }
     }
 
     if (piece == 'K' || piece == 'k')
     {
-        if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor))
+        if (!isValidKing(piece, fromRow, fromCol, toRow, toCol, board, activeColor, calledByKing))
         {
-            RCLCPP_DEBUG(logger, "King cooked");
             return false;
         }
     }
 
     if (piece == '-')
     {
-        RCLCPP_DEBUG(logger, "no piece at from position");
         return false;
     }
 
-    RCLCPP_DEBUG(logger, "moveValidator being a good boy");
+    // Returns if called by under attack since it otherwise would leave a recursion loop
+    if (calledByUnderAttack)
+    {
+        return true;
+    }
+
+    // Checks that moving a piece does not leave the king in check
+    vector<vector<char>> boardCopy = board;
+
+    boardCopy[toRow][toCol] = boardCopy[fromRow][fromCol];
+    boardCopy[fromRow][fromCol] = '-';
+
+    vector<int> kingPos = findKing(activeColor, boardCopy);
+
+    if (underAttack(kingPos[0], kingPos[1], activeColor, boardCopy))
+    {
+        RCLCPP_DEBUG(logger, "King is left in check");
+        return false;
+    }
+    RCLCPP_DEBUG(logger, "MoveValidator says move is valid");
     return true;
 }
 
-bool MoveValidator::isValidCastle(string activeColor, bool castleBools[], string castle, const vector<vector<char>> &board)
+vector<int> MoveValidator::findKing(string color, const vector<vector<char>> &board)
 {
-    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
-    vector<string> nullHistory;
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            if (board[i][j] == 'K' && color == "b")
+            {
+                return {i, j};
+            }
+            else if (board[i][j] == 'k' && color == "w")
+            {
+                return {i, j};
+            }
+        }
+    }
+    return {-1, -1}; // King not found
+}
+
+bool MoveValidator::checkHistoryForKingOrRookMovement(const string &move, const vector<string> &moveHistory)
+{
+    for (int i = 0; i < (int)moveHistory.size(); i++)
+    {
+        bool whiteKingHasMoved = (moveHistory[i].substr(0, 2) == "e1");
+        bool blackKingHasMoved = (moveHistory[i].substr(0, 2) == "e8");
+
+        bool whiteLeftRookHadMoved = (moveHistory[i].substr(0, 2) == "a1");
+        bool whiteRightRookHadMoved = (moveHistory[i].substr(0, 2) == "h1");
+        bool blackLeftRookHadMoved = (moveHistory[i].substr(0, 2) == "a8");
+        bool blackRightRookHadMoved = (moveHistory[i].substr(0, 2) == "h8");
+
+        if (move == "wK" && (whiteKingHasMoved || whiteRightRookHadMoved))
+        {
+            return true;
+        }
+
+        if (move == "wQ" && (whiteKingHasMoved || whiteLeftRookHadMoved))
+        {
+            return true;
+        }
+        if (move == "bK" && (blackKingHasMoved || blackRightRookHadMoved))
+        {
+            return true;
+        }
+        if (move == "bQ" && (blackKingHasMoved || blackLeftRookHadMoved))
+        {
+            return true;
+        }
+    }
+    return false; // No king or rook movement found in history
+}
+
+bool MoveValidator::castlePathUnderAttack(const string &move, const vector<vector<char>> &board)
+{
+    if (move == "wK")
+    {
+        return (underAttack(7, 5, "w", board) || underAttack(7, 6, "w", board) || underAttack(7, 4, "w", board));
+    }
+    if (move == "wQ")
+    {
+        return (underAttack(7, 3, "w", board) || underAttack(7, 2, "w", board) || underAttack(7, 4, "w", board));
+    }
+    if (move == "bK")
+    {
+        return (underAttack(0, 5, "b", board) || underAttack(0, 6, "b", board) || underAttack(0, 4, "b", board));
+    }
+    if (move == "bQ")
+    {
+        return (underAttack(0, 3, "b", board) || underAttack(0, 2, "b", board) || underAttack(0, 4, "b", board));
+    }
+
+    return false;
+}
+
+bool MoveValidator::emptySquaresForCastle(const string &move, const vector<vector<char>> &board)
+{
+    if (move == "wK")
+    {
+        return (board[7][5] == '-' && board[7][6] == '-');
+    }
+
+    if (move == "wQ")
+    {
+        return (board[7][3] == '-' && board[7][2] == '-' && board[7][1] == '-');
+    }
+    if (move == "bK")
+    {
+        return (board[0][5] == '-' && board[0][6] == '-');
+    }
+    if (move == "bQ")
+    {
+        return (board[0][3] == '-' && board[0][2] == '-' && board[0][1] == '-');
+    }
+
+    return false;
+}
+
+bool MoveValidator::isValidCastle(string activeColor, string move, const vector<vector<char>> &board, const vector<string> &moveHistory)
+{
+
+    // Check if the move is for the correct color
+    if (move[0] != activeColor[0])
+    {
+        return false;
+    }
+
+    if (checkHistoryForKingOrRookMovement(move, moveHistory))
+    {
+        return false;
+    }
+
+    if (castlePathUnderAttack(move, board))
+    {
+        return false;
+    }
+
+    if (!emptySquaresForCastle(move, board))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool MoveValidator::isValidEnPassant(string &activeColor, const string &currentMove, const vector<string> &moveHistory)
+{
+    if (moveHistory.empty())
+    {
+        return false; // No previous moves to check
+    }
+
+    string lastMove = moveHistory.back();
+
     if (activeColor == "w")
     {
-
-        bool underAttackBoolwQ = !underAttack(7, 1, activeColor, board, nullHistory) && !underAttack(7, 2, activeColor, board, nullHistory) && !underAttack(7, 3, activeColor, board, nullHistory);
-        bool pathClearwQ = board[7][1] == '-' && board[7][2] == '-' && board[7][3] == '-';
-        bool castlewQ = castle == "wQ" && castleBools[Utill::WQcastleIndex];
-
-        RCLCPP_DEBUG(logger, "castlewQ = " + castlewQ);
-        RCLCPP_DEBUG(logger, "pathClearwQ = " + pathClearwQ);
-        RCLCPP_DEBUG(logger, "underAttackBoolwQ = " + underAttackBoolwQ);
-
-        if (castlewQ && pathClearwQ && underAttackBoolwQ)
-        {
-
-            return true;
-        }
-
-
-        bool underAttackBoolwK = !underAttack(7, 5, activeColor, board, nullHistory) && !underAttack(7, 6, activeColor, board, nullHistory);
-        bool pathClearwK = board[7][5] == '-' && board[7][6] == '-';
-        bool castlewK = castle == "wK" && castleBools[Utill::WKcastleIndex];
-        
-        RCLCPP_DEBUG(logger, "castlewK = " + castlewK);
-        RCLCPP_DEBUG(logger, "pathClearwK = " + pathClearwK);
-        RCLCPP_DEBUG(logger, "underAttackBoolwK = " + underAttackBoolwK);
-
-        if (castlewK && pathClearwK && underAttackBoolwK)
-        {
-            RCLCPP_DEBUG(logger, "Castle is valid");
-            RCLCPP_DEBUG(logger, "castleBools[Utill::WQcastleIndex] = " + castleBools[Utill::WQcastleIndex]);
-            RCLCPP_DEBUG(logger, "castleBools[Utill::WKcastleIndex] = " + castleBools[Utill::WKcastleIndex]);
-            RCLCPP_DEBUG(logger, "board[7][1] = " + board[7][1]);
-            RCLCPP_DEBUG(logger, "board[7][2] = " + board[7][2]);
-            RCLCPP_DEBUG(logger, "board[7][3] = " + board[7][3]); 
-            return true;
-        }  
-    }
-
-    else
-    {
-        bool underAttackBoolbQ = !underAttack(0, 1, activeColor, board, nullHistory) && !underAttack(0, 2, activeColor, board, nullHistory) && !underAttack(0, 3, activeColor, board, nullHistory);
-        bool pathClearbQ = board[0][1] == '-' && board[0][2] == '-' && board[0][3] == '-';
-        bool castlebQ = castle == "bQ" && castleBools[Utill::BQcastleIndex];
-        
-        RCLCPP_DEBUG(logger, "castlebQ = " + castlebQ);
-        RCLCPP_DEBUG(logger, "pathClearbQ = " + pathClearbQ);
-        RCLCPP_DEBUG(logger, "underAttackBoolbQ = " + underAttackBoolbQ);
-        if (castlebQ && pathClearbQ && underAttackBoolbQ)
+        if (lastMove == "b7b5" && currentMove == "a5b6")
         {
             return true;
         }
-
-        bool underAttackBoolbK = !underAttack(0, 5, activeColor, board, nullHistory) && !underAttack(0, 6, activeColor, board, nullHistory);
-        bool pathClearbK = board[0][5] == '-' && board[0][6] == '-';
-        bool castlebK = castle == "bK" && castleBools[Utill::BKcastleIndex];
-
-        RCLCPP_DEBUG(logger, "castlebK = " + castlebK);
-        RCLCPP_DEBUG(logger, "pathClearbK = " + pathClearbK);
-        RCLCPP_DEBUG(logger, "underAttackBoolbK = " + underAttackBoolbK);
-
-        if (castlebK &&
-            pathClearbK &&
-            underAttackBoolbK)
+        if (lastMove == "a7a5" && currentMove == "b5a6")
+        {
+            return true;
+        }
+        if (lastMove == "c7c5" && currentMove == "b5c6")
+        {
+            return true;
+        }
+        if (lastMove == "b7b5" && currentMove == "c5d6")
+        {
+            return true;
+        }
+        if (lastMove == "d7d5" && currentMove == "c5d6")
+        {
+            return true;
+        }
+        if (lastMove == "c7c5" && currentMove == "d5c6")
+        {
+            return true;
+        }
+        if (lastMove == "e7e5" && currentMove == "d5e6")
+        {
+            return true;
+        }
+        if (lastMove == "d7d5" && currentMove == "e5d6")
+        {
+            return true;
+        }
+        if (lastMove == "f7f5" && currentMove == "e5f6")
+        {
+            return true;
+        }
+        if (lastMove == "e7e5" && currentMove == "f5e6")
+        {
+            return true;
+        }
+        if (lastMove == "g7g5" && currentMove == "f5g6")
+        {
+            return true;
+        }
+        if (lastMove == "f7f5" && currentMove == "g5f6")
+        {
+            return true;
+        }
+        if (lastMove == "h7h5" && currentMove == "g5h6")
+        {
+            return true;
+        }
+        if (lastMove == "g7g5" && currentMove == "h5g6")
         {
             return true;
         }
     }
-    return false;
-}
-
-bool MoveValidator::isValidPromotion(int fromRow, int fromCol, int toCol, const vector<vector<char>> &board)
-{
-    char piece = board[fromRow][fromCol];
-
-    if ((piece == 'P') && (toCol == 7))
+    else if (activeColor == "b")
     {
-        return true;
-    }
+        if (lastMove == "b2b4" && currentMove == "a4b3")
+        {
+            return true;
+        }
+        if (lastMove == "a2a4" && currentMove == "b4a3")
+        {
+            return true;
+        }
+        if (lastMove == "c2c4" && currentMove == "b4c3")
+        {
+            return true;
+        }
+        if (lastMove == "b2b4" && currentMove == "c4d3")
+        {
+            return true;
+        }
+        if (lastMove == "d2d4" && currentMove == "c4d3")
+        {
+            return true;
+        }
+        if (lastMove == "c2c4" && currentMove == "d4c3")
+        {
+            return true;
+        }
+        if (lastMove == "e2e4" && currentMove == "d4e3")
+        {
+            return true;
+        }
+        if (lastMove == "d2d4" && currentMove == "e4d3")
+        {
+            return true;
+        }
+        if (lastMove == "f2f4" && currentMove == "e4f3")
+        {
+            return true;
+        }
+        if (lastMove == "e2e4" && currentMove == "f4e3")
+        {
+            return true;
+        }
+        if (lastMove == "g2g4" && currentMove == "f4g3")
+        {
+            return true;
+        }
+        if (lastMove == "f2f4" && currentMove == "g4f3")
+        {
+            return true;
+        }
+        if (lastMove == "h2h4" && currentMove == "g4h3")
+        {
+            return true;
+        }
+        if (lastMove == "g2g4" && currentMove == "h4g3")
+        {
 
-    if ((piece == 'p') && (toCol == 0))
-    {
-        return true;
+            return true;
+        }
     }
-
-    return false;
-}
-
-bool MoveValidator::isValidEnPassant(const string &activeColor, const vector<vector<char>> &board, string currentMove, vector<string> moveHistory)
-{
-    string lastMove = moveHistory.back();
-    
-    if (activeColor == "w" && 
-       ((lastMove == "b7b5" && currentMove == "a5b6") || 
-        (lastMove == "a7a5" && currentMove == "b5a6") || (lastMove == "c7c5" && currentMove == "b5c6") || 
-        (lastMove == "b7b5" && currentMove == "c5d6") || (lastMove == "d7d5" && currentMove == "c5d6") || 
-        (lastMove == "c7c5" && currentMove == "d5c6") || (lastMove == "e7e5" && currentMove == "d5e6") ||
-        (lastMove == "d7d5" && currentMove == "e5d6") || (lastMove == "f7f5" && currentMove == "e5f6") ||
-        (lastMove == "e7e5" && currentMove == "f5e6") || (lastMove == "g7g5" && currentMove == "f5g6") ||
-        (lastMove == "f7f5" && currentMove == "g5f6") || (lastMove == "h7h5" && currentMove == "g5h6") ||
-        (lastMove == "g7g5" && currentMove == "h5g6")))
-    {
-        return true;
-    }
-
-    if (activeColor == "b" && 
-       ((lastMove == "b2b4" && currentMove == "a4b3") || 
-        (lastMove == "a2a4" && currentMove == "b4a3") || (lastMove == "c2c4" && currentMove == "b4c3") ||
-        (lastMove == "b2b4" && currentMove == "c4d3") || (lastMove == "d2d4" && currentMove == "c4d3") ||
-        (lastMove == "c2c4" && currentMove == "d4c3") || (lastMove == "e2e4" && currentMove == "d4e3") ||
-        (lastMove == "d2d4" && currentMove == "e4d3") || (lastMove == "f2f4" && currentMove == "e4f3") ||
-        (lastMove == "e2e4" && currentMove == "f4e3") || (lastMove == "g2g4" && currentMove == "f4g3") ||
-        (lastMove == "f2f4" && currentMove == "g4f3") || (lastMove == "h2h4" && currentMove == "g4h3") ||
-        (lastMove == "g2g4" && currentMove == "h4g3")))
-    {
-        return true;
-    }
-    
     return false;
 }
 
 // Function for checking if pawn move is valid (Need to implement isPathClear function)
-bool MoveValidator::isValidPawn(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor, vector<string> moveHistory)
+bool MoveValidator::isValidPawn(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByUnderAttack)
 {
-
     int rowDiff = toRow - fromRow;
     int colDiff = toCol - fromCol;
     char dest = board[toRow][toCol];
 
-
-    string stringMove = Utill::translateIntMoveToString(fromRow * 1000 + fromCol * 100 + toRow * 10 + toCol);
-    RCLCPP_DEBUG(rclcpp::get_logger("Move_Validator"), "I hope the move is %s", stringMove.c_str());
-
-    if (isValidEnPassant(activeColor, board, stringMove, moveHistory))
+    // Diagonal capture
+    if (abs(colDiff) == 1)
     {
-        return true;
-    }else
-    {
-        // Diagonal capture
-        if (abs(colDiff) == 1)
+        if (activeColor == "w" && rowDiff == -1)
         {
-            if (activeColor == "w" && rowDiff == -1)
-                return isupper(dest);
-            if (activeColor == "b" && rowDiff == 1)
-                return islower(dest);
-            return false;
+            return ChessBoard::isBlack(dest);
         }
-    
-        // Forward move (must be in same column)
-        if (colDiff != 0)
-            return false;
-    
-        // White forward
-        if (activeColor == "w")
+        if (activeColor == "b" && rowDiff == 1)
         {
-            if (rowDiff == -1 && dest == '-')
-                return true;
-            if (rowDiff == -2 && fromRow == 6 && board[fromRow - 1][fromCol] == '-' && dest == '-')
-                return true;
+            return ChessBoard::isWhite(dest);
         }
-    
-        // Black forward
-        if (activeColor == "b")
-        {
-            if (rowDiff == 1 && dest == '-')
-                return true;
-            if (rowDiff == 2 && fromRow == 1 && board[fromRow + 1][fromCol] == '-' && dest == '-')
-                return true;
-        }
-    
         return false;
     }
+
+    // Forward move (must be in same column)
+    if (colDiff != 0)
+    {
+        return false;
+    }
+
+    // Ensures the pawn doesnt count as attacking a square that is infront of it
+    if (calledByUnderAttack)
+    {
+        return false;
+    }
+
+    
+    // White forward
+    if (activeColor == "w")
+    {
+        if (rowDiff == -1 && dest == '-')
+        {
+            return true;
+        }
+        if (rowDiff == -2 && fromRow == 6 && board[fromRow - 1][fromCol] == '-' && dest == '-')
+        {
+            return true;
+        }
+    }
+
+    // Black forward
+    if (activeColor == "b")
+    {
+        if (rowDiff == 1 && dest == '-')
+        {
+            return true;
+        }
+        if (rowDiff == 2 && fromRow == 1 && board[fromRow + 1][fromCol] == '-' && dest == '-')
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MoveValidator::pathClearBetweenOrthogonal(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
+{
+    int absRowDiff = abs(toRow - fromRow);
+    int absColDiff = abs(toCol - fromCol);
+
+    // Movement along collumn
+    if (absRowDiff == 0)
+    {
+        int startCol = min(fromCol, toCol);
+        int endCol = max(fromCol, toCol);
+        for (int col = startCol + 1; col < endCol; ++col)
+        {
+            if (col == endCol)
+            {
+                break;
+            }
+            if (board[fromRow][col] != '-')
+            {
+                return false; // Path is blocked
+            }
+        }
+    }
+    // Movement along row
+    else if (absColDiff == 0)
+    {
+        int startRow = min(fromRow, toRow);
+        int endRow = max(fromRow, toRow);
+        for (int row = startRow + 1; row < endRow; ++row)
+        {
+            if (row == endRow)
+            {
+                break;
+            }
+            if (board[row][fromCol] != '-')
+            {
+                return false; // Path is blocked
+            }
+        }
+    }
+    return true;
+}
+
+bool MoveValidator::pathClearBetweenDiagonal(int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
+{
+    int rowDiff = abs(toRow - fromRow);
+
+    // Check if the row and col should increase or decrease
+    int rowStep = (toRow > fromRow) ? 1 : -1;
+    int colStep = (toCol > fromCol) ? 1 : -1;
+
+    for (int i = 1; i < rowDiff; ++i)
+    {
+        if (board[fromRow + i * rowStep][fromCol + i * colStep] != '-')
+        {
+            return false; // Path is blocked
+        }
+    }
+
+    return true;
 }
 
 bool MoveValidator::isValidRook(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)
 {
-    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
-    RCLCPP_DEBUG(logger, "MoveValidator::isValidRook function start");
-    int rowDiff = abs(toRow - fromRow);
-    int colDiff = abs(toCol - fromCol);
+    int absRowDiff = abs(toRow - fromRow);
+    int absColDiff = abs(toCol - fromCol);
+    char dest = board[toRow][toCol];
 
-    if ((colDiff != 0) && (rowDiff != 0))
+    // Checks for diagonal movement
+    if ((absColDiff != 0) && (absRowDiff != 0))
     {
-        RCLCPP_DEBUG(logger, "Rook cant move in row direction and col direction");
-        return false; // Rook cant move in row direction and col direction
-    }
-
-    if (isupper(board[toRow][toCol]) == isupper(piece) && board[toRow][toCol] != '-')
-    {
-        RCLCPP_DEBUG(logger, "Rook cant move to own piece");
-        RCLCPP_DEBUG(logger, "Piece detected is" + board[toRow][toCol]);
-        RCLCPP_DEBUG(logger, "Piece is at %d %d", toRow, toCol);
         return false;
     }
-    
-    // move in row direction
-    int startR = min(fromRow, toRow);
-    int endR = max(fromRow, toRow);
-    for (startR + 1; startR < endR; startR++)
-    {
-        if (board[startR][fromCol] != '-')
-        {
-            RCLCPP_DEBUG(logger, "Rook path is blocked, along row");
-            RCLCPP_DEBUG(logger, "Piece detected is" + board[startR][fromCol]);
-            RCLCPP_DEBUG(logger, "Piece is at %d %d", startR, fromCol);
 
-            return false;
-        }
+    // Checks if we move to the same color, and if the destination is not empty since then we run isWhite() on a empty square
+    if (ChessBoard::isWhite(dest) == ChessBoard::isWhite(piece) && dest != '-')
+    {
+        return false;
     }
 
-    // move in col direction
-    int startC = min(fromCol, toCol);
-    int endC = max(fromCol, toCol);
-    for (startC + 1; startC < endC; startC++)
+    // Checks for clear path
+    if (!pathClearBetweenOrthogonal(fromRow, fromCol, toRow, toCol, board))
     {
-        if (board[startC][fromRow] != '-')
-        {
-            RCLCPP_DEBUG(logger, "Rook path is blocked, along col");
-            return false;
-        }
+        return false;
     }
+
     return true;
 }
 
@@ -330,10 +526,10 @@ bool MoveValidator::isValidKnight(char piece, int fromRow, int fromCol, int toRo
 {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
+    char dest = board[toRow][toCol];
 
     // Knight moves in L shape
-    char dest = board[toRow][toCol];
-    if ((isupper(piece) != isupper(dest)) && (rowDiff == 2 && colDiff == 1) || (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2) || (rowDiff == 1 && colDiff == 2))
+    if ((ChessBoard::isBlack(piece) != ChessBoard::isBlack(dest)) && (rowDiff == 2 && colDiff == 1) || (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2) || (rowDiff == 1 && colDiff == 2))
         return true; // It's only a valid move if the horse moves in an L shape and doesn't land on a piece of it's own color
     return false;
 }
@@ -342,28 +538,24 @@ bool MoveValidator::isValidBishop(char piece, int fromRow, int fromCol, int toRo
 {
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
-
     char dest = board[toRow][toCol];
 
+    // Bishop must move diagonally
     if (rowDiff != colDiff)
     {
-        return false; // Bishop must move diagonally
+        return false;
     }
 
-    if (isupper(piece) != islower(dest))
+    // If dest is not empty and both are the same color, error cant capture own piece
+    if (dest != '-' && ((ChessBoard::isBlack(piece) == ChessBoard::isBlack(dest))))
     {
-        return false; // Cannot capture own piece
+        return false;
     }
 
     // Check if path is clear
-    int rowStep = (toRow > fromRow) ? 1 : -1;
-    int colStep = (toCol > fromCol) ? 1 : -1;
-    for (int i = 1; i < rowDiff; ++i)
+    if (!pathClearBetweenDiagonal(fromRow, fromCol, toRow, toCol, board))
     {
-        if (board[fromRow + i * rowStep][fromCol + i * colStep] != '-')
-        {
-            return false; // Path is blocked
-        }
+        return false;
     }
     return true;
 }
@@ -378,52 +570,65 @@ bool MoveValidator::isValidQueen(char piece, int fromRow, int fromCol, int toRow
     return false;
 }
 
-bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, const string &activeColor)
+bool MoveValidator::isValidKing(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board, string &activeColor, bool calledByKing)
 {
-    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
     int rowDiff = abs(toRow - fromRow);
     int colDiff = abs(toCol - fromCol);
     char dest = board[toRow][toCol];
 
     if (rowDiff > 1 || colDiff > 1)
-        RCLCPP_DEBUG(logger, "King cannot move more than 1 square at once");
-        return false;
-    if (dest != '-' && ((activeColor == "w" && isupper(dest)) || (activeColor == "b" && islower(dest))))
-        RCLCPP_DEBUG(logger, "King cannot move into piece of own coler");
-        return false;
-
-    // Check king cannot move into chess
-    if (underAttack)
     {
-        RCLCPP_DEBUG(logger, "King cannot move into check");
-        return false;
+        return false; // King can only move one square in any direction
     }
 
+    if (dest != '-' && ((ChessBoard::isBlack(piece) == ChessBoard::isBlack(dest))))
+    {
+        return false; // Can't capture own piece
+    }
+
+
+    if (calledByKing)
+    {
+        return true; // Called by King underattack, so checking for underattack would become a infinite loop
+    }
+
+    if (underAttack(toRow, toCol, activeColor, board, true))
+    {
+        return false; // Can't move into check
+    }
     return true;
 }
 
-bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board, vector<string> moveHistory)
+bool MoveValidator::underAttack(int row, int col, const string &activeColor, const vector<vector<char>> &board, bool calledByKing)
 {
+    rclcpp::Logger const logger = rclcpp::get_logger("Move_Validator");
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            if (board[i][j] != '-')
-            {
-                char piece = board[i][j];
-                string pieceColor = islower(piece) ? "w" : "b";
 
-                if (pieceColor != activeColor)
-                {
-                    // Check if the piece can attack the target square
-                    if (isValidMove(i, j, row, col, board, pieceColor, moveHistory))
-                    {
-                        RCLCPP_DEBUG(rclcpp::get_logger("Move_Validator"), "Square is under attack by piece at %d %d", i, j);
-                    
-                        return true; // The square is under attack
-                    }
-                }
+            if (board[i][j] == '-')
+            {
+                continue;
             }
+
+            char piece = board[i][j];
+            string pieceColor = ChessBoard::isWhite(piece) ? "w" : "b";
+
+            if (pieceColor == activeColor)
+            {
+                continue;
+            }
+
+            // Check if the opposite colorored piece can attack the target square
+            if (!isValidMove(i, j, row, col, board, pieceColor, true, calledByKing))
+            {
+                continue;
+            }
+
+            RCLCPP_DEBUG(logger, "Piece %c at %d, %d can attack %d, %d", piece, i, j, row, col);
+            return true;
         }
     }
     return false;
