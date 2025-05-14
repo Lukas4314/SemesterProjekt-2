@@ -6,11 +6,6 @@
 
 Gripper::Gripper()
 {
-   // Initialiser ADC
-   adc_init();
-   adc_gpio_init(26); // GPIO 26 = ADC0
-   adc_select_input(0);
-
    // Pin configuration
     gpio_init(PIN14);
     gpio_set_dir(PIN14, GPIO_OUT);
