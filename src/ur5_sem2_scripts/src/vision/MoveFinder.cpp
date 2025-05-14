@@ -80,6 +80,26 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
+	cv::cvtColor(oldChessBoard, oldChessBoard, cv::COLOR_BGR2GRAY);
+	cv::cvtColor(newChessBoard, newChessBoard, cv::COLOR_BGR2GRAY);
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			cv::Rect square(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
+			cv::Mat squareOld = oldChessBoard(square);
+			cv::Mat squareNew = newChessBoard(square);
+
+			double oldSum = cv::sum(squareOld)[0];
+			double newSum = cv::sum(squareNew)[0];
+			double diff = std::abs(oldSum - newSum);
+
+			diffBoardArray[i][j] = diff;
+		}
+	}
+
+
 	// Finds the highest difference
 	int maxDiff = 0;
 	for (int i = 0; i < 8; i++)
@@ -114,6 +134,10 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
+
+
+
+	
 	// Print the boardvalues
 	for (int i = 0; i < 8; i++)
 	{
