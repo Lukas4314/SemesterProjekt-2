@@ -247,13 +247,13 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 
 
-	float castleWeight = 1.2f;
+	float castleWeight = 1.5f;
 	float castleScoreWQ = (diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
 	float castleScoreWK = (diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
 	float castleScoreBQ = (diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) / castleWeight;
 	float castleScoreBK = (diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) / castleWeight;
 
-	float enPassantWeight = 1.2f;
+	float enPassantWeight = 1.5f;
 
 	for (int file = 0; file < 8; file++)
 	{
