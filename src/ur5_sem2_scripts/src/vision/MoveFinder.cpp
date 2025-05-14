@@ -41,7 +41,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Grid configuration
 	int cellWidth = width / 8;
 	int cellHeight = height / 8;
-	int falloffDistance = 10; // Distance from grid line to start dimming
+	int falloffDistance = 5; // Distance from grid line to start dimming
 
 	for (int y = 0; y < height; ++y)
 	{
@@ -117,13 +117,13 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
-	float castleWeight = 1.5f;
+	float castleWeight = 1.2f;
 	int castleScoreWQ = (float)(diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
 	int castleScoreWK = (float)(diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
 	int castleScoreBQ = (float)(diffBoardArray[0][0] + diffBoardArray[0][2] + diffBoardArray[0][3] + diffBoardArray[0][4]) / castleWeight;
 	int castleScoreBK = (float)(diffBoardArray[0][5] + diffBoardArray[0][6] + diffBoardArray[0][4] + diffBoardArray[0][7]) / castleWeight;
 
-	float enPassantWeight = 1.5f;
+	float enPassantWeight = 1.2f;
 
 	for (int file = 0; file < 8; file++)
 	{
@@ -168,10 +168,10 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
-	std::cout << "castleScoreWQ: " << castleScoreWQ << std::endl;
-	std::cout << "castleScoreWK: " << castleScoreWK << std::endl;
-	std::cout << "castleScoreBQ: " << castleScoreBQ << std::endl;
-	std::cout << "castleScoreBK: " << castleScoreBK << std::endl;
+	// std::cout << "castleScoreWQ: " << castleScoreWQ << std::endl;
+	// std::cout << "castleScoreWK: " << castleScoreWK << std::endl;
+	// std::cout << "castleScoreBQ: " << castleScoreBQ << std::endl;
+	// std::cout << "castleScoreBK: " << castleScoreBK << std::endl;
 	tilePairs.emplace_back(castleScoreWQ, 0, 0, 0, Utill::WQ);
 	tilePairs.emplace_back(castleScoreWK, 0, 0, 0, Utill::WK);
 	tilePairs.emplace_back(castleScoreBQ, 0, 0, 0, Utill::BQ);
@@ -180,13 +180,13 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Sort tile pairs by combined change score in descending order
 	std::sort(tilePairs.rbegin(), tilePairs.rend());
 
-	std::cout << "actualMoveScore = " << std::get<0>(tilePairs[depth]) << std::endl;
-	std::cout << "actualMoveRow1 = " << std::get<1>(tilePairs[depth]) << std::endl;
-	std::cout << "actualMoveCol1 = " << std::get<2>(tilePairs[depth]) << std::endl;
-	std::cout << "actualMoveRow2 = " << std::get<3>(tilePairs[depth]) << std::endl;
-	std::cout << "actualMoveCol2 = " << std::get<4>(tilePairs[depth]) << std::endl;
-	std::cout << "first tile score = " << diffBoardArray[std::get<1>(tilePairs[depth])][std::get<2>(tilePairs[depth])] << std::endl;
-	std::cout << "second tile score = " << diffBoardArray[std::get<3>(tilePairs[depth])][std::get<4>(tilePairs[depth])] << std::endl;
+	// std::cout << "actualMoveScore = " << std::get<0>(tilePairs[depth]) << std::endl;
+	// std::cout << "actualMoveRow1 = " << std::get<1>(tilePairs[depth]) << std::endl;
+	// std::cout << "actualMoveCol1 = " << std::get<2>(tilePairs[depth]) << std::endl;
+	// std::cout << "actualMoveRow2 = " << std::get<3>(tilePairs[depth]) << std::endl;
+	// std::cout << "actualMoveCol2 = " << std::get<4>(tilePairs[depth]) << std::endl;
+	// std::cout << "first tile score = " << diffBoardArray[std::get<1>(tilePairs[depth])][std::get<2>(tilePairs[depth])] << std::endl;
+	// std::cout << "second tile score = " << diffBoardArray[std::get<3>(tilePairs[depth])][std::get<4>(tilePairs[depth])] << std::endl;
 
 	return std::get<1>(tilePairs[depth]) * 1000 + std::get<2>(tilePairs[depth]) * 100 + std::get<3>(tilePairs[depth]) * 10 + std::get<4>(tilePairs[depth]);
 }

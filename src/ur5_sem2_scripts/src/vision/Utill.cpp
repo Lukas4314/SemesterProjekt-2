@@ -5,33 +5,31 @@
 
 using namespace std;
 
+std::string Utill::translateIntMoveToString(int move)
+{
+	if (move == 0)
+		return "0";
 
+	if (move == Utill::WQ)
+		return "wQ";
+	if (move == Utill::BQ)
+		return "bQ";
+	if (move == Utill::WK)
+		return "wK";
+	if (move == Utill::BK)
+		return "bK";
 
-std::string Utill::translateIntMoveToString(int move) {
-	if (move == 0) return "0";
-
-
-
-	
-	if (move == Utill::WQ) return "wQ";
-	if (move == Utill::BQ) return "bQ";
-	if (move == Utill::WK) return "wK";
-	if (move == Utill::BK) return "bK";
-
-	
-
-	
 	std::string moveString = "";
 	moveString += (char)(move % 1000 / 100 + 97);
-	moveString += (char)(7-move / 1000 + 49);
+	moveString += (char)(7 - move / 1000 + 49);
 	moveString += (char)(move % 10 + 97);
 
-	moveString += (char)(7-move % 100 / 10 + 49);
+	moveString += (char)(7 - move % 100 / 10 + 49);
 	return moveString;
-
 }
 
-string Utill::translateEngineBestMove(string bestmove) {
+string Utill::translateEngineBestMove(string bestmove)
+{
 	if (bestmove == "e1g1")
 	{
 		return "wK";
@@ -48,13 +46,11 @@ string Utill::translateEngineBestMove(string bestmove) {
 	{
 		return "bQ";
 	}
-	else 
-	{
-		return bestmove;
-	}
+
+	return bestmove;
 }
 
-string Utill::translateToEngine(string move) 
+string Utill::translateToEngine(string move)
 {
 	if (move == "wK")
 	{
@@ -72,12 +68,11 @@ string Utill::translateToEngine(string move)
 	{
 		return "e8c8";
 	}
-	else 
+	else
 	{
 		return move;
 	}
 }
-
 
 string Utill::vectorStringToString(const vector<string> &moveHistory)
 {

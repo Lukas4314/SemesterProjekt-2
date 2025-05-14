@@ -40,7 +40,6 @@ bool ChessMoves::move(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "move() called");
     switch (move.type) {
         case 'm':
-
             if (move.captured != '-') {
                 return capture_piece(move, TFchess);
             } else {
@@ -303,7 +302,7 @@ bool ChessMoves::en_passant(MoveStruct move, double TFchess[4][4]) {
 bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     RCLCPP_INFO(node_->get_logger(), "playercapture() called");
     double deathposition[2] = {0, 0};
-    if (move.color == 'w') {
+    if (move.color == 'b') {
         for (int i = 0; i < 16; i++) {
             if (deadPiecesLeft[i] == '-') {
                 deadPiecesLeft[i] = move.piece;

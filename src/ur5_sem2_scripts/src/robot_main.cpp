@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 
 
   
-  moveStruct move;
+  MoveStruct move;
   move.piece = 'p';
   move.type = 'm';
   move.start[0] = 0;
@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
   move.captured = '-';
   move.color = 'w';
 
-  moveStruct move1;
+  MoveStruct move1;
   move1 = move;
   move1.start[0] = 7;
   move1.start[1] = 7;
@@ -132,15 +132,15 @@ int main(int argc, char *argv[])
   move1.end[1] = 0;
   move1.captured = 'b';
 
-  moveStruct move2;
+  MoveStruct move2;
   move2 = move1;
   move2.captured = 'q';
 
-  moveStruct move3;
+  MoveStruct move3;
   move3 = move2;
   move3.captured = 'k';
 
-  moveStruct move4;
+  MoveStruct move4;
   move4 = move;
   move4.type = 'a';
   move4.piece = 'k';

@@ -69,7 +69,7 @@ add_executable(readJoints src/readJoints.cpp)
 add_executable(robot_main src/robot_main.cpp src/BoardTransformer.cpp)
 add_executable(vision_main src/vision_main.cpp)
 add_executable(board_test_main src/TestBoard.cpp)
-add_executable(final_main src/final_main.cpp)
+add_executable(final_main src/final_main.cpp src/BoardTransformer.cpp)
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables

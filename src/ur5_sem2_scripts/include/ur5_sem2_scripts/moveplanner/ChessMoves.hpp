@@ -16,15 +16,15 @@ public:
     explicit ChessMoves(const rclcpp::Node::SharedPtr& node);
     ~ChessMoves();
     bool move_to_idle();
-    bool move(moveStruct move, double TFchess[4][4]);
-    bool remove_piece(moveStruct move, double TFchess[4][4]);
-    bool add_piece(moveStruct move, double TFchess[4][4]);
-    bool move_piece(moveStruct move, double TFchess[4][4]);
-    bool capture_piece(moveStruct move, double TFchess[4][4]);
-    bool promote_pawn(moveStruct move, double TFchess[4][4]);
-    bool castle(moveStruct move, double TFchess[4][4]);
-    bool en_passant(moveStruct move, double TFchess[4][4]);
-    bool playercapture(moveStruct move, double TFchess[4][4]);
+    bool move(MoveStruct move, double TFchess[4][4]);
+    bool remove_piece(MoveStruct move, double TFchess[4][4]);
+    bool add_piece(MoveStruct move, double TFchess[4][4]);
+    bool move_piece(MoveStruct move, double TFchess[4][4]);
+    bool capture_piece(MoveStruct move, double TFchess[4][4]);
+    bool promote_pawn(MoveStruct move, double TFchess[4][4]);
+    bool castle(MoveStruct move, double TFchess[4][4]);
+    bool en_passant(MoveStruct move, double TFchess[4][4]);
+    bool playercapture(MoveStruct move, double TFchess[4][4]);
     bool execute_move(std::array<double, 2> start, std::array<double, 2> end);
     std::array<double, 2> applyTransformation(int point[2], double TFchess[4][4]);
 
@@ -63,7 +63,7 @@ private:
         {0.65, 0.25}, {0.65, 0.20}, {0.70, 0.25}, {0.70, 0.20},
         {0.75, 0.25}, {0.75, 0.20}, {0.80, 0.25}, {0.80, 0.20}
     };
-    const float player_capture_position[2] = {0.375, 0.025};  // Position to place captured piece
+    const float player_capture_position[2] = {0.375, -0.025};  // Position to place captured piece
 
     char deadPiecesLeft[16] = {'-','-','-','-','-','-','-','-','-', '-', '-', '-', '-', '-', '-', '-'};
     char deadPiecesRight[16] = {'-','-','-','-','-','-','-','-','-', '-', '-', '-', '-', '-', '-', '-'};

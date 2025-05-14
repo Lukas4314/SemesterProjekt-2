@@ -52,5 +52,7 @@ private:
 
     MoveStruct moveStruct;
 
+    char promotedTo = '-';
+
     rclcpp::Logger const logger = rclcpp::get_logger("Board");
 };
