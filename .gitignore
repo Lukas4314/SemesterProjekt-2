@@ -23,6 +23,8 @@ frames_*
 src/vs*
 src/trac_ik/
 src/ur5_sem2_scripts/SemesterProjekt-2/
+src/picoCode/build/
+src/picoCode/.vscode/
 
 # User-specific files
 *.rsuser

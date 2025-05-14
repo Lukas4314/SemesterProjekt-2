@@ -1,0 +1,21 @@
+#pragma once
+#include <cstdint>
+#include <rclcpp/rclcpp.hpp>
+
+class Gripper
+{
+    public:
+    Gripper();
+    ~Gripper();
+
+    bool openGripper();
+    bool closeGripper();
+
+    void sendByte(uint8_t byte);
+    int receiveByte();
+    void sendCommand(uint8_t command);
+
+private:
+    int serialPort = -1;
+    rclcpp::Logger logger_ = rclcpp::get_logger("Gripper");
+};

@@ -91,7 +91,8 @@ bool ChessMoves::remove_piece(MoveStruct move, double TFchess[4][4]) {
     
     RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
     // Execute the move
-    if(execute_move(start, end))
+    std::array<bool, 2> boardheight = {true, false};
+    if(execute_move(start, end, boardheight))
     {
         return true;
     }
@@ -143,7 +144,8 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4]) {
     std::array<double, 2> end = applyTransformation(move.end, TFchess);
 
     RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
-    if(execute_move(start, end))
+    std::array<bool, 2> boardheight = {false, true};
+    if(execute_move(start, end, boardheight))
     {
         return true;
     }
@@ -164,8 +166,8 @@ bool ChessMoves::move_piece(MoveStruct move, double TFchess[4][4]) {
     // apply transformation to end position
     std::array<double, 2> end = applyTransformation(move.end, TFchess);
 
-
-    if (execute_move(start, end)) {
+    std::array<bool, 2> boardheight = {true, true};
+    if (execute_move(start, end, boardheight)) {
         return true;
     } else {
         return false;
@@ -334,7 +336,7 @@ bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4]) {
     return true;
 }
 
-bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end) {
+bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight) {
     RCLCPP_INFO(node_->get_logger(), "execute_move() called");
 
     
@@ -366,7 +368,18 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     waypoints.push_back(pose1);
 
     geometry_msgs::msg::Pose pose2 = pose1;
-    pose2.position.z = BOARDHEIGHT;
+
+    if (boardheight[0])
+    {
+        pose2.position.z = BOARDHEIGHT;
+    }
+    else
+    {
+        pose2.position.z = TABLEHEIGHT;
+
+    }
+
+
     waypoints.push_back(pose2);
     
     // Plan Cartesian path for the first part of the move
@@ -400,7 +413,16 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     waypoints.push_back(pose3);
 
     geometry_msgs::msg::Pose pose4 = pose3;
-    pose4.position.z = BOARDHEIGHT;
+
+    if (boardheight[1])
+    {
+        pose4.position.z = BOARDHEIGHT;
+    }
+    else
+    {
+        pose4.position.z = TABLEHEIGHT;
+    }
+
     waypoints.push_back(pose4);
 
     // Plan Cartesian path for the piece transfer
