@@ -18,31 +18,21 @@ int main(int argc, char *argv[])
     ChessBoard chessBoard = ChessBoard();
     chessBoard.setBoard(
         vector<vector<char>>{
-            {'R', '-', 'B', 'Q', 'K', 'B', 'N', 'R'},
-            {'-', '-', '-', 'P', 'P', 'P', 'P', 'P'},
-            {'-', '-', 'N', '-', '-', '-', '-', '-'},
+            {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'},
+            {'P', 'P', '-', 'P', 'P', 'P', 'P', 'P'},
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
             {'-', '-', 'P', '-', '-', '-', '-', '-'},
-            {'-', '-', '-', '-', 'p', 'b', '-', '-'},
-            {'-', '-', '-', 'p', '-', 'n', '-', '-'},
-            {'p', 'P', 'p', '-', '-', 'p', 'p', 'p'},
-            {'r', '-', '-', 'q', '-', 'r', 'k', '-'}});
+            {'-', '-', '-', '-', 'p', '-', '-', '-'},
+            {'-', '-', '-', '-', '-', '-', '-', '-'},
+            {'p', 'p', 'p', 'p', '-', 'p', 'p', 'p'},
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}});
         
 
     chessBoard.printBoard();
 
     vector<vector<char>> boardCopy = chessBoard.getBoard();
 
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("d1e1")).c_str());
-    chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("b2a1n")).c_str());
-    chessBoard.printBoard();
-
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("e1e3")).c_str());
-    chessBoard.printBoard();
-
-    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("a1e1")).c_str());
+    RCLCPP_DEBUG(logger, to_string(chessBoard.applyIfValidMove("b1d2")).c_str());
     chessBoard.printBoard();
 
     return 0;
