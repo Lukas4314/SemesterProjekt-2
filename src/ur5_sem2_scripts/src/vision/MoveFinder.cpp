@@ -45,8 +45,8 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	cv::Mat circularMask(squareHeight, squareWidth, CV_8UC1, cv::Scalar(0));
 	cv::circle(circularMask,
-           cv::Point(squareWidth / 2, squareHeight / 2),
-           std::min(squareWidth, squareHeight) / 2,
+           cv::Point(squareWidth / 3, squareHeight / 3),
+           std::min(squareWidth, squareHeight) / 3,
            cv::Scalar(255), -1);  // Filled circle
 
 
@@ -92,25 +92,25 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::cvtColor(newChessBoard, newChessBoard, cv::COLOR_BGR2GRAY);
 
 	for (int i = 0; i < 8; i++)
-{
-    for (int j = 0; j < 8; j++)
-    {
-        cv::Rect square(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
-        cv::Mat squareOld = oldChessBoard(square);
-        cv::Mat squareNew = newChessBoard(square);
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			cv::Rect square(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
+			cv::Mat squareOld = oldChessBoard(square);
+			cv::Mat squareNew = newChessBoard(square);
 
-        // Apply circular mask
-        cv::Mat maskedOld, maskedNew;
-        squareOld.copyTo(maskedOld, circularMask);
-        squareNew.copyTo(maskedNew, circularMask);
+			// Apply circular mask
+			cv::Mat maskedOld, maskedNew;
+			squareOld.copyTo(maskedOld, circularMask);
+			squareNew.copyTo(maskedNew, circularMask);
 
-        double oldSum = cv::sum(maskedOld)[0];
-        double newSum = cv::sum(maskedNew)[0];
-        double diff = std::abs(oldSum - newSum);
+			double oldSum = cv::sum(maskedOld)[0];
+			double newSum = cv::sum(maskedNew)[0];
+			double diff = std::abs(oldSum - newSum);
 
-        diffBoardArray[i][j] = diff;
-    }
-}
+			diffBoardArray[i][j] = diff;
+		}
+	}
 
 
 	// Finds the highest difference
