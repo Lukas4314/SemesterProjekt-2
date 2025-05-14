@@ -75,11 +75,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	int cellHeight = height / 8;
 	int falloffDistance = 5; // Distance from grid line to start dimming
 
-	cv::Mat circularMask(squareHeight, squareWidth, CV_8UC1, cv::Scalar(0));
-	cv::circle(circularMask,
-           cv::Point(squareWidth / 2, squareHeight / 2),
-           std::min(squareWidth, squareHeight) / 2,
-           cv::Scalar(255), -1);  // Filled circle
+	
 
 
 
@@ -138,7 +134,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 			// Calculate mean and stddev within the mask
 			cv::Scalar mean, stddev;
-			cv::meanStdDev(squareImage, mean, stddev, mask);
+			cv::meanStdDev(squareImage, mean, stddev);
 
 			float k = 0.5f; // Adjust for shadow sensitivity
 			float diff = std::abs(mean[0]) + k * std::abs(stddev[0]);
