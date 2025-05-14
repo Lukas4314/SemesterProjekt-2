@@ -22,7 +22,39 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::resize(oldChessBoard, oldChessBoard, newChessBoard.size());
 
 	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
-	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
+	// Resize to match
+	cv::resize(oldChessBoard, oldChessBoard, newChessBoard.size());
+
+	// Convert both images to grayscale
+	cv::Mat oldGray, newGray;
+	cv::cvtColor(oldChessBoard, oldGray, cv::COLOR_BGR2GRAY);
+	cv::cvtColor(newChessBoard, newGray, cv::COLOR_BGR2GRAY);
+
+	// Define the motion model: MOTION_AFFINE or MOTION_TRANSLATION are good choices
+	int motionModel = cv::MOTION_AFFINE;
+	cv::Mat warpMatrix = cv::Mat::eye(2, 3, CV_32F);
+
+	// Termination criteria
+	cv::TermCriteria criteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 50, 1e-6);
+
+	// Align new image to old
+	try {
+		cv::findTransformECC(oldGray, newGray, warpMatrix, motionModel, criteria);
+	} catch (const cv::Exception& e) {
+		std::cerr << "ECC alignment failed: " << e.what() << std::endl;
+	}
+
+	// Warp newChessBoard using the warp matrix
+	cv::Mat alignedNewChessBoard;
+	cv::warpAffine(newChessBoard, alignedNewChessBoard, warpMatrix, newChessBoard.size(), cv::INTER_LINEAR + cv::WARP_INVERSE_MAP);
+
+	// Optional: visualize result
+	cv::imshow("Aligned New Chessboard", alignedNewChessBoard);
+
+	// Now compute the difference
+	cv::absdiff(oldChessBoard, alignedNewChessBoard, diffBoard);
+
+	//cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
 	cv::imshow("difBoard", diffBoard);
 	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
 	int imageWidth = diffBoard.cols;
@@ -92,28 +124,28 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::cvtColor(newChessBoard, newChessBoard, cv::COLOR_BGR2GRAY);
 
 	for (int i = 0; i < 8; i++)
-{
-	for (int j = 0; j < 8; j++)
 	{
-		cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
-		cv::Mat squareImage = diffBoardModified(square);
+		for (int j = 0; j < 8; j++)
+		{
+			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
+			cv::Mat squareImage = diffBoardModified(square);
 
-		// Create circular mask
-		cv::Mat mask = cv::Mat::zeros(squareHeight, squareWidth, CV_8UC1);
-		cv::Point center(squareWidth / 2, squareHeight / 2);
-		int radius = std::min(squareWidth, squareHeight) / 2;
-		cv::circle(mask, center, radius, cv::Scalar(255), -1);  // filled white circle
+			// Create circular mask
+			cv::Mat mask = cv::Mat::zeros(squareHeight, squareWidth, CV_8UC1);
+			cv::Point center(squareWidth / 2, squareHeight / 2);
+			int radius = std::min(squareWidth, squareHeight) / 2;
+			cv::circle(mask, center, radius, cv::Scalar(255), -1);  // filled white circle
 
-		// Calculate mean and stddev within the mask
-		cv::Scalar mean, stddev;
-		cv::meanStdDev(squareImage, mean, stddev, mask);
+			// Calculate mean and stddev within the mask
+			cv::Scalar mean, stddev;
+			cv::meanStdDev(squareImage, mean, stddev, mask);
 
-		float k = 0.5f; // Adjust for shadow sensitivity
-		float diff = std::abs(mean[0]) + k * std::abs(stddev[0]);
+			float k = 0.5f; // Adjust for shadow sensitivity
+			float diff = std::abs(mean[0]) + k * std::abs(stddev[0]);
 
-		diffBoardArray[i][j] = diff;
+			diffBoardArray[i][j] = diff;
+		}
 	}
-}
 
 
 
