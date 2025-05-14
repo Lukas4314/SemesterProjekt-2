@@ -33,10 +33,10 @@ void Gripper::open(){
 
 void Gripper::close(){
     gpio_put(PIN14, 1);
+}
 
-    while (adc_read() < 100) {
-        
-        sleep_ms(10);
-    }
+void Gripper::stop()
+{
+    gpio_put(PIN14, 0);
     gpio_put(PIN15, 0);
 }

@@ -27,18 +27,97 @@ int main()
     }
 
     Gripper gripper;
-
+    __uint8_t status = 0;
+    int timeindex = 0;
 
     while (true) {
-        int ch = getchar_timeout_us(0);
-        if (ch != PICO_ERROR_TIMEOUT) {
-            if (ch == 1){
+        __uint8_t ch = getchar_timeout_us(0);
+
+        // Check comms from the pc
+        if (ch == PICO_ERROR_TIMEOUT) {
+            // No input, continue
+        }
+        else if (ch == OPEN_GRIPPER) {
+            
+            if (status == GRIPPER_CLOSED)
+            {
                 gripper.open();
+                putchar(GRIPPER_ACK);
+                status = GRIPPER_OPENING;
+                timeindex = 200; // Set the time index to 200 ms
             }
-            else if (ch == 2){
-                gripper.close();
+            else if (status == GRIPPER_OPEN)
+            {
+                putchar(GRIPPER_NACK);
+            }
+            else if (status == GRIPPER_OPENING)
+            {
+                putchar(GRIPPER_NACK);
+            }
+            else if (status == GRIPPER_ERROR)
+            {
+                putchar(GRIPPER_NACK);
             }
         }
+        else if (ch == CLOSE_GRIPPER) {
+            
+            if (status == GRIPPER_OPEN)
+            {
+                gripper.close();
+                putchar(GRIPPER_ACK);
+                status = GRIPPER_CLOSING;
+            }
+            else if (status == GRIPPER_CLOSED)
+            {
+                putchar(GRIPPER_NACK);
+            }
+            else if (status == GRIPPER_OPENING)
+            {
+                putchar(GRIPPER_NACK);
+            }
+            else if (status == GRIPPER_ERROR)
+            {
+                putchar(GRIPPER_NACK);
+            }
+            
+            
+        }
+        else if (ch == GRIPPER_STATUS) {
+            putchar(GRIPPER_ACK);
+            putchar(status);
+        }
+
+        // Check if the gripper is closed
+        if (adc.read() < 100 && status == GRIPPER_CLOSING) {
+            status = GRIPPER_CLOSED;
+            gripper.stop();
+        }
+
+        // Check if the gripper is opening
+        if (status == GRIPPER_OPENING) {
+            if (timeindex <= 0) {
+                gripper.stop();
+                status = GRIPPER_OPEN;
+            }
+
+            else {
+                timeindex--;
+            }
+        }
+        
+        
+        
+        
+
+
+        // if (ch != PICO_ERROR_TIMEOUT) {
+        //     if (ch == 1){
+        //         gripper.open();
+        //     }
+        //     else if (ch == 2){
+        //         gripper.close();
+        //     }
+        // }
         sleep_ms(10); // optional: avoid busy loop
     }
     return 0;

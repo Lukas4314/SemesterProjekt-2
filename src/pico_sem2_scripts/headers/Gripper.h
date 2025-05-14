@@ -15,5 +15,6 @@ public:
     ~Gripper();
     void open();
     void close();
+    void stop();
 
 };
