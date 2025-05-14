@@ -1,7 +1,0 @@
-{
-    "bestmove": "bestmove e7e5 ponder g1f3",
-    "continuation": "e7e5 g1f3 g8f6 b1c3 f8b4 f1c4 d7d6 e1g1 c7c6 a2a3 b4c5 c4b3 e8g8 d2d4 e5d4 f3d4 d6d5 e4d5 c6d5",
-    "evaluation": 0.42,
-    "mate": null,
-    "success": true
-}
