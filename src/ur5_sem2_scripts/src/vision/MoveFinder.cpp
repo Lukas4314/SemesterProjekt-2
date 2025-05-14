@@ -54,6 +54,11 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Now compute the difference
 	cv::absdiff(oldChessBoard, alignedNewChessBoard, diffBoard);
 
+	// Convert alligned to grayscale
+	cv::Mat alignedNewGray;
+	cv::cvtColor(alignedNewChessBoard, alignedNewGray, cv::COLOR_BGR2GRAY);
+
+
 	//cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
 	cv::imshow("difBoard", diffBoard);
 	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
@@ -120,28 +125,33 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::cvtColor(newChessBoard, newChessBoard, cv::COLOR_BGR2GRAY);
 
 	for (int i = 0; i < 8; i++)
+{
+	for (int j = 0; j < 8; j++)
 	{
-		for (int j = 0; j < 8; j++)
-		{
-			cv::Rect square = cv::Rect(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
-			cv::Mat squareImage = diffBoardModified(square);
+		cv::Rect square(j * squareWidth, i * squareHeight, squareWidth, squareHeight);
 
-			// Create circular mask
-			cv::Mat mask = cv::Mat::zeros(squareHeight, squareWidth, CV_8UC1);
-			cv::Point center(squareWidth / 2, squareHeight / 2);
-			int radius = std::min(squareWidth, squareHeight) / 2;
-			cv::circle(mask, center, radius, cv::Scalar(255), -1);  // filled white circle
+		// Extract corresponding squares
+		cv::Mat oldSquare = oldGray(square);
+		cv::Mat newSquare = alignedNewGray(square);  // aligned version from ECC step
 
-			// Calculate mean and stddev within the mask
-			cv::Scalar mean, stddev;
-			cv::meanStdDev(squareImage, mean, stddev);
+		// Create circular mask
+		cv::Mat mask = cv::Mat::zeros(squareHeight, squareWidth, CV_8UC1);
+		cv::Point center(squareWidth / 2, squareHeight / 2);
+		int radius = std::min(squareWidth, squareHeight) / 2;
+		cv::circle(mask, center, radius, cv::Scalar(255), -1);
 
-			float k = 0.5f; // Adjust for shadow sensitivity
-			float diff = std::abs(mean[0]) + k * std::abs(stddev[0]);
+		// Calculate mean and stddev for both images
+		cv::Scalar meanOld, stddevOld, meanNew, stddevNew;
+		cv::meanStdDev(oldSquare, meanOld, stddevOld, mask);
+		cv::meanStdDev(newSquare, meanNew, stddevNew, mask);
 
-			diffBoardArray[i][j] = diff;
-		}
+		float k = 0.5f; // Weight factor for stddev
+		float diff = std::abs(meanNew[0] - meanOld[0]) + k * std::abs(stddevNew[0] - stddevOld[0]);
+
+		diffBoardArray[i][j] = diff;
 	}
+}
+
 
 
 
