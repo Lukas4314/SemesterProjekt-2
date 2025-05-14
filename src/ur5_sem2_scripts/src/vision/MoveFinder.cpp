@@ -142,8 +142,8 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 		// Calculate mean and stddev for both images
 		cv::Scalar meanOld, stddevOld, meanNew, stddevNew;
-		cv::meanStdDev(oldSquare, meanOld, stddevOld, mask);
-		cv::meanStdDev(newSquare, meanNew, stddevNew, mask);
+		cv::meanStdDev(oldSquare, meanOld, stddevOld);
+		cv::meanStdDev(newSquare, meanNew, stddevNew);
 
 		float k = 0.5f; // Weight factor for stddev
 		float diff = std::abs(meanNew[0] - meanOld[0]) + k * std::abs(stddevNew[0] - stddevOld[0]);
