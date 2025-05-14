@@ -403,6 +403,7 @@ bool ChessBoard::applyIfValidMove(string move)
         RCLCPP_DEBUG(logger, "It is valid castle");
         doCastle(move);
         updateTurn(move, originalBoard);
+        updateMoveStruct()
         return true;
     }
 
