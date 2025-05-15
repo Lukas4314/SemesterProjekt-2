@@ -211,6 +211,9 @@ int main(int argc, char *argv[])
 
   AllInOneMain allInOneMain = AllInOneMain(camera_index);
 
+
+
+
   // Takes start image
   allInOneMain.getPieceMovedString(0);
 
@@ -253,6 +256,7 @@ int main(int argc, char *argv[])
       cout << "Remi! " << endl;
       break;
     }
+
     chessMoves.move(movePlanCamera, raw_TF);
 
 
