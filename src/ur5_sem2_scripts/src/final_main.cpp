@@ -274,12 +274,16 @@ int main(int argc, char *argv[])
     }
 
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+   
+   
+   /*
     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
     std::cout << "Press a button when the robot has made its move" << std::endl;
     if (cv::waitKey(0) == 'q')
     {
       break;
     }
+    */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     // Just for opdating the camera image

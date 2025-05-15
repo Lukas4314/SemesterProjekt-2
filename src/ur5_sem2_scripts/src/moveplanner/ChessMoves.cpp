@@ -1,5 +1,6 @@
 #include "ur5_sem2_scripts/pico_comm/Gripper.h"
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
+#include "ur5_sem2_scripts/pico_comm/Gripper.h"
 
 
 
