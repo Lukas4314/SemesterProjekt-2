@@ -25,7 +25,7 @@ while True:
             line.set_xdata(range(len(data)))
             ax.relim()
             ax.autoscale_view()
-            plt.pause(0.01)
+            plt.pause(0.01)  # Pause for at opdatere grafen
     except Exception as e:
         print("Fejl:", e)
 
