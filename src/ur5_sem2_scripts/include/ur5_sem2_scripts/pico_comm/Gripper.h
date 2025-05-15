@@ -1,10 +1,11 @@
 #pragma once
 #include <cstdint>
 #include <rclcpp/rclcpp.hpp>
+#include <string>
 
 class Gripper
 {
-    public:
+public:
     Gripper();
     ~Gripper();
 
@@ -14,6 +15,7 @@ class Gripper
     void sendByte(uint8_t byte);
     int receiveByte();
     void sendCommand(uint8_t command);
+    std::string translateCodeToString(int code);
 
 private:
     int serialPort = -1;

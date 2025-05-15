@@ -10,7 +10,7 @@ file(GLOB src_files src/*.cpp)
 
 
 add_executable(picoMain mains/picoMain.cpp ${src_files})
-add_executable(adcTestMain mains/picoMain.cpp ${src_files})
+add_executable(adcTestMain mains/adcTestMain.cpp ${src_files})
 
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/headers
