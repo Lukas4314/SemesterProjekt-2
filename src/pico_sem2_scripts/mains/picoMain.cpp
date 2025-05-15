@@ -65,7 +65,7 @@ int main()
                 gripper.open();
                 putchar(GRIPPER_ACK);
                 status = GRIPPER_OPENING;
-                timeindex = 500; // Set the time index to 200 ms
+                timeindex = 750;
             }
             else if (status == GRIPPER_OPEN)
             {
@@ -92,7 +92,7 @@ int main()
             if (status == GRIPPER_OPEN)
             {
                 gripper.close();
-                timeIndexForADC = 50;
+                timeIndexForADC = 200;
                 putchar(GRIPPER_ACK);
                 status = GRIPPER_CLOSING;
             }
