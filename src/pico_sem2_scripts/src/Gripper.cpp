@@ -21,13 +21,15 @@ Gripper::~Gripper()
 
 
 void Gripper::open(){
+    stop();
     gpio_put(PIN14, 1);
 //   sleep_ms(2000);
 //    gpio_put(PIN0, 0);
 }
 
 void Gripper::close(){
-    gpio_put(PIN14, 1);
+    stop();
+    gpio_put(PIN15, 1);
 }
 
 void Gripper::stop()
