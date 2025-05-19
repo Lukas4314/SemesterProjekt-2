@@ -1,6 +1,7 @@
-
+#include "ur5_sem2_scripts/pico_comm/Gripper.h"
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
 #include "ur5_sem2_scripts/Logger.h"
+#include "ur5_sem2_scripts/pico_comm/Gripper.h"
 
 ChessMoves::ChessMoves(const rclcpp::Node::SharedPtr &node)
     : node_(node), move_group_interface(node, "ur_manipulator")
@@ -436,7 +437,7 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Pick up the piece
-    // gripper.closeGripper();
+    gripper.closeGripper();
     rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to the end position
@@ -478,7 +479,7 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Set the piece down
-    // gripper.openGripper();
+    gripper.openGripper();
 
     rclcpp::sleep_for(std::chrono::seconds(0));
 

@@ -20,6 +20,7 @@
 #define GRIPPER_NACK 0x15
 #define GRIPPER_OPEN 0x07
 #define GRIPPER_CLOSED 0x08
+#define GETADC 0x09
 
 #define GRIPPER_TIMEOUT 1000 // milliseconds
 
@@ -77,18 +78,34 @@ void Gripper::sendByte(uint8_t byte)
 
 int Gripper::receiveByte()
 {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10)); // Wait for 100ms before reading
     if (serialPort == -1)
-        return -1;
-
-    uint8_t buffer[1];  // Buffer for 1 byte
-    ssize_t bytesRead = read(serialPort, buffer, 1); // Read 1 byte
-
-    if (bytesRead != 1)
     {
-        RCLCPP_DEBUG(logger_, "Failed to read 1 byte from serial port: %s", std::strerror(errno));
+        std::cout << "Serial port not open" << std::endl;
         return -1;
     }
-    
+
+    uint8_t buffer[1]; // Buffer for 1 byte
+    int timeTillTimeout = 5000;
+    while (true)
+    {
+        ssize_t bytesRead = read(serialPort, buffer, 1); // Read 1 byte
+
+        if (bytesRead == 1)
+        {
+            break;
+        }
+
+        RCLCPP_DEBUG(logger_, "Failed to read 1 byte from serial port: %s", std::strerror(errno));
+        timeTillTimeout -= 100;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        if (timeTillTimeout <= 0)
+        {
+            RCLCPP_ERROR(logger_, "Timeout while waiting for response from gripper");
+            return -1; // Timeout
+        }
+    }
+    std::cout << "Received byte: " << static_cast<int>(buffer[0]) << std::endl;
     return buffer[0]; // Return the received byte
 }
 
@@ -96,6 +113,7 @@ void Gripper::sendCommand(uint8_t command)
 {
     sendByte(command);
     int response = receiveByte();
+    std::cout << "Received command: " << translateCodeToString(response) << std::endl;
     if (response == GRIPPER_ACK)
     {
         RCLCPP_DEBUG(logger_, "Command acknowledged");
@@ -137,35 +155,84 @@ bool Gripper::openGripper()
             RCLCPP_DEBUG(logger_, "Unexpected status: %d", status);
             return false;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 
 bool Gripper::closeGripper()
 {
+    std::cout << "sending close command" << std::endl;
     sendCommand(CLOSE_GRIPPER);
 
     while (true)
     {
+        std::cout << "Sending get gripper status command" << std::endl;
         sendCommand(GRIPPER_STATUS);
         int status = receiveByte();
         if (status == GRIPPER_CLOSING)
         {
+            std::cout << "Gripper is closing" << std::endl;
             RCLCPP_INFO(logger_, "Gripper is closing");
+
+            std::cout << "Sending get ADC command" << std::endl;
+            sendCommand(GETADC);
+            int adcValue = receiveByte() * 5;
+            std::cout << "ADC Value: " << adcValue << std::endl;
         }
         else if (status == GRIPPER_CLOSED)
         {
+            std::cout << "Gripper closed succesfully" << std::endl;
             RCLCPP_DEBUG(logger_, "Gripper closed successfully");
             return true;
         }
         else if (status == GRIPPER_ERROR)
         {
+            std::cout << "Gripper error occurred" << std::endl;
             RCLCPP_ERROR(logger_, "Gripper error occurred");
             return false;
         }
         else
         {
+            std::cout << "Unexpected status: " << status << std::endl;
             RCLCPP_DEBUG(logger_, "Unexpected status: %d", status);
             return false;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+}
+
+std::string Gripper::translateCodeToString(int code)
+{
+    if (code == GRIPPER_ACK)
+    {
+        return "ACK";
+    }
+    else if (code == GRIPPER_NACK)
+    {
+        return "NACK";
+    }
+    else if (code == GRIPPER_OPEN)
+    {
+        return "OPEN";
+    }
+    else if (code == GRIPPER_CLOSED)
+    {
+        return "CLOSED";
+    }
+    else if (code == GRIPPER_OPENING)
+    {
+        return "OPENING";
+    }
+    else if (code == GRIPPER_CLOSING)
+    {
+        return "CLOSING";
+    }
+    else if (code == GRIPPER_ERROR)
+    {
+        return "ERROR";
+    }
+    else
+    {
+        return "UNKNOWN CODE: " + std::to_string(code);
     }
 }

@@ -528,10 +528,12 @@ bool MoveValidator::isValidKnight(char piece, int fromRow, int fromCol, int toRo
     int colDiff = abs(toCol - fromCol);
     char dest = board[toRow][toCol];
 
-    // Knight moves in L shape
-    if ((ChessBoard::isBlack(piece) != ChessBoard::isBlack(dest)) && (rowDiff == 2 && colDiff == 1) || (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2) || (rowDiff == 1 && colDiff == 2))
-        return true; // It's only a valid move if the horse moves in an L shape and doesn't land on a piece of it's own color
-    return false;
+    bool isLShape = (rowDiff == 2 && colDiff == 1) || (rowDiff == 1 && colDiff == 2);
+    
+    // Check if destination is either empty or contains opponent's piece
+    bool isValidCapture = (dest == '-') || (ChessBoard::isBlack(piece) != ChessBoard::isBlack(dest));
+    
+    return isLShape && isValidCapture;
 }
 
 bool MoveValidator::isValidBishop(char piece, int fromRow, int fromCol, int toRow, int toCol, const vector<vector<char>> &board)

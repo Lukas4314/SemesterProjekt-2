@@ -81,7 +81,7 @@ int AllInOneMain::getPieceMoved(int depth)
 */
 
 
-	float circleScale2 = 1.2;
+	float circleScale2 = 1.4;
 	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
 	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
 
@@ -95,7 +95,7 @@ int AllInOneMain::getPieceMoved(int depth)
 	// ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, firstPixelColor);
 
 	// Cut out chessboard
-	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.6, ImageFinder::hsvMode2);
+	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.45, ImageFinder::hsvMode2);
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(chessboard.cols / 2, chessboard.rows / 2), 180, 1);
 	cv::warpAffine(chessboard, chessboard, rotationMatrix, chessboard.size());
 
