@@ -9,6 +9,7 @@
 #include "Utill.h"
 #include <string>
 #include "ament_index_cpp/get_package_share_directory.hpp"
+#include "ur5_sem2_scripts/Logger.h"
 
 AllInOneMain::AllInOneMain(int camera_index)
 {

@@ -8,6 +8,7 @@
 #include "ChessBoard.h"
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
+#include "ur5_sem2_scripts/Logger.h"
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created
@@ -19,6 +20,7 @@ ChessBoard::ChessBoard()
     castlingRights = "KQkq";
     enPassant = "-";
     halfMoveClock = 0;
+    moveCount = 0;
     resetMoveStruct();
 }
 
@@ -408,6 +410,9 @@ bool ChessBoard::isRemi(string &activeColor)
 
 void ChessBoard::updateTurn(string move, vector<vector<char>> originalBoard)
 {
+    Logger::setValue(MOVE_COUNT, to_string(moveCount));
+    Logger::setValue(MOVE, move);
+
     // Puts the color (as a char) into the moveStrut before updating the color
     moveStruct.color = activeColor[0];
     activeColor = (activeColor == "w") ? "b" : "w";

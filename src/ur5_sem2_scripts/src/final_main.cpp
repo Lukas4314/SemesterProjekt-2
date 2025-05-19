@@ -14,6 +14,7 @@
 #include "ur5_sem2_scripts/board/ChessBoard.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
 #include "ur5_sem2_scripts/vision/Utill.h"
+#include "ur5_sem2_scripts/Logger.h"
 
 void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger)
 {
@@ -109,6 +110,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
 
 MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
 {
+  Logger::setValue(CAMERA_MOVE, "1");
   string move;
   bool succesMove;
   int moveDepth = 0;
@@ -122,14 +124,13 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
     moveDepth++;
 
   } while (!succesMove);
-
   cout << "Camera Move is: " << move << endl;
   chess.printBoard();
 
-
-    // Here it needs to get movestruct
+  // Here it needs to get movestruct
   MoveStruct movePlan;
   movePlan = chess.getMoveStruct();
+
   if (movePlan.captured != '-')
   {
     movePlan.type = 'k';
@@ -172,7 +173,8 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
   RCLCPP_DEBUG(logger, ("Bestmove: " + bestMove).c_str());
 
   char promotedTo = '-';
-  if (bestMove.length() == 5){
+  if (bestMove.length() == 5)
+  {
     promotedTo = bestMove.substr(4, 1)[0];
   }
 
@@ -191,6 +193,10 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
 
 int main(int argc, char *argv[])
 {
+
+  // Make logger for csv file
+  Logger::initialize(Logger::getAllLoggerKeys());
+
   // Initialize ROS and create the Node
   rclcpp::init(argc, argv);
   auto const node = std::make_shared<rclcpp::Node>(
@@ -211,9 +217,6 @@ int main(int argc, char *argv[])
 
   AllInOneMain allInOneMain = AllInOneMain(camera_index);
 
-
-
-
   // Takes start image
   allInOneMain.getPieceMovedString(0);
 
@@ -229,6 +232,9 @@ int main(int argc, char *argv[])
 
   while (true)
   {
+
+    // Gets a move from the camera and checks if it is valid and repeats until it is
+    MoveStruct movePlanCamera = applyCameraMove(allInOneMain, chess);
     // Gets the transformation matrix
     std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(allInOneMain);
 
@@ -242,8 +248,9 @@ int main(int argc, char *argv[])
       }
     }
 
-    // Gets a move from the camera and checks if it is valid and repeats until it is
-    MoveStruct movePlanCamera = applyCameraMove(allInOneMain, chess);
+    
+
+
 
     if (chess.isMated(chess.getActiveColor()))
     {
@@ -258,8 +265,6 @@ int main(int argc, char *argv[])
     }
 
     chessMoves.move(movePlanCamera, raw_TF);
-
-
 
     // Applies the move from stokfish
     MoveStruct movePlan;
@@ -292,7 +297,8 @@ int main(int argc, char *argv[])
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
     std::cout << "Press a button when the robot has made its move" << std::endl;
-    if (cv::waitKey(0) == 'q'){
+    if (cv::waitKey(0) == 'q')
+    {
       break;
     }
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
