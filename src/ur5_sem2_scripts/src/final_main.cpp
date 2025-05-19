@@ -44,8 +44,8 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_pixels[1][3] / pixelPerCm;
 
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
-  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 2.5;
-  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 2.5;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 1.6;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 1.6;
 
   std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
                                                                 {-1, 0, 0, 25},
@@ -60,9 +60,10 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
                                                                {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
 
-  float boardSize = 0.288;
-  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize},
-                                                                   {-1, 0, 0, boardSize},
+  float boardSize = 0.295;
+  float cali = 0.01;
+  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
+                                                                   {-1, 0, 0, boardSize + cali},
                                                                    {0, 0, -1, 0},
                                                                    {0, 0, 0, 1}}};
 

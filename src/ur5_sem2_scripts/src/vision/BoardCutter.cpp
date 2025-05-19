@@ -108,7 +108,7 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
 
 	// Calculate the angle of rotation in degrees
 
-	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45 + 1;
+	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45;
 
 	// Calculate the translation values
 	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x, greenPointCenter.y);
