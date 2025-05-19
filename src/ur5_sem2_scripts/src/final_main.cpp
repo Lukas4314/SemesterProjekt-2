@@ -216,6 +216,8 @@ int main(int argc, char *argv[])
   if (!playerWhite)
   {
     applyStockfishMove(engine, chess);
+    Logger::setValue(CAMERA_MOVE, "0");
+    Logger::writeRow();
   }
 
   bool instaQuit = false;
@@ -256,8 +258,12 @@ int main(int argc, char *argv[])
 
     chessMoves.move(movePlanCamera, raw_TF);
 
+    // Writes the row before stockfish starts playing
+    Logger::writeRow();
+
     // Applies the move from stokfish
     MoveStruct movePlan;
+
     movePlan = applyStockfishMove(engine, chess);
     std::cout << "Now trying to move robot with best move " << std::endl;
     chessMoves.move(movePlan, raw_TF);
@@ -296,8 +302,16 @@ int main(int argc, char *argv[])
      */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
+
+
+
+
     // Just for opdating the camera image
     allInOneMain.getPieceMovedString(0);
+
+    //writes the row after stockfish has played
+    Logger::writeRow();
+
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')
