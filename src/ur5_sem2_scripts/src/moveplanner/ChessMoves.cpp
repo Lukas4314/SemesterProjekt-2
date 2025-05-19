@@ -1,6 +1,6 @@
 #include "ur5_sem2_scripts/pico_comm/Gripper.h"
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
-#include "ur5_sem2_scripts/Logger.h"
+#include "ur5_sem2_scripts/logger/Logger.h"
 #include "ur5_sem2_scripts/pico_comm/Gripper.h"
 
 ChessMoves::ChessMoves(const rclcpp::Node::SharedPtr &node)

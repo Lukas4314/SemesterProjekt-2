@@ -8,7 +8,7 @@
 #include "ChessBoard.h"
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
-#include "ur5_sem2_scripts/Logger.h"
+#include "ur5_sem2_scripts/logger/Logger.h"
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created

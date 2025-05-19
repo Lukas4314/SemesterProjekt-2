@@ -14,7 +14,7 @@
 #include "ur5_sem2_scripts/board/ChessBoard.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
 #include "ur5_sem2_scripts/vision/Utill.h"
-#include "ur5_sem2_scripts/Logger.h"
+#include "ur5_sem2_scripts/logger/Logger.h"
 
 void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger)
 {
@@ -37,6 +37,8 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_PEGS, std::to_string(allInOneMain.getBoardCutter(0).getAngle()));
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD, std::to_string(allInOneMain.getBoardCutter(1).getAngle()));
 
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = yellowPlok_boardGreen_T_pixels;
 
@@ -106,6 +108,8 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
   } while (!succesMove);
   cout << "Camera Move is: " << move << endl;
   chess.printBoard();
+
+  Logger::setValue(MOVES_TRIED_BEFORE_SUCCESS, to_string(moveDepth));
 
   // Here it needs to get movestruct
   MoveStruct movePlan;
@@ -214,7 +218,6 @@ int main(int argc, char *argv[])
     applyStockfishMove(engine, chess);
   }
 
-
   bool instaQuit = false;
   if (cv::waitKey(0) == 'q')
   {
@@ -238,10 +241,6 @@ int main(int argc, char *argv[])
         raw_TF[i][j] = TF[i][j];
       }
     }
-
-    
-
-
 
     if (chess.isMated(chess.getActiveColor()))
     {
@@ -286,16 +285,15 @@ int main(int argc, char *argv[])
     }
 
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-   
-   
-   /*
-    // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
-    std::cout << "Press a button when the robot has made its move" << std::endl;
-    if (cv::waitKey(0) == 'q')
-    {
-      break;
-    }
-    */
+
+    /*
+     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
+     std::cout << "Press a button when the robot has made its move" << std::endl;
+     if (cv::waitKey(0) == 'q')
+     {
+       break;
+     }
+     */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     // Just for opdating the camera image

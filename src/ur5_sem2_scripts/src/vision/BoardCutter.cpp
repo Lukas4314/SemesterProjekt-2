@@ -134,7 +134,7 @@ float BoardCutter::getAngle()
 	// Set the transformation values based on the chessboard rotation and position
 	cv::Point2i difference = redPointCenter - greenPointCenter;
 
-	return = -atan2(difference.y, difference.x) * 180 / M_PI - 45;
+	return -atan2(difference.y, difference.x) * 180 / M_PI - 45;
 }
 
 void BoardCutter::zoom(cv::Mat inputImage, cv::Mat &outputImage, double zoomFactor, cv::Point2i offset)

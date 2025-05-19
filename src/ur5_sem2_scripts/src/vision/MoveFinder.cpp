@@ -6,6 +6,7 @@
 #include "Utill.h"
 #include "ImageDrawer.h"
 #include <math.h>
+#include "ur5_sem2_scripts/logger/Logger.h"
 
 MoveFinder::MoveFinder() {}
 MoveFinder::~MoveFinder() {}
@@ -93,7 +94,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
-
 	// normalize everthing to 0-5
 	for (int i = 0; i < 8; i++)
 	{
@@ -102,7 +102,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 			diffBoardArray[i][j] = diffBoardArray[i][j] / maxDiff * 5;
 		}
 	}
-
 
 	// Square root of the normalized value
 	float exponent = 0.33f;
@@ -123,7 +122,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 		std::cout << std::endl;
 	}
-
 
 	// Vector to store {change value, row, col}
 	std::vector<std::tuple<float, int, int>> tileChanges;
@@ -162,12 +160,6 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 		}
 	}
 
-
-	
-
-
-
-
 	float castleWeight = 1.5f;
 	float castleScoreWQ = (diffBoardArray[7][0] + diffBoardArray[7][2] + diffBoardArray[7][3] + diffBoardArray[7][4]) / castleWeight;
 	float castleScoreWK = (diffBoardArray[7][5] + diffBoardArray[7][6] + diffBoardArray[7][4] + diffBoardArray[7][7]) / castleWeight;
@@ -204,7 +196,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 			tilePairs.emplace_back(enPassantBQSide, 3, file - 1, 2, file);
 		}
 		else
-			// If the file is not 0 or 7, the pawn can be taken from both sides.
+		// If the file is not 0 or 7, the pawn can be taken from both sides.
 		{
 			enPassantWKSide = (diffBoardArray[5][file] + diffBoardArray[4][file] + diffBoardArray[4][file + 1]) / enPassantWeight;
 			enPassantBKSide = (diffBoardArray[2][file] + diffBoardArray[3][file] + diffBoardArray[3][file + 1]) / enPassantWeight;
@@ -238,6 +230,18 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// std::cout << "actualMoveCol2 = " << std::get<4>(tilePairs[depth]) << std::endl;
 	// std::cout << "first tile score = " << diffBoardArray[std::get<1>(tilePairs[depth])][std::get<2>(tilePairs[depth])] << std::endl;
 	// std::cout << "second tile score = " << diffBoardArray[std::get<3>(tilePairs[depth])][std::get<4>(tilePairs[depth])] << std::endl;
+
+	std::string mostLikelyMove       = Utill::translateIntMoveToString(std::get<1>(tilePairs[0]) * 1000 + std::get<2>(tilePairs[0]) * 100 + std::get<3>(tilePairs[0]) * 10 + std::get<4>(tilePairs[0]));
+	std::string secondMostLikelyMove = Utill::translateIntMoveToString(std::get<1>(tilePairs[1]) * 1000 + std::get<2>(tilePairs[1]) * 100 + std::get<3>(tilePairs[1]) * 10 + std::get<4>(tilePairs[1]));
+	std::string thirdMostLikelyMove  = Utill::translateIntMoveToString(std::get<1>(tilePairs[2]) * 1000 + std::get<2>(tilePairs[2]) * 100 + std::get<3>(tilePairs[2]) * 10 + std::get<4>(tilePairs[2]));
+
+	Logger::setValue(MOST_LIKELY_CAMERA_MOVE, mostLikelyMove);
+	Logger::setValue(SECOND_MOST_LIKELY_CAMERA_MOVE, secondMostLikelyMove);
+	Logger::setValue(THIRD_MOST_LIKELY_CAMERA_MOVE, thirdMostLikelyMove);
+
+	Logger::setValue(MOST_LIKELY_CAMERA_MOVE_SCORE, std::to_string(std::get<0>(tilePairs[0])));
+	Logger::setValue(SECOND_MOST_LIKELY_CAMERA_MOVE_SCORE, std::to_string(std::get<0>(tilePairs[1])));
+	Logger::setValue(THIRD_MOST_LIKELY_CAMERA_MOVE_SCORE, std::to_string(std::get<0>(tilePairs[2])));
 
 	return std::get<1>(tilePairs[depth]) * 1000 + std::get<2>(tilePairs[depth]) * 100 + std::get<3>(tilePairs[depth]) * 10 + std::get<4>(tilePairs[depth]);
 }

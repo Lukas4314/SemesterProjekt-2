@@ -1,4 +1,4 @@
-#include "ur5_sem2_scripts/Logger.h"
+#include "ur5_sem2_scripts/logger/Logger.h"
 #include <iostream>
 #include <sstream>
 #include <iomanip>
@@ -132,7 +132,7 @@ void Logger::setStandardValues()
     setValue(MOVE_COUNT, "Null");
     setValue(CAMERA_MOVE, "Null");
     setValue(MOVE, "Null");
-    
+
     // Gripper related values
     setValue(GRIPPER_PICKUP_OWN_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS, "1");
@@ -142,15 +142,15 @@ void Logger::setStandardValues()
     setValue(GRIPPER_PICKUP_ENEMY_PIECE, "0");
     setValue(GRIPPER_PICKUP_ENEMY_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS, "1");
-    
+
     // Castling
     setValue(EXTRA_PICKUP_FOR_CASTLING, "0");
     setValue(EXTRA_PICKUP_FOR_CASTLING_SUCCESS, "1");
-    
+
     // Transformation matrices
     setValue(ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD, "Null");
     setValue(ANGLE_OF_TRANSFORMATION_MATRIX_PEGS, "Null");
-    
+
     // Move tracking
     setValue(MOVES_TRIED_BEFORE_SUCCESS, "Null");
     setValue(MOST_LIKELY_CAMERA_MOVE, "Null");
@@ -162,13 +162,11 @@ void Logger::setStandardValues()
     setValue(ROBOT_MANAGES_TO_MAKE_MOVEMENT, "1");
 }
 
-#include <vector>
-#include <string>
-
-std::vector<std::string> getAllLoggerKeys() {
+std::vector<const char *> Logger::getAllLoggerKeys()
+{
     return {
         // Core move tracking
-        HALF_MOVES,
+        MOVE_COUNT,
         CAMERA_MOVE,
         MOVE,
 
@@ -183,8 +181,8 @@ std::vector<std::string> getAllLoggerKeys() {
         GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS,
 
         // Castling
-        EXTRA_PICKUP_FOR_CASTLING,          
-        EXTRA_PICKUP_FOR_CASTLING_SUCCESS,  
+        EXTRA_PICKUP_FOR_CASTLING,
+        EXTRA_PICKUP_FOR_CASTLING_SUCCESS,
 
         // Transformation matrices
         ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD,
@@ -193,15 +191,14 @@ std::vector<std::string> getAllLoggerKeys() {
         // Move prediction
         MOVES_TRIED_BEFORE_SUCCESS,
         MOST_LIKELY_CAMERA_MOVE,
-        SECOND_MOST_LIKELY_CAMERA_MOVE,      
+        SECOND_MOST_LIKELY_CAMERA_MOVE,
         THIRD_MOST_LIKELY_CAMERA_MOVE,
         MOST_LIKELY_CAMERA_MOVE_SCORE,
         SECOND_MOST_LIKELY_CAMERA_MOVE_SCORE,
         THIRD_MOST_LIKELY_CAMERA_MOVE_SCORE,
 
         // Final status
-        ROBOT_MANAGES_TO_MAKE_MOVEMENT
-    };
+        ROBOT_MANAGES_TO_MAKE_MOVEMENT};
 }
 
 void Logger::close()
