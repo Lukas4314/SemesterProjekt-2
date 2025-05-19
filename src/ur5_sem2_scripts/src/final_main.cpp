@@ -14,6 +14,7 @@
 #include "ur5_sem2_scripts/board/ChessBoard.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
 #include "ur5_sem2_scripts/vision/Utill.h"
+#include "ur5_sem2_scripts/logger/Logger.h"
 
 void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger)
 {
@@ -36,6 +37,8 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_PEGS, std::to_string(allInOneMain.getBoardCutter(0).getAngle()));
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD, std::to_string(allInOneMain.getBoardCutter(1).getAngle()));
 
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = yellowPlok_boardGreen_T_pixels;
 
@@ -44,8 +47,8 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_pixels[1][3] / pixelPerCm;
 
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
-  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 2.5;
-  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 2.5;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 1.6;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 1.6;
 
   std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
                                                                 {-1, 0, 0, 25},
@@ -60,9 +63,10 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
                                                                {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
 
-  float boardSize = 0.288;
-  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize},
-                                                                   {-1, 0, 0, boardSize},
+  float boardSize = 0.295;
+  float cali = 0.01;
+  std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
+                                                                   {-1, 0, 0, boardSize + cali},
                                                                    {0, 0, -1, 0},
                                                                    {0, 0, 0, 1}}};
 
@@ -88,6 +92,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
 
 MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
 {
+  Logger::setValue(CAMERA_MOVE, "1");
   string move;
   bool succesMove;
   int moveDepth = 0;
@@ -101,13 +106,15 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
     moveDepth++;
 
   } while (!succesMove);
-
   cout << "Camera Move is: " << move << endl;
   chess.printBoard();
+
+  Logger::setValue(MOVES_TRIED_BEFORE_SUCCESS, to_string(moveDepth));
 
   // Here it needs to get movestruct
   MoveStruct movePlan;
   movePlan = chess.getMoveStruct();
+
   if (movePlan.captured != '-')
   {
     movePlan.type = 'k';
@@ -177,6 +184,10 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
 
 int main(int argc, char *argv[])
 {
+
+  // Make logger for csv file
+  Logger::initialize(Logger::getAllLoggerKeys());
+
   // Initialize ROS and create the Node
   rclcpp::init(argc, argv);
   auto const node = std::make_shared<rclcpp::Node>(
@@ -205,8 +216,9 @@ int main(int argc, char *argv[])
   if (!playerWhite)
   {
     applyStockfishMove(engine, chess);
+    Logger::setValue(CAMERA_MOVE, "0");
+    Logger::writeRow();
   }
-
 
   bool instaQuit = false;
   if (cv::waitKey(0) == 'q')
@@ -216,6 +228,9 @@ int main(int argc, char *argv[])
 
   while (!instaQuit)
   {
+
+    // Gets a move from the camera and checks if it is valid and repeats until it is
+    MoveStruct movePlanCamera = applyCameraMove(allInOneMain, chess);
     // Gets the transformation matrix
     std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(allInOneMain);
 
@@ -229,9 +244,6 @@ int main(int argc, char *argv[])
       }
     }
 
-    // Gets a move from the camera and checks if it is valid and repeats until it is
-    MoveStruct movePlanCamera = applyCameraMove(allInOneMain, chess);
-
     if (chess.isMated(chess.getActiveColor()))
     {
       cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
@@ -243,10 +255,15 @@ int main(int argc, char *argv[])
       cout << "Remi! " << endl;
       break;
     }
+
     chessMoves.move(movePlanCamera, raw_TF);
+
+    // Writes the row before stockfish starts playing
+    Logger::writeRow();
 
     // Applies the move from stokfish
     MoveStruct movePlan;
+
     movePlan = applyStockfishMove(engine, chess);
     std::cout << "Now trying to move robot with best move " << std::endl;
     chessMoves.move(movePlan, raw_TF);
@@ -274,16 +291,27 @@ int main(int argc, char *argv[])
     }
 
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-    // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
-    std::cout << "Press a button when the robot has made its move" << std::endl;
-    if (cv::waitKey(0) == 'q')
-    {
-      break;
-    }
+
+    /*
+     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
+     std::cout << "Press a button when the robot has made its move" << std::endl;
+     if (cv::waitKey(0) == 'q')
+     {
+       break;
+     }
+     */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+
+
+
+
 
     // Just for opdating the camera image
     allInOneMain.getPieceMovedString(0);
+
+    //writes the row after stockfish has played
+    Logger::writeRow();
+
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')

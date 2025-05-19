@@ -92,7 +92,7 @@ int main()
             if (status == GRIPPER_OPEN)
             {
                 gripper.close();
-                timeIndexForADC = 50;
+                timeIndexForADC = 200;
                 putchar(GRIPPER_ACK);
                 status = GRIPPER_CLOSING;
             }
