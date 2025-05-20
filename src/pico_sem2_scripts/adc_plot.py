@@ -10,7 +10,7 @@ fig, ax = plt.subplots()
 
 data = [0] * 100  # Start med dummy-værdier
 line, = ax.plot(data)
-ax.set_ylim(0, 4095)  # Hvis du bruger 12-bit ADC på Pico
+ax.set_ylim(0, 500)  # Hvis du bruger 12-bit ADC på Pico
 
 while True:
     try:
