@@ -45,6 +45,7 @@ private:
     string castlingRights;
     string enPassant;
     int halfMoveClock;
+    int moveCount;
 
     vector<string> moveHistory; 
 

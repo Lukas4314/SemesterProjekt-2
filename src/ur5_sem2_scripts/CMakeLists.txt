@@ -23,6 +23,14 @@ find_package(moveit_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 
 
+# === logger Library ===
+file(GLOB LOGGER_SRCS CONFIGURE_DEPENDS src/logger/*.cpp)
+add_library(LoggerModule ${LOGGER_SRCS})
+target_include_directories(LoggerModule PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/logger
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 # === Moveplanner Library ===
 file(GLOB MOVE_SRCS CONFIGURE_DEPENDS src/moveplanner/*.cpp)
 add_library(MoveplannerModule ${MOVE_SRCS})
@@ -35,7 +43,7 @@ target_include_directories(MoveplannerModule PUBLIC
     ${OpenCV_INCLUDE_DIRS}
 )
 ament_target_dependencies(MoveplannerModule rclcpp geometry_msgs tf2_ros std_msgs moveit_ros_planning_interface)
-target_link_libraries(MoveplannerModule PicoCommModule)
+target_link_libraries(MoveplannerModule PicoCommModule LoggerModule)
 
 # === Vision Library ===
 file(GLOB VISION_SRCS CONFIGURE_DEPENDS src/vision/*.cpp)
@@ -44,7 +52,7 @@ target_include_directories(VisionModule PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
     ${OpenCV_INCLUDE_DIRS}
 )
-target_link_libraries(VisionModule ${OpenCV_LIBS})
+target_link_libraries(VisionModule ${OpenCV_LIBS} LoggerModule)
 ament_target_dependencies(VisionModule rclcpp)
 
 # === Board Library ===
@@ -55,7 +63,7 @@ target_include_directories(BoardModule PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/vision
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
-target_link_libraries(BoardModule VisionModule)
+target_link_libraries(BoardModule VisionModule LoggerModule)
 ament_target_dependencies(BoardModule rclcpp)
 
 # === PicoComm Library ===
@@ -65,6 +73,7 @@ target_include_directories(PicoCommModule PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/ur5_sem2_scripts/pico_comm
 )
 ament_target_dependencies(PicoCommModule rclcpp)
+target_link_libraries(PicoCommModule LoggerModule)
 
 
 
@@ -78,6 +87,9 @@ add_executable(robot_main src/robot_main.cpp src/BoardTransformer.cpp)
 add_executable(vision_main src/vision_main.cpp)
 add_executable(board_test_main src/TestBoard.cpp)
 add_executable(final_main src/final_main.cpp src/BoardTransformer.cpp)
+add_executable(test_main src/test_main.cpp)
+
+
 
 target_include_directories(robot_main PUBLIC include)
 # Apply dependencies to all executables
@@ -87,16 +99,18 @@ ament_target_dependencies(chess_frame rclcpp ur_client_library tf2_ros geometry_
 ament_target_dependencies(square_move rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
 ament_target_dependencies(readJoints rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
 ament_target_dependencies(robot_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
-target_link_libraries(robot_main MoveplannerModule VisionModule BoardModule)  # Link with the libraries
+ament_target_dependencies(test_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
+
+target_link_libraries(robot_main MoveplannerModule VisionModule BoardModule LoggerModule)  # Link with the libraries
 ament_target_dependencies(vision_main rclcpp)
-target_link_libraries(vision_main VisionModule BoardModule)  # Link with the libraries
+target_link_libraries(vision_main VisionModule BoardModule LoggerModule)  # Link with the libraries
 ament_target_dependencies(board_test_main rclcpp)
-target_link_libraries(board_test_main VisionModule BoardModule)  # Link with the libraries
+target_link_libraries(board_test_main VisionModule BoardModule LoggerModule)  # Link with the libraries
 ament_target_dependencies(final_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
-target_link_libraries(final_main MoveplannerModule VisionModule BoardModule)  # Link with the libraries
+target_link_libraries(final_main MoveplannerModule VisionModule BoardModule LoggerModule)  # Link with the libraries
 
 # Install executables
-install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main final_main
+install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main final_main test_main
   DESTINATION lib/${PROJECT_NAME})
 
 # Install library (ChessMoves) properly
