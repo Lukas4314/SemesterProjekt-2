@@ -9,9 +9,6 @@ public:
 	const static int hsvMode = 1;
 	const static int hsvMode2 = 2;
 
-	static constexpr double hueExponent = 1;
-	static constexpr double saturationExponent = 1;
-	static constexpr double valueExponent = 1;
 
 	ImageFinder();
 	void testStart();
@@ -20,7 +17,7 @@ public:
 
 	static void hueHeatmapWithParams(cv::Mat inputImage, cv::Mat &outputImage, int minSat, int maxSat, int minVal, int maxVal);
 
-	static void showHSVChannelDifferences(const cv::Mat& image, const cv::Scalar& bgrColor);
+	static void showHSVChannelDifferences(const cv::Mat& image, const cv::Scalar& bgrColor, const std::string& name = "default");
 
 	static void showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2, std::string name = "default");
 

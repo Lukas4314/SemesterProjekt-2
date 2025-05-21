@@ -199,14 +199,16 @@ int main(int argc, char *argv[])
   int camera_index;
   node->get_parameter("camera_index", camera_index); // Retrieve the parameter
 
+  // 
+  AllInOneMain allInOneMain = AllInOneMain(camera_index);
+  allInOneMain.flushCamera();
+
   ChessMoves chessMoves(node);
   chessMoves.move_to_idle();
 
   // Create a chessboard object
   ChessBoard chess;
   StockfishUCI engine;
-
-  AllInOneMain allInOneMain = AllInOneMain(camera_index);
 
   // Takes start image
   allInOneMain.getPieceMovedString(0);
@@ -302,16 +304,11 @@ int main(int argc, char *argv[])
      */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-
-
-
-
     // Just for opdating the camera image
     allInOneMain.getPieceMovedString(0);
 
-    //writes the row after stockfish has played
+    // writes the row after stockfish has played
     Logger::writeRow();
-
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')
