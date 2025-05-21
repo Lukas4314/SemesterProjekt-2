@@ -184,10 +184,6 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
 
 int main(int argc, char *argv[])
 {
-  // First set up the camera and flood it in case of any focus or color issues when first using the camera
-  // Setting up the ROS stuff takes some time which gives the camera time to adjust hopefully, and therefore can avoid sleeping for a second wasting time
-  AllInOneMain allInOneMain = AllInOneMain(camera_index);
-  allInOneMain.flushCamera();
 
   // Make logger for csv file
   Logger::initialize(Logger::getAllLoggerKeys());
@@ -202,6 +198,10 @@ int main(int argc, char *argv[])
   auto const logger = rclcpp::get_logger("final_main");
   int camera_index;
   node->get_parameter("camera_index", camera_index); // Retrieve the parameter
+
+  // 
+  AllInOneMain allInOneMain = AllInOneMain(camera_index);
+  allInOneMain.flushCamera();
 
   ChessMoves chessMoves(node);
   chessMoves.move_to_idle();
