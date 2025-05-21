@@ -57,48 +57,36 @@ int AllInOneMain::getPieceMoved(int depth)
 		oldChessboard = chessboard.clone();
 	}
 
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
+	flushCamera();
 
 	cv::imshow("Original frame", chessWithMarkedCornors);
 
+	// Get the different colors
+	cv::Vec3b yellowCircleColor = yellowCircle.at<cv::Vec3b>(0, 0);
+	cv::Vec3b redCircleColor = redCircle.at<cv::Vec3b>(0, 0);
+	cv::Vec3b greenCircleColor = greenCircle.at<cv::Vec3b>(0, 0);
 
-	/*
-	cv::Point2i boundingBoxStart = cv::Point2i(550, 120);
-	cv::Rect boundingBox = cv::Rect(boundingBoxStart.x, boundingBoxStart.y, 780, chessWithMarkedCornors.rows - boundingBoxStart.y - 100);
-	std::cout << chessWithMarkedCornors.size() << std::endl;
-	chessWithMarkedCornors = chessWithMarkedCornors(boundingBox);
+	// Convert to Scalar (B, G, R)
+	cv::Scalar yellowCircleScalar(yellowCircleColor[0], yellowCircleColor[1], yellowCircleColor[2]);
+	cv::Scalar redCircleScalar(redCircleColor[0], redCircleColor[1], redCircleColor[2]);
+	cv::Scalar greenCircleScalar(greenCircleColor[0], greenCircleColor[1], greenCircleColor[2]);
 
-
-
-	cv::imshow("chessWithMarkedCornors hard coded cutted", chessWithMarkedCornors.clone());
-
-*/
-
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorPegSearch");
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, yellowCircleScalar, "YellowColorPegSearch");
 
 	float circleScale2 = 1.4;
 	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
+
 	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
 
-	//boardCutter2.getCornorPoints(chessWithMarkedCornors, yellowCircle, redCircle, mask, 1.2, ImageFinder::hsvMode2);
-
-
-	// cv::imshow("cutBoard", chessWithMarkedCornors2.clone());
-
-	// cv::Vec3b pixel = greenCircle.at<cv::Vec3b>(0, 0);		  // Get the first pixel (row=0, col=0)
-	// cv::Scalar firstPixelColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
-	// ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, firstPixelColor);
+	// Show the differences for the chessboard
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, greenCircleScalar, "greenColorBoardSearch");
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorBoardSearch");
 
 	// Cut out chessboard
 	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.45, ImageFinder::hsvMode2);
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(chessboard.cols / 2, chessboard.rows / 2), 180, 1);
 	cv::warpAffine(chessboard, chessboard, rotationMatrix, chessboard.size());
-
 
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);
@@ -146,5 +134,13 @@ BoardCutter AllInOneMain::getBoardCutter(int index)
 	{
 		std::cout << "Invalid index" << std::endl;
 		return boardCutter;
+	}
+}
+
+void AllInOneMain::flushCamera()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		cap >> chessWithMarkedCornors;
 	}
 }
