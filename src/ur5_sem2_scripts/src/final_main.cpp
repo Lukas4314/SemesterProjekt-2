@@ -310,6 +310,8 @@ int main(int argc, char *argv[])
     // writes the row after stockfish has played
     Logger::writeRow();
 
+    chess.printBoard();
+
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')
     {
