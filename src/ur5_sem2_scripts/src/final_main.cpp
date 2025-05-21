@@ -99,7 +99,7 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
 
   do
   {
-    move = allInOneMain.getPieceMovedString(moveDepth);
+    move = allInOneMain.getPieceMovedString(moveDepth, CAMERA);
     cout << "Move is: " << move << endl;
     succesMove = chess.applyIfValidMove(move);
     cout << "Succes move: " << succesMove << endl;
@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
   StockfishUCI engine;
 
   // Takes start image
-  allInOneMain.getPieceMovedString(0);
+  allInOneMain.getPieceMovedString(0, CAMERA);
 
   // if the player wants to be black
   bool playerWhite = true;
