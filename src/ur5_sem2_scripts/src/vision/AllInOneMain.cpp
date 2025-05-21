@@ -57,13 +57,7 @@ int AllInOneMain::getPieceMoved(int depth)
 		oldChessboard = chessboard.clone();
 	}
 
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
-	cap >> chessWithMarkedCornors;
+	flushCamera();
 
 	cv::imshow("Original frame", chessWithMarkedCornors);
 
@@ -146,5 +140,15 @@ BoardCutter AllInOneMain::getBoardCutter(int index)
 	{
 		std::cout << "Invalid index" << std::endl;
 		return boardCutter;
+	}
+}
+
+
+
+void AllInOneMain::flushCamera()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		cap >> chessWithMarkedCornors;
 	}
 }

@@ -10,6 +10,7 @@ public:
 	int getPieceMoved(int depth = 0);
 	std::string getPieceMovedString(int depth = 0);
 	BoardCutter getBoardCutter(int index);
+	void flushCamera();
 private:
 	cv::VideoCapture cap;
 	cv::Mat greenCircle;

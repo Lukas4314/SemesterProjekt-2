@@ -184,6 +184,10 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
 
 int main(int argc, char *argv[])
 {
+  // First set up the camera and flood it in case of any focus or color issues when first using the camera
+  // Setting up the ROS stuff takes some time which gives the camera time to adjust hopefully, and therefore can avoid sleeping for a second wasting time
+  AllInOneMain allInOneMain = AllInOneMain(camera_index);
+  allInOneMain.flushCamera();
 
   // Make logger for csv file
   Logger::initialize(Logger::getAllLoggerKeys());
@@ -205,8 +209,6 @@ int main(int argc, char *argv[])
   // Create a chessboard object
   ChessBoard chess;
   StockfishUCI engine;
-
-  AllInOneMain allInOneMain = AllInOneMain(camera_index);
 
   // Takes start image
   allInOneMain.getPieceMovedString(0);
@@ -302,16 +304,11 @@ int main(int argc, char *argv[])
      */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
-
-
-
-
     // Just for opdating the camera image
     allInOneMain.getPieceMovedString(0);
 
-    //writes the row after stockfish has played
+    // writes the row after stockfish has played
     Logger::writeRow();
-
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')
