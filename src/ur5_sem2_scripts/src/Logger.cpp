@@ -95,6 +95,7 @@ void Logger::initialize(const std::vector<const char *> &headerNames)
         writeHeaders();
         std::cout << "Logger initialized: " << fileName << std::endl;
     }
+    setStandardValues();
 }
 
 void Logger::setValue(const char *headerName, const std::string &value)
