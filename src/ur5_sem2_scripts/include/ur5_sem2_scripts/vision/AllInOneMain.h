@@ -2,15 +2,20 @@
 #include "BoardCutter.h"
 #include <string>
 #pragma once
+
+const std::string CAMERA = "Camera";
+const std::string ENGINE = "Engine";
+
 class AllInOneMain
 {
 public:
 	AllInOneMain(int camera_index);
 	~AllInOneMain();
-	int getPieceMoved(int depth = 0);
-	std::string getPieceMovedString(int depth = 0);
+	int getPieceMoved(int depth = 0, const std::string = "MISSING");
+	std::string getPieceMovedString(int depth = 0, const std::string = "MISSING");
 	BoardCutter getBoardCutter(int index);
 	void flushCamera();
+
 private:
 	cv::VideoCapture cap;
 	cv::Mat greenCircle;
@@ -23,7 +28,4 @@ private:
 	cv::Mat chessboard;
 	BoardCutter boardCutter;
 	BoardCutter boardCutter2;
-
-
 };
-
