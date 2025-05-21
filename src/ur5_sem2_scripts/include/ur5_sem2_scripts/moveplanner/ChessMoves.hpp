@@ -28,6 +28,8 @@ public:
     bool playercapture(MoveStruct move, double TFchess[4][4]);
     bool execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight = {{false, false}});
 
+    void setEndEffectorAngle(float angle) { end_effector_angle = angle; }
+
     std::array<double, 2> applyTransformation(int point[2], double TFchess[4][4]);
 
     const std::array<std::array<double, 4>, 4> TFRed =
@@ -51,6 +53,8 @@ private:
     const float idle_position[3] = {0.15, 0.0, TRANSFERHEIGHT}; // Idle position of the robot
     const float tile_size = 0.0353;                             // Size of each square on the chess board
 
+    float end_effector_angle = 0.0; // Angle of the end effector
+    
     Gripper gripper; // Gripper object to control the gripper
 
     const float death_positionsleft[16][2] = {
