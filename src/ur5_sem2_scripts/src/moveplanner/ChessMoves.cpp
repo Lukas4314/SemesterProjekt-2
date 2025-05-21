@@ -396,7 +396,7 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     waypoints.push_back(start_pose);
     geometry_msgs::msg::Pose pose1;
     // Set orientation using a quaternion
-    quat.setRPY(0, M_PI, 0);
+    quat.setRPY(end_effector_angle, M_PI, 0);
     pose1.orientation.x = quat.x();
     pose1.orientation.y = quat.y();
     pose1.orientation.z = quat.z();
