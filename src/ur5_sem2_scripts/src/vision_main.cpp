@@ -1,6 +1,6 @@
 #include "iostream"
 #include "string"
-#include "AllInOneMain.h"
+#include "VisionInterface.h"
 #include "opencv2/opencv.hpp"
 #include <string>
 #include "ChessBoard.h"
@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
         activeColor = "w";
     }
 
-    AllInOneMain allInOneMain = AllInOneMain(camera_index);
-    allInOneMain.getPieceMovedString(0);
+    VisionInterface visionInterface = VisionInterface(camera_index);
+    visionInterface.getPieceMovedString(0);
     
 
     // If the user chooses black, Stockfish makes the first move
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
             do
             {
-                move = allInOneMain.getPieceMovedString(moveDepth);
+                move = visionInterface.getPieceMovedString(moveDepth);
                 cout << "Move is: " << move << endl;
                 succesMove = chess.applyIfValidMove(move);
                 cout << "Succes move: " << succesMove << endl;
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
 
         do
         {
-            move = allInOneMain.getPieceMovedString(moveDepth);
+            move = visionInterface.getPieceMovedString(moveDepth);
             cout << "Move is: " << move << endl;
             succesMove = chess.applyIfValidMove(move);
             cout << "Succes move: " << succesMove << endl;
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
         moveCounter++;
         cout << "Move counter: " << moveCounter << endl;
 
-        allInOneMain.getPieceMovedString(0);
+        visionInterface.getPieceMovedString(0);
         cout << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" << endl;
         if (cv::waitKey(0) == 'q')
         {

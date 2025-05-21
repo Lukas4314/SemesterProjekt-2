@@ -1,4 +1,4 @@
-#include "AllInOneMain.h"
+#include "VisionInterface.h"
 #include "ImageFinder.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -11,7 +11,7 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
 
-AllInOneMain::AllInOneMain(int camera_index)
+VisionInterface::VisionInterface(int camera_index)
 {
 	std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
 
@@ -35,9 +35,9 @@ AllInOneMain::AllInOneMain(int camera_index)
 	boardCutter = BoardCutter();
 	boardCutter2 = BoardCutter("BoardCutter2");
 }
-AllInOneMain::~AllInOneMain() {}
+VisionInterface::~VisionInterface() {}
 
-int AllInOneMain::getPieceMoved(int depth, const std::string calledBy)
+int VisionInterface::getPieceMoved(int depth, const std::string calledBy)
 {
 
 	if (depth != 0 && calledBy == CAMERA)
@@ -118,13 +118,13 @@ int AllInOneMain::getPieceMoved(int depth, const std::string calledBy)
 	return 0;
 }
 
-std::string AllInOneMain::getPieceMovedString(int depth, const std::string calledBy)
+std::string VisionInterface::getPieceMovedString(int depth, const std::string calledBy)
 {
 	std::string move = Utill::translateIntMoveToString(getPieceMoved(depth, calledBy));
 	return move;
 }
 
-BoardCutter AllInOneMain::getBoardCutter(int index)
+BoardCutter VisionInterface::getBoardCutter(int index)
 {
 	if (index == 0)
 	{
@@ -141,7 +141,7 @@ BoardCutter AllInOneMain::getBoardCutter(int index)
 	}
 }
 
-void AllInOneMain::flushCamera()
+void VisionInterface::flushCamera()
 {
 	for (int i = 0; i < 10; i++)
 	{
