@@ -109,6 +109,9 @@ target_link_libraries(board_test_main VisionModule BoardModule LoggerModule)  # 
 ament_target_dependencies(final_main rclcpp ur_client_library tf2_ros geometry_msgs std_msgs moveit_ros_planning_interface)
 target_link_libraries(final_main MoveplannerModule VisionModule BoardModule LoggerModule)  # Link with the libraries
 
+target_link_libraries(test_main LoggerModule)  # Link with the libraries
+
+
 # Install executables
 install(TARGETS simple_move svejse_frame chess_frame square_move readJoints robot_main vision_main board_test_main final_main test_main
   DESTINATION lib/${PROJECT_NAME})

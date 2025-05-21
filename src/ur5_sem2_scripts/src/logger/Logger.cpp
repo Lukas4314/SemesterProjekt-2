@@ -28,10 +28,13 @@ std::string Logger::generateUniqueFileName()
     std::string finalName;
     int counter = 0;
 
+    // Sæt log-mappen her:
+    std::string folderPath = "Logs/";
+
     do
     {
         std::ostringstream oss;
-        oss << baseName;
+        oss << folderPath << baseName;
         if (counter > 0)
             oss << "_" << counter;
         oss << ".csv";
