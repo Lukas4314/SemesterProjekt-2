@@ -305,7 +305,7 @@ int main(int argc, char *argv[])
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     // Just for opdating the camera image
-    allInOneMain.getPieceMovedString(0);
+    allInOneMain.getPieceMovedString(0, ENGINE);
 
     // writes the row after stockfish has played
     Logger::writeRow();

@@ -93,7 +93,7 @@ void Logger::initialize(const std::vector<const char *> &headerNames)
 
         buffer.assign(headers.size(), "");
         writeHeaders();
-        setStandardValues():
+        setStandardValues();
         std::cout << "Logger initialized: " << fileName << std::endl;
     }
 }

@@ -3,16 +3,16 @@
 #include <string>
 #pragma once
 
-static const int CAMERA = 0;
-static const int ENGINE = 1;
+const std::string CAMERA = "Camera";
+const std::string ENGINE = "Engine";
 
 class AllInOneMain
 {
 public:
 	AllInOneMain(int camera_index);
 	~AllInOneMain();
-	int getPieceMoved(int depth = 0);
-	std::string getPieceMovedString(int depth = 0, int calledBy);
+	int getPieceMoved(int depth = 0, const std::string = "MISSING");
+	std::string getPieceMovedString(int depth = 0, const std::string = "MISSING");
 	BoardCutter getBoardCutter(int index);
 	void flushCamera();
 
