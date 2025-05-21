@@ -35,12 +35,22 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	ImageFinder::adjustHSVChannels(diffBoardHsvColorChannels, hueExponent, saturationExponent, valueExponent);
 
-	// Normalize to 8-bit for better visualization
+	// Normalize to 8-bit
 	cv::normalize(diffBoardHsvColorChannels[0], diffBoardHsvColorChannels[0], 0, 255, cv::NORM_MINMAX);
 	cv::normalize(diffBoardHsvColorChannels[1], diffBoardHsvColorChannels[1], 0, 255, cv::NORM_MINMAX);
 	cv::normalize(diffBoardHsvColorChannels[2], diffBoardHsvColorChannels[2], 0, 255, cv::NORM_MINMAX);
 
-	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]) / 3;
+	float hueWeight = 1.0f;
+	float saturationWeight = 2.0f;
+	float valueWeight = 1.0f;
+	float totalWeight = hueWeight + saturationWeight + valueWeight;
+
+	// Apply weights to each channel
+	diffBoardHsvColorChannels[0] *= hueWeight;
+	diffBoardHsvColorChannels[1] *= saturationWeight;
+	diffBoardHsvColorChannels[2] *= valueWeight;
+
+	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]) / totalWeight;
 
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;

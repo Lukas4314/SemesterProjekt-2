@@ -64,7 +64,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
 
   float boardSize = 0.295;
-  float cali = 0.01;
+  float cali = 0.011;
   std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
                                                                    {-1, 0, 0, boardSize + cali},
                                                                    {0, 0, -1, 0},

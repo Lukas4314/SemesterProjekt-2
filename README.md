@@ -45,3 +45,7 @@ start debug mode:
 --log-level DEBUG 
 ```
 
+# For Pico R/W access
+sudo chmod a+rw /dev/ttyACM0
+
+
