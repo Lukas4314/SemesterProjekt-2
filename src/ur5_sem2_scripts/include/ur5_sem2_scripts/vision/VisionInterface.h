@@ -6,11 +6,11 @@
 const std::string CAMERA = "Camera";
 const std::string ENGINE = "Engine";
 
-class AllInOneMain
+class VisionInterface
 {
 public:
-	AllInOneMain(int camera_index);
-	~AllInOneMain();
+	VisionInterface(int camera_index);
+	~VisionInterface();
 	int getPieceMoved(int depth = 0, const std::string = "MISSING");
 	std::string getPieceMovedString(int depth = 0, const std::string = "MISSING");
 	BoardCutter getBoardCutter(int index);

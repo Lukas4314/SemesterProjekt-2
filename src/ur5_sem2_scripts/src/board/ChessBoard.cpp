@@ -145,9 +145,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
         moveStruct.start[0] = 4;
-        moveStruct.start[1] = 0;
+        moveStruct.start[1] = 7;
         moveStruct.end[0] = 2;
-        moveStruct.end[1] = 0;
+        moveStruct.end[1] = 7;
         moveStruct.type = 'c';
     }
     else if (move == "wK")
@@ -155,9 +155,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 6); // Move the king
         movePiece(7, 7, 7, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1g1");
-        moveStruct.start[0] = 0;
+        moveStruct.start[0] = 7;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 0;
+        moveStruct.end[0] = 7;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }
@@ -167,9 +167,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 2); // Move the king
         movePiece(0, 0, 0, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8c8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 2;
         moveStruct.type = 'c';
     }
@@ -178,9 +178,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 6); // Move the king
         movePiece(0, 7, 0, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8g8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }

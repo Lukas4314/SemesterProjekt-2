@@ -9,7 +9,7 @@
 #include <vector>
 #include "ur5_sem2_scripts/moveplanner/ChessMoves.hpp"
 #include "ur5_sem2_scripts/moveStruct.hpp"
-#include "ur5_sem2_scripts/vision/AllInOneMain.h"
+#include "ur5_sem2_scripts/vision/VisionInterface.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
 #include "ur5_sem2_scripts/board/ChessBoard.h"
 #include "ur5_sem2_scripts/BoardTransformer.hpp"
@@ -29,16 +29,16 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
   }
 }
 
-std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allInOneMain)
+std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &visionInterface)
 {
   // Create a logger
   auto logger = rclcpp::get_logger("final_main");
   double pixelPerCm = 11.2;
 
   // Makes the transformation matrix from the cam to the yellow plok
-  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = allInOneMain.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
-  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_PEGS, std::to_string(allInOneMain.getBoardCutter(0).getAngle()));
-  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD, std::to_string(allInOneMain.getBoardCutter(1).getAngle()));
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = visionInterface.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_PEGS, std::to_string(visionInterface.getBoardCutter(0).getAngle()));
+  Logger::setValue(ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD, std::to_string(visionInterface.getBoardCutter(1).getAngle()));
 
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = yellowPlok_boardGreen_T_pixels;
 
@@ -90,7 +90,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(AllInOneMain &allIn
   return base_boardRed_T_m;
 }
 
-MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
+MoveStruct applyCameraMove(VisionInterface &visionInterface, ChessBoard &chess)
 {
   Logger::setValue(CAMERA_MOVE, "1");
   string move;
@@ -99,7 +99,7 @@ MoveStruct applyCameraMove(AllInOneMain &allInOneMain, ChessBoard &chess)
 
   do
   {
-    move = allInOneMain.getPieceMovedString(moveDepth, CAMERA);
+    move = visionInterface.getPieceMovedString(moveDepth, CAMERA);
     cout << "Move is: " << move << endl;
     succesMove = chess.applyIfValidMove(move);
     cout << "Succes move: " << succesMove << endl;
@@ -200,18 +200,19 @@ int main(int argc, char *argv[])
   node->get_parameter("camera_index", camera_index); // Retrieve the parameter
 
   // 
-  AllInOneMain allInOneMain = AllInOneMain(camera_index);
-  allInOneMain.flushCamera();
+  VisionInterface visionInterface = VisionInterface(camera_index);
+  visionInterface.flushCamera();
 
   ChessMoves chessMoves(node);
   chessMoves.move_to_idle();
-
+  
+  float end_effector_angle = 0.0;
   // Create a chessboard object
   ChessBoard chess;
   StockfishUCI engine;
 
   // Takes start image
-  allInOneMain.getPieceMovedString(0, CAMERA);
+  visionInterface.getPieceMovedString(0, CAMERA);
 
   // if the player wants to be black
   bool playerWhite = true;
@@ -232,9 +233,9 @@ int main(int argc, char *argv[])
   {
 
     // Gets a move from the camera and checks if it is valid and repeats until it is
-    MoveStruct movePlanCamera = applyCameraMove(allInOneMain, chess);
+    MoveStruct movePlanCamera = applyCameraMove(visionInterface, chess);
     // Gets the transformation matrix
-    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(allInOneMain);
+    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(visionInterface);
 
     // Puts it into the array
     double raw_TF[4][4];
@@ -258,6 +259,8 @@ int main(int argc, char *argv[])
       break;
     }
 
+    end_effector_angle = allInOneMain.getBoardCutter(0).getAngle();
+    chessMoves.setEndEffectorAngle(end_effector_angle);
     chessMoves.move(movePlanCamera, raw_TF);
 
     // Writes the row before stockfish starts playing
@@ -268,6 +271,9 @@ int main(int argc, char *argv[])
 
     movePlan = applyStockfishMove(engine, chess);
     std::cout << "Now trying to move robot with best move " << std::endl;
+
+    end_effector_angle = allInOneMain.getBoardCutter(0).getAngle();
+    chessMoves.setEndEffectorAngle(end_effector_angle);
     chessMoves.move(movePlan, raw_TF);
     std::cout << "Moved the robot" << std::endl;
 
@@ -305,10 +311,12 @@ int main(int argc, char *argv[])
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     // Just for opdating the camera image
-    allInOneMain.getPieceMovedString(0, ENGINE);
+    visionInterface.getPieceMovedString(0, ENGINE);
 
     // writes the row after stockfish has played
     Logger::writeRow();
+
+    chess.printBoard();
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')

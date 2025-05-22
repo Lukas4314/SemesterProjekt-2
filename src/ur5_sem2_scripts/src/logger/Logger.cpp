@@ -31,6 +31,12 @@ std::string Logger::generateUniqueFileName()
     // Sæt log-mappen her:
     std::string folderPath = "Logs/";
 
+    if (!fs::exists(folderPath))
+    {
+        std::cout << "Creating log folder, since it doesn't already exist: " << folderPath << std::endl;
+        fs::create_directory(folderPath);
+    }
+
     do
     {
         std::ostringstream oss;
@@ -129,6 +135,7 @@ void Logger::writeRow()
         logFile << std::endl;
         buffer.assign(headers.size(), "");
     }
+    setStandardValues();
 }
 
 void Logger::setStandardValues()
