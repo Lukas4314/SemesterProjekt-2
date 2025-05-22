@@ -199,13 +199,13 @@ int main(int argc, char *argv[])
   int camera_index;
   node->get_parameter("camera_index", camera_index); // Retrieve the parameter
 
-  // 
+  //
   VisionInterface visionInterface = VisionInterface(camera_index);
   visionInterface.flushCamera();
 
   ChessMoves chessMoves(node);
   chessMoves.move_to_idle();
-  
+
   float end_effector_angle = 0.0;
   // Create a chessboard object
   ChessBoard chess;
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
       break;
     }
 
-    end_effector_angle = allInOneMain.getBoardCutter(0).getAngle();
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
     chessMoves.setEndEffectorAngle(end_effector_angle);
     chessMoves.move(movePlanCamera, raw_TF);
 
@@ -272,7 +272,8 @@ int main(int argc, char *argv[])
     movePlan = applyStockfishMove(engine, chess);
     std::cout << "Now trying to move robot with best move " << std::endl;
 
-    end_effector_angle = allInOneMain.getBoardCutter(0).getAngle();
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+    ;
     chessMoves.setEndEffectorAngle(end_effector_angle);
     chessMoves.move(movePlan, raw_TF);
     std::cout << "Moved the robot" << std::endl;

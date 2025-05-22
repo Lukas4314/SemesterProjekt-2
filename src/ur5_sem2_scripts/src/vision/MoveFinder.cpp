@@ -29,9 +29,9 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	std::vector<cv::Mat> diffBoardHsvColorChannels;
 	cv::split(diffBoard, diffBoardHsvColorChannels);
 
-	double hueExponent = 1;
-	double saturationExponent = 1;
-	double valueExponent = 1;
+	double hueExponent = 2;
+	double saturationExponent = 2;
+	double valueExponent = 2;
 
 	ImageFinder::adjustHSVChannels(diffBoardHsvColorChannels, hueExponent, saturationExponent, valueExponent);
 
@@ -40,17 +40,17 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::normalize(diffBoardHsvColorChannels[1], diffBoardHsvColorChannels[1], 0, 255, cv::NORM_MINMAX);
 	cv::normalize(diffBoardHsvColorChannels[2], diffBoardHsvColorChannels[2], 0, 255, cv::NORM_MINMAX);
 
-	float hueWeight = 1.0f;
-	float saturationWeight = 2.0f;
-	float valueWeight = 1.0f;
+	float hueWeight = 0.25f;
+	float saturationWeight = 1.0f;
+	float valueWeight = 0.25f;
 	float totalWeight = hueWeight + saturationWeight + valueWeight;
 
 	// Apply weights to each channel
-	diffBoardHsvColorChannels[0] *= hueWeight;
-	diffBoardHsvColorChannels[1] *= saturationWeight;
-	diffBoardHsvColorChannels[2] *= valueWeight;
+	diffBoardHsvColorChannels[0] *= hueWeight / totalWeight;
+	diffBoardHsvColorChannels[1] *= saturationWeight / totalWeight;
+	diffBoardHsvColorChannels[2] *= valueWeight / totalWeight;
 
-	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]) / totalWeight;
+	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]);
 
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;
@@ -68,7 +68,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Grid configuration
 	int cellWidth = width / 8;
 	int cellHeight = height / 8;
-	int falloffDistance = 5; // Distance from grid line to start dimming
+	int falloffDistance = 30; // Distance from grid line to start dimming
 
 	for (int y = 0; y < height; ++y)
 	{
