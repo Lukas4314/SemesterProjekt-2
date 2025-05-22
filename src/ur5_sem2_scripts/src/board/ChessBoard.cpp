@@ -583,42 +583,78 @@ MoveStruct ChessBoard::getMoveStruct()
 void ChessBoard::drawBoard()
 {
 
-    const int cellSize = 50; // Size of each cell in pixels
-    const int imageSize = cellSize * 8;
+    const int cellSize = 80;
+    const int boardSize = 8;
+    cv::Mat boardImage(cellSize * boardSize, cellSize * boardSize, CV_8UC3);
 
-    // Create a white image
-    cv::Mat image(imageSize, imageSize, CV_8UC3, cv::Scalar(255, 255, 255));
-
-    // Font settings
-    int fontFace = cv::FONT_HERSHEY_SIMPLEX;
-    double fontScale = 1.0;
-    int thickness = 2;
-
-    for (int row = 0; row < 8; ++row)
+    // Chessboard pattern
+    for (int row = 0; row < boardSize; ++row)
     {
-        for (int col = 0; col < 8; ++col)
+        for (int col = 0; col < boardSize; ++col)
         {
-            char ch = board[row][col];
-            std::string text(1, ch);
+            cv::Scalar color = (row + col) % 2 == 0 ? cv::Scalar(240, 217, 181) : cv::Scalar(181, 136, 99);
+            cv::rectangle(boardImage, cv::Rect(col * cellSize, row * cellSize, cellSize, cellSize), color, -1);
+        }
+    }
+    // Map piece chars to image paths
+    std::unordered_map<char, std::string> pieceImages = {
+        {'P', "/pictures/pieces/wp.png"},
+        {'p', "/pictures/pieces/bp.png"},
+        {'R', "/pictures/pieces/wr.png"},
+        {'r', "/pictures/pieces/br.png"},
+        {'N', "/pictures/pieces/wn.png"},
+        {'n', "/pictures/pieces/bn.png"},
+        {'B', "/pictures/pieces/wb.png"},
+        {'b', "/pictures/pieces/bb.png"},
+        {'Q', "/pictures/pieces/wq.png"},
+        {'q', "/pictures/pieces/bq.png"},
+        {'K', "/pictures/pieces/wk.png"},
+        {'k', "/pictures/pieces/bk.png"},
+    };
 
-            // Get text size
-            int baseline = 0;
-            cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+    // Load all images up front
+    std::unordered_map<char, cv::Mat> loadedPieces;
+    for (const auto &[ch, path] : pieceImages)
+    {
+        loadedPieces[ch] = loadAndResize(path, cellSize);
+    }
 
-            // Calculate center position for the text
-            int x = col * cellSize + (cellSize - textSize.width) / 2;
-            int y = row * cellSize + (cellSize + textSize.height) / 2;
-
-            // Draw rectangle (optional grid)
-            cv::rectangle(image, cv::Point(col * cellSize, row * cellSize),
-                          cv::Point((col + 1) * cellSize, (row + 1) * cellSize),
-                          cv::Scalar(200, 200, 200), 1);
-
-            // Draw the character
-            cv::putText(image, text, cv::Point(x, y), fontFace, fontScale, cv::Scalar(0, 0, 0), thickness);
+    // Draw pieces
+    for (int row = 0; row < boardSize; ++row)
+    {
+        for (int col = 0; col < boardSize; ++col)
+        {
+            char piece = board[row][col];
+            if (piece != ' ' && loadedPieces.count(piece))
+            {
+                cv::Mat &pieceImg = loadedPieces[piece];
+                overlayImage(boardImage, pieceImg, cv::Point(col * cellSize, row * cellSize));
+            }
         }
     }
 
-    // Show the image
-    cv::imshow("Board text representaton", image);
+    cv::imshow("Chessboard", boardImage);
+}
+
+cv::Mat ChessBoard::loadAndResize(const std::string &path, int size)
+{
+    cv::Mat img = cv::imread(path, cv::IMREAD_UNCHANGED); // Load with alpha channel
+    cv::resize(img, img, cv::Size(size, size));
+    return img;
+}
+
+void ChessBoard::overlayImage(cv::Mat &background, const cv::Mat &foreground, cv::Point location)
+{
+    for (int y = 0; y < foreground.rows; ++y)
+    {
+        for (int x = 0; x < foreground.cols; ++x)
+        {
+            cv::Vec4b fgPixel = foreground.at<cv::Vec4b>(y, x);
+            if (fgPixel[3] > 0)
+            { // Alpha > 0
+                background.at<cv::Vec3b>(location.y + y, location.x + x) =
+                    cv::Vec3b(fgPixel[0], fgPixel[1], fgPixel[2]); // BGR
+            }
+        }
+    }
 }
