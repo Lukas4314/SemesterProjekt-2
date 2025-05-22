@@ -220,11 +220,25 @@ int main(int argc, char *argv[])
   float boardAngle = visionInterface.getBoardCutter(0).getAngle();
   if (boardAngle > 90 || boardAngle < -90)
   {
+    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(visionInterface);
+
+    // Puts it into the array
+    double raw_TF[4][4];
+    for (size_t i = 0; i < 4; ++i)
+    {
+      for (size_t j = 0; j < 4; ++j)
+      {
+        raw_TF[i][j] = TF[i][j];
+      }
+    }
+    
+    // Applies the move from stokfish
+    MoveStruct movePlan;
     movePlan = applyStockfishMove(engine, chess);
     std::cout << "Now trying to move robot with best move " << std::endl;
 
     end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
-    ;
+
     chessMoves.setEndEffectorAngle(end_effector_angle);
     chessMoves.move(movePlan, raw_TF);
     std::cout << "Moved the robot" << std::endl;
