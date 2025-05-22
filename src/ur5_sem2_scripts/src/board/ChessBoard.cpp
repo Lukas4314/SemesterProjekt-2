@@ -625,7 +625,7 @@ void ChessBoard::drawBoard()
         for (int col = 0; col < boardSize; ++col)
         {
             char piece = board[row][col];
-            if (piece != ' ' && loadedPieces.count(piece))
+            if (piece != '-' && loadedPieces.count(piece))
             {
                 cv::Mat &pieceImg = loadedPieces[piece];
                 overlayImage(boardImage, pieceImg, cv::Point(col * cellSize, row * cellSize));
