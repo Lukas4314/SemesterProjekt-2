@@ -48,7 +48,7 @@ private:
     moveit::planning_interface::MoveGroupInterface move_group_interface; // MoveGroupInterface requires initialization
     const float TRANSFERHEIGHT = 0.40;                                   // Height to lift piece to transfer
     const float BOARDHEIGHT = 0.228;                                     // Height to set piece down on board
-    const float TABLEHEIGHT = 0.214;                                     // Height of the table
+    const float TABLEHEIGHT = 0.212;                                     // Height of the table
 
     const float idle_position[3] = {0.15, 0.0, TRANSFERHEIGHT}; // Idle position of the robot
     const float tile_size = 0.0353;                             // Size of each square on the chess board
