@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <string>
+#include <math.h>
 
 ImageFinder::ImageFinder() {}
 
@@ -171,18 +172,35 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &po
         point = minLoc;
     }
 }
-
 void ImageFinder::adjustHSVChannels(std::vector<cv::Mat> &hsvChannels,
                                     double hueExponent,
                                     double saturationExponent,
                                     double valueExponent)
 {
+    // Convert to float for exponentiation
+    for (int i = 0; i < 3; ++i)
+    {
+        hsvChannels[i].convertTo(hsvChannels[i], CV_32F, 1.0 / 255.0);
+    }
+
     // Apply exponentiation
     cv::pow(hsvChannels[0], hueExponent, hsvChannels[0]);        // Hue
     cv::pow(hsvChannels[1], saturationExponent, hsvChannels[1]); // Saturation
     cv::pow(hsvChannels[2], valueExponent, hsvChannels[2]);      // Value
-}
 
+    // Clip values to [0, 1] just in case
+    for (int i = 0; i < 3; ++i)
+    {
+        cv::threshold(hsvChannels[i], hsvChannels[i], 1.0, 1.0, cv::THRESH_TRUNC);
+        cv::threshold(hsvChannels[i], hsvChannels[i], 0.0, 0.0, cv::THRESH_TOZERO);
+    }
+
+    // Convert back to 8-bit
+    for (int i = 0; i < 3; ++i)
+    {
+        hsvChannels[i].convertTo(hsvChannels[i], CV_8U, 255.0);
+    }
+}
 void ImageFinder::rotatePoint(cv::Point2i &point, cv::Point2i center, double angle)
 {
 
