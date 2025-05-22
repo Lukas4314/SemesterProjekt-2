@@ -31,6 +31,12 @@ std::string Logger::generateUniqueFileName()
     // Sæt log-mappen her:
     std::string folderPath = "Logs/";
 
+    if (!fs::exists(folderPath))
+    {
+        std::cout << "Creating log folder, since it doesn't already exist: " << folderPath << std::endl;
+        fs::create_directory(folderPath);
+    }
+
     do
     {
         std::ostringstream oss;
@@ -129,6 +135,7 @@ void Logger::writeRow()
         logFile << std::endl;
         buffer.assign(headers.size(), "");
     }
+    setStandardValues();
 }
 
 void Logger::setStandardValues()
@@ -137,7 +144,7 @@ void Logger::setStandardValues()
     setValue(CAMERA_MOVE, "Null");
     setValue(MOVE, "Null");
 
-    // Gripper related values
+    // Gripper related valuesros2 run ur5_sem2_scripts svejse_frame 
     setValue(GRIPPER_PICKUP_OWN_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS, "1");
     setValue(GRIPPER_SHOULD_PICKUP_DEAD_PIECE, "0");

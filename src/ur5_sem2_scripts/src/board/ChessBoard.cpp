@@ -9,6 +9,8 @@
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
+#include <opencv2/opencv.hpp>
+
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created
@@ -145,9 +147,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
         moveStruct.start[0] = 4;
-        moveStruct.start[1] = 0;
+        moveStruct.start[1] = 7;
         moveStruct.end[0] = 2;
-        moveStruct.end[1] = 0;
+        moveStruct.end[1] = 7;
         moveStruct.type = 'c';
     }
     else if (move == "wK")
@@ -155,9 +157,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 6); // Move the king
         movePiece(7, 7, 7, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1g1");
-        moveStruct.start[0] = 0;
+        moveStruct.start[0] = 7;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 0;
+        moveStruct.end[0] = 7;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }
@@ -167,9 +169,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 2); // Move the king
         movePiece(0, 0, 0, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8c8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 2;
         moveStruct.type = 'c';
     }
@@ -178,9 +180,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 6); // Move the king
         movePiece(0, 7, 0, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8g8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }
@@ -576,4 +578,47 @@ MoveStruct ChessBoard::getMoveStruct()
     moveStruct.start[0] = 7 - moveStruct.start[0];
     moveStruct.end[0] = 7 - moveStruct.end[0];
     return moveStruct;
+}
+
+void ChessBoard::drawBoard()
+{
+
+    const int cellSize = 50; // Size of each cell in pixels
+    const int imageSize = cellSize * 8;
+
+    // Create a white image
+    cv::Mat image(imageSize, imageSize, CV_8UC3, cv::Scalar(255, 255, 255));
+
+    // Font settings
+    int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+    double fontScale = 1.0;
+    int thickness = 2;
+
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            char ch = board[row][col];
+            std::string text(1, ch);
+
+            // Get text size
+            int baseline = 0;
+            cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
+            // Calculate center position for the text
+            int x = col * cellSize + (cellSize - textSize.width) / 2;
+            int y = row * cellSize + (cellSize + textSize.height) / 2;
+
+            // Draw rectangle (optional grid)
+            cv::rectangle(image, cv::Point(col * cellSize, row * cellSize),
+                          cv::Point((col + 1) * cellSize, (row + 1) * cellSize),
+                          cv::Scalar(200, 200, 200), 1);
+
+            // Draw the character
+            cv::putText(image, text, cv::Point(x, y), fontFace, fontScale, cv::Scalar(0, 0, 0), thickness);
+        }
+    }
+
+    // Show the image
+    cv::imshow("Board text representaton", image);
 }

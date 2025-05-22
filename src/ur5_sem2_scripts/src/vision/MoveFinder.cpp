@@ -25,16 +25,42 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
 	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
 	cv::imshow("difBoard", diffBoard);
-	cv::cvtColor(diffBoard, diffBoard, cv::COLOR_BGR2GRAY);
+
+	std::vector<cv::Mat> diffBoardHsvColorChannels;
+	cv::split(diffBoard, diffBoardHsvColorChannels);
+
+	double hueExponent = 2;
+	double saturationExponent = 2;
+	double valueExponent = 2;
+
+	ImageFinder::adjustHSVChannels(diffBoardHsvColorChannels, hueExponent, saturationExponent, valueExponent);
+
+	// Normalize to 8-bit
+	cv::normalize(diffBoardHsvColorChannels[0], diffBoardHsvColorChannels[0], 0, 255, cv::NORM_MINMAX);
+	cv::normalize(diffBoardHsvColorChannels[1], diffBoardHsvColorChannels[1], 0, 255, cv::NORM_MINMAX);
+	cv::normalize(diffBoardHsvColorChannels[2], diffBoardHsvColorChannels[2], 0, 255, cv::NORM_MINMAX);
+
+	float hueWeight = 0.25f;
+	float saturationWeight = 1.0f;
+	float valueWeight = 0.25f;
+	float totalWeight = hueWeight + saturationWeight + valueWeight;
+
+	// Apply weights to each channel
+	diffBoardHsvColorChannels[0] *= hueWeight / totalWeight;
+	diffBoardHsvColorChannels[1] *= saturationWeight / totalWeight;
+	diffBoardHsvColorChannels[2] *= valueWeight / totalWeight;
+
+	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]);
+
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;
 	int squareWidth = imageWidth / 8;
 	int squareHeight = imageHeight / 8;
 
-	cv::imshow("diffBoardGrayscale", diffBoard);
+	cv::imshow("summedHSVImage in Movefinder", summedHSVImage);
 	float diffBoardArray[8][8];
 
-	cv::Mat diffBoardModified = diffBoard.clone();
+	cv::Mat diffBoardModified = summedHSVImage.clone();
 
 	int height = diffBoard.rows;
 	int width = diffBoard.cols;
@@ -42,7 +68,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Grid configuration
 	int cellWidth = width / 8;
 	int cellHeight = height / 8;
-	int falloffDistance = 5; // Distance from grid line to start dimming
+	int falloffDistance = 30; // Distance from grid line to start dimming
 
 	for (int y = 0; y < height; ++y)
 	{
@@ -231,9 +257,9 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// std::cout << "first tile score = " << diffBoardArray[std::get<1>(tilePairs[depth])][std::get<2>(tilePairs[depth])] << std::endl;
 	// std::cout << "second tile score = " << diffBoardArray[std::get<3>(tilePairs[depth])][std::get<4>(tilePairs[depth])] << std::endl;
 
-	std::string mostLikelyMove       = Utill::translateIntMoveToString(std::get<1>(tilePairs[0]) * 1000 + std::get<2>(tilePairs[0]) * 100 + std::get<3>(tilePairs[0]) * 10 + std::get<4>(tilePairs[0]));
+	std::string mostLikelyMove = Utill::translateIntMoveToString(std::get<1>(tilePairs[0]) * 1000 + std::get<2>(tilePairs[0]) * 100 + std::get<3>(tilePairs[0]) * 10 + std::get<4>(tilePairs[0]));
 	std::string secondMostLikelyMove = Utill::translateIntMoveToString(std::get<1>(tilePairs[1]) * 1000 + std::get<2>(tilePairs[1]) * 100 + std::get<3>(tilePairs[1]) * 10 + std::get<4>(tilePairs[1]));
-	std::string thirdMostLikelyMove  = Utill::translateIntMoveToString(std::get<1>(tilePairs[2]) * 1000 + std::get<2>(tilePairs[2]) * 100 + std::get<3>(tilePairs[2]) * 10 + std::get<4>(tilePairs[2]));
+	std::string thirdMostLikelyMove = Utill::translateIntMoveToString(std::get<1>(tilePairs[2]) * 1000 + std::get<2>(tilePairs[2]) * 100 + std::get<3>(tilePairs[2]) * 10 + std::get<4>(tilePairs[2]));
 
 	Logger::setValue(MOST_LIKELY_CAMERA_MOVE, mostLikelyMove);
 	Logger::setValue(SECOND_MOST_LIKELY_CAMERA_MOVE, secondMostLikelyMove);

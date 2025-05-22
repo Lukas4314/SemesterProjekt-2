@@ -2,13 +2,16 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <string>
+#include <math.h>
 
 ImageFinder::ImageFinder() {}
 
-void ImageFinder::testStart() {
+void ImageFinder::testStart()
+{
     // Open webcam once
     cv::VideoCapture cap(0);
-    if (!cap.isOpened()) {
+    if (!cap.isOpened())
+    {
         throw std::runtime_error("Error: Could not open the cam.");
     }
 
@@ -21,9 +24,8 @@ void ImageFinder::testStart() {
     cv::resize(redCircle, redCircle, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
     cv::resize(mask, mask, cv::Size(), imageScale, imageScale, cv::INTER_LINEAR);
 
-
-
-    if (greenCircle.empty() || redCircle.empty()) {
+    if (greenCircle.empty() || redCircle.empty())
+    {
         throw std::runtime_error("Error: Could not load the reference images.");
     }
 
@@ -31,45 +33,47 @@ void ImageFinder::testStart() {
 
     cv::namedWindow("Webcam", cv::WINDOW_AUTOSIZE);
 
-    while (true) {
+    while (true)
+    {
         cv::Mat frame;
-        cap >> frame;  // Capture frame
-        if (frame.empty()) break;
+        cap >> frame; // Capture frame
+        if (frame.empty())
+            break;
 
         // Find green circle in the frame
         findImageInImage(greenCircle, frame, greenBallPoint, mask, "test", bgrMode);
 
-
         cv::rectangle(frame, cv::Rect(greenBallPoint.x, greenBallPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
-
 
         // Show the original frame
         cv::imshow("Frame", frame);
 
         // Exit if 'q' is pressed
-        if (cv::waitKey() == 'q') break;
-
-
+        if (cv::waitKey() == 'q')
+            break;
     }
 
-    cap.release();  // Release webcam resource
+    cap.release(); // Release webcam resource
 }
 
-void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& point, cv::Mat mask, std::string name, int mode) {
-    if (frame.empty() || image.empty()) return;
+void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &point, cv::Mat mask, std::string name, int mode)
+{
+    if (frame.empty() || image.empty())
+        return;
 
     // Match the template using the hue channel with a mask
     cv::Mat result;
 
-
-
-    if (!mask.empty() && mask.size() == image.size()) {
-        if (mode == ImageFinder::bgrMode) {
+    if (!mask.empty() && mask.size() == image.size())
+    {
+        if (mode == ImageFinder::bgrMode)
+        {
             int templateMode = cv::TM_SQDIFF_NORMED;
 
             cv::matchTemplate(frame, image, result, templateMode, mask);
         }
-        else if (mode == ImageFinder::hsvMode) {
+        else if (mode == ImageFinder::hsvMode)
+        {
             int templateMode = cv::TM_SQDIFF_NORMED;
 
             cv::Mat hsvImage;
@@ -87,11 +91,8 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
             double saturationExponent = 1.0;
             double valueExponent = 1.0;
 
-
             adjustHSVChannels(hsvImageChannels, hueExponent, saturationExponent, valueExponent);
             adjustHSVChannels(hsvFrameChannels, hueExponent, saturationExponent, valueExponent);
-
-
 
             cv::Mat finalImage = (hsvImageChannels[0] + hsvImageChannels[1] + hsvImageChannels[2]) / 3;
             cv::Mat finalFrame = (hsvFrameChannels[0] + hsvFrameChannels[1] + hsvFrameChannels[2]) / 3;
@@ -100,18 +101,15 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
             finalFrame.convertTo(finalFrame, CV_8U);
 
             cv::matchTemplate(finalFrame, finalImage, result, templateMode, mask);
-
-
         }
 
-
-        else if (mode == ImageFinder::hsvMode2) {
+        else if (mode == ImageFinder::hsvMode2)
+        {
             int templateMode = cv::TM_CCORR_NORMED;
 
-            cv::Vec3b pixel = image.at<cv::Vec3b>(0, 0); // Get the first pixel (row=0, col=0)
+            cv::Vec3b pixel = image.at<cv::Vec3b>(0, 0);       // Get the first pixel (row=0, col=0)
             cv::Scalar bgrColor(pixel[0], pixel[1], pixel[2]); // Convert to Scalar (B, G, R
-            
-            
+
             // Convert input image to HSV
             cv::Mat hsvImage;
             cv::cvtColor(frame, hsvImage, cv::COLOR_BGR2HSV);
@@ -120,7 +118,6 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
             cv::Mat colorMat(1, 1, CV_8UC3, bgrColor);
             cv::cvtColor(colorMat, colorMat, cv::COLOR_BGR2HSV);
             cv::resize(colorMat, colorMat, cv::Size(frame.cols, frame.rows), cv::INTER_NEAREST);
-
 
             std::vector<cv::Mat> hsvColorChannels;
             cv::split(colorMat, hsvColorChannels);
@@ -132,18 +129,14 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
             double saturationExponent = 1;
             double valueExponent = 1;
 
-            adjustHSVChannels(hsvChannels, ImageFinder::hueExponent, ImageFinder::saturationExponent, ImageFinder::valueExponent);
-            adjustHSVChannels(hsvColorChannels, ImageFinder::hueExponent, ImageFinder::saturationExponent, ImageFinder::valueExponent);
-
+            adjustHSVChannels(hsvChannels, hueExponent, saturationExponent, valueExponent);
+            adjustHSVChannels(hsvColorChannels, hueExponent, saturationExponent, valueExponent);
 
             // Compute absolute differences
             cv::Mat diffH, diffS, diffV;
             cv::absdiff(hsvChannels[0], hsvColorChannels[0], diffH);
             cv::absdiff(hsvChannels[1], hsvColorChannels[1], diffS);
             cv::absdiff(hsvChannels[2], hsvColorChannels[2], diffV);
-
-
-
 
             // Normalize to 8-bit for better visualization
             cv::normalize(diffH, diffH, 0, 255, cv::NORM_MINMAX);
@@ -152,61 +145,64 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i& po
 
             cv::Mat summedHSVImage = (diffH + diffS + diffV) / 3;
 
+            cv::Mat invertedMask = 255 - mask;
 
-			cv::Mat invertedMask = 255 - mask;
+            cv::matchTemplate(summedHSVImage, mask, result, templateMode, mask);
 
-            
-
-			cv::matchTemplate(summedHSVImage, mask, result, templateMode, mask);
-
-
-
-
-			cv::Mat resultClone = result.clone();
+            cv::Mat resultClone = result.clone();
             cv::normalize(resultClone, resultClone, 0, 255, cv::NORM_MINMAX);
             resultClone.convertTo(resultClone, CV_8U);
-			cv::imshow("result", resultClone);
-
-
-
+            cv::imshow("result", resultClone);
         }
 
-        else {
+        else
+        {
             std::cout << "No mask" << std::endl;
         }
-
 
         // Find the best match location
         double minVal, maxVal;
         cv::Point minLoc, maxLoc;
         cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
 
-
         cv::normalize(result, result, 0, 255, cv::NORM_MINMAX, CV_8U);
-        //cv::imshow(name, 255-result);
-
+        // cv::imshow(name, 255-result);
 
         // Store best match coordinates
         point = minLoc;
     }
 }
-
-
-void ImageFinder::adjustHSVChannels(std::vector<cv::Mat>& hsvChannels,
-    double hueExponent,
-    double saturationExponent,
-    double valueExponent)
+void ImageFinder::adjustHSVChannels(std::vector<cv::Mat> &hsvChannels,
+                                    double hueExponent,
+                                    double saturationExponent,
+                                    double valueExponent)
 {
+    // Convert to float for exponentiation
+    for (int i = 0; i < 3; ++i)
+    {
+        hsvChannels[i].convertTo(hsvChannels[i], CV_32F, 1.0 / 255.0);
+    }
+
     // Apply exponentiation
-    cv::pow(hsvChannels[0], hueExponent, hsvChannels[0]); // Hue
+    cv::pow(hsvChannels[0], hueExponent, hsvChannels[0]);        // Hue
     cv::pow(hsvChannels[1], saturationExponent, hsvChannels[1]); // Saturation
-    cv::pow(hsvChannels[2], valueExponent, hsvChannels[2]); // Value
+    cv::pow(hsvChannels[2], valueExponent, hsvChannels[2]);      // Value
+
+    // Clip values to [0, 1] just in case
+    for (int i = 0; i < 3; ++i)
+    {
+        cv::threshold(hsvChannels[i], hsvChannels[i], 1.0, 1.0, cv::THRESH_TRUNC);
+        cv::threshold(hsvChannels[i], hsvChannels[i], 0.0, 0.0, cv::THRESH_TOZERO);
+    }
+
+    // Convert back to 8-bit
+    for (int i = 0; i < 3; ++i)
+    {
+        hsvChannels[i].convertTo(hsvChannels[i], CV_8U, 255.0);
+    }
 }
-
-
-
-
-void ImageFinder::rotatePoint(cv::Point2i& point, cv::Point2i center, double angle) {
+void ImageFinder::rotatePoint(cv::Point2i &point, cv::Point2i center, double angle)
+{
 
     double s = sin(angle * CV_PI / 180);
     double c = cos(angle * CV_PI / 180);
@@ -222,8 +218,10 @@ void ImageFinder::rotatePoint(cv::Point2i& point, cv::Point2i center, double ang
 }
 ImageFinder::~ImageFinder() {}
 
-void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scalar& bgrColor) {
-    if (image.empty()) {
+void ImageFinder::showHSVChannelDifferences(const cv::Mat &image, const cv::Scalar &bgrColor, const std::string &name)
+{
+    if (image.empty())
+    {
         std::cerr << "Error: Image is empty!" << std::endl;
         return;
     }
@@ -243,21 +241,18 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
     std::vector<cv::Mat> hsvChannels;
     cv::split(hsvImage, hsvChannels);
 
+    float hueExponent = 1;
+    float saturationExponent = 1;
+    float valueExponent = 1;
 
-
-
-    adjustHSVChannels(hsvChannels, ImageFinder::hueExponent, ImageFinder::saturationExponent, ImageFinder::valueExponent);
-    adjustHSVChannels(hsvColorChannels, ImageFinder::hueExponent, ImageFinder::saturationExponent, ImageFinder::valueExponent);
-
+    adjustHSVChannels(hsvChannels, hueExponent, saturationExponent, valueExponent);
+    adjustHSVChannels(hsvColorChannels, hueExponent, saturationExponent, valueExponent);
 
     // Compute absolute differences
     cv::Mat diffH, diffS, diffV;
     cv::absdiff(hsvChannels[0], hsvColorChannels[0], diffH);
     cv::absdiff(hsvChannels[1], hsvColorChannels[1], diffS);
     cv::absdiff(hsvChannels[2], hsvColorChannels[2], diffV);
-
-
-
 
     // Normalize to 8-bit for better visualization
     cv::normalize(diffH, diffH, 0, 255, cv::NORM_MINMAX);
@@ -276,14 +271,12 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
 
     cv::Mat summedHSVImage = (diffH + diffS + diffV) / 3;
 
-
-    cv::imshow("Summed HSV", summedHSVImage);
-    cv::imshow("Hue Difference", diffH);
-    cv::imshow("Saturation Difference", diffS);
-    cv::imshow("Value Difference", diffV);
-    cv::imshow("Value Channel", hsvChannels[2]);
-    cv::imshow("Saturation Channel", hsvChannels[1]);
-
+    cv::imshow("Summed HSV" + name, summedHSVImage);
+    cv::imshow("Hue Difference" + name, diffH);
+    cv::imshow("Saturation Difference" + name, diffS);
+    cv::imshow("Value Difference" + name, diffV);
+    cv::imshow("Value Channel" + name, hsvChannels[2]);
+    cv::imshow("Saturation Channel" + name, hsvChannels[1]);
 
     cv::moveWindow("Hue Difference", 0, 0);
     cv::moveWindow("Saturation Difference", 480, 0);
@@ -293,60 +286,50 @@ void ImageFinder::showHSVChannelDifferences(const cv::Mat& image, const cv::Scal
     cv::moveWindow("Summed HSV", 0, 400);
 }
 
-
-
-
-void ImageFinder::showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2, std::string name) {
-    if (hsvImage.empty() || hsvImage2.empty()) {
+void ImageFinder::showHSVImageDifferences(const cv::Mat hsvImage, const cv::Mat hsvImage2, std::string name)
+{
+    if (hsvImage.empty() || hsvImage2.empty())
+    {
         std::cerr << "Error: one of the images are empty!" << std::endl;
         return;
     }
 
-
-
     cv::cvtColor(hsvImage, hsvImage, cv::COLOR_BGR2HSV);
-	cv::cvtColor(hsvImage2, hsvImage2, cv::COLOR_BGR2HSV);
+    cv::cvtColor(hsvImage2, hsvImage2, cv::COLOR_BGR2HSV);
 
     // Compute absolute differences
     cv::Mat diffImage;
     cv::absdiff(hsvImage, hsvImage2, diffImage);
-    
-   
 
-	std::vector<cv::Mat> hsvChannels;
-	cv::split(diffImage, hsvChannels);
+    std::vector<cv::Mat> hsvChannels;
+    cv::split(diffImage, hsvChannels);
 
     // Normalize to 8-bit for better visualization
-    //cv::normalize(diffH, diffH, 0, 255, cv::NORM_MINMAX);
-    //cv::normalize(diffS, diffS, 0, 255, cv::NORM_MINMAX);
-    //cv::normalize(diffV, diffV, 0, 255, cv::NORM_MINMAX);
+    // cv::normalize(diffH, diffH, 0, 255, cv::NORM_MINMAX);
+    // cv::normalize(diffS, diffS, 0, 255, cv::NORM_MINMAX);
+    // cv::normalize(diffV, diffV, 0, 255, cv::NORM_MINMAX);
 
- 
+    cv::imshow("Summed HSV " + name, diffImage);
+    cv::imshow("Hue Difference " + name, hsvChannels[0]);
+    cv::imshow("Saturation Difference " + name, hsvChannels[1]);
+    cv::imshow("Value Difference " + name, hsvChannels[2]);
 
-    cv::imshow("Summed HSV "+name, diffImage);
-    cv::imshow("Hue Difference "+name, hsvChannels[0]);
-    cv::imshow("Saturation Difference "+name, hsvChannels[1]);
-    cv::imshow("Value Difference "+name, hsvChannels[2]);
-
-
-    cv::moveWindow("Hue Difference "+name, 0, 0);
-    cv::moveWindow("Saturation Difference "+name, 480, 0);
-    cv::moveWindow("Value Difference "+name, 480 * 2, 0);
-    cv::moveWindow("Summed HSV "+name, 0, 400);
-
-
+    cv::moveWindow("Hue Difference " + name, 0, 0);
+    cv::moveWindow("Saturation Difference " + name, 480, 0);
+    cv::moveWindow("Value Difference " + name, 480 * 2, 0);
+    cv::moveWindow("Summed HSV " + name, 0, 400);
 }
 
-
-void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat& outputImage, int minSat, int maxSat, int minVal, int maxVal) {
+void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat &outputImage, int minSat, int maxSat, int minVal, int maxVal)
+{
     cv::Mat hsvImage;
     cv::cvtColor(inputImage, hsvImage, cv::COLOR_BGR2HSV);
 
     std::vector<cv::Mat> channels;
     cv::split(hsvImage, channels);
-    cv::Mat hue = channels[0];  // Extract Hue channel
-    cv::Mat saturation = channels[1];  // Extract Saturation channel
-    cv::Mat value = channels[2];  // Extract Value channel
+    cv::Mat hue = channels[0];        // Extract Hue channel
+    cv::Mat saturation = channels[1]; // Extract Saturation channel
+    cv::Mat value = channels[2];      // Extract Value channel
 
     // Create mask for low/high saturation or value
     cv::Mat mask;
@@ -361,9 +344,12 @@ void ImageFinder::hueHeatmapWithParams(cv::Mat inputImage, cv::Mat& outputImage,
     cv::Mat heatmap;
     cv::applyColorMap(hue, heatmap, cv::COLORMAP_JET);
 
-    for (int y = 0; y < heatmap.rows; y++) {
-        for (int x = 0; x < heatmap.cols; x++) {
-            if (mask.at<uchar>(y, x) > 0) {
+    for (int y = 0; y < heatmap.rows; y++)
+    {
+        for (int x = 0; x < heatmap.cols; x++)
+        {
+            if (mask.at<uchar>(y, x) > 0)
+            {
                 heatmap.at<cv::Vec3b>(y, x) = cv::Vec3b(0, 0, 0);
             }
         }
