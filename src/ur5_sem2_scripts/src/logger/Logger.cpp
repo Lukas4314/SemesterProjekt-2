@@ -194,6 +194,7 @@ std::vector<const char *> Logger::getAllLoggerKeys()
         GRIPPER_PICKUP_ENEMY_PIECE,
         GRIPPER_PICKUP_ENEMY_PIECE_SUCCESS,
         GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS,
+        
 
         // Castling
         EXTRA_PICKUP_FOR_CASTLING,
@@ -211,6 +212,11 @@ std::vector<const char *> Logger::getAllLoggerKeys()
         MOST_LIKELY_CAMERA_MOVE_SCORE,
         SECOND_MOST_LIKELY_CAMERA_MOVE_SCORE,
         THIRD_MOST_LIKELY_CAMERA_MOVE_SCORE,
+        CameraCorrectGreenCornerLocation,
+        CameraCorrectYellowCornorLocation,
+        CameraCorrectRedPegLocation,
+        CameraCorrectYellowPegLocation,
+
 
         // Final status
         ROBOT_MANAGES_TO_MAKE_MOVEMENT};
