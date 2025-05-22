@@ -226,6 +226,9 @@ int main(int argc, char *argv[])
   ChessBoard chess;
   StockfishUCI engine;
 
+  chess.printBoard();
+  chess.drawBoard();
+
   // Takes start image
   visionInterface.getPieceMovedString(0, CAMERA);
 
@@ -312,6 +315,10 @@ int main(int argc, char *argv[])
 
     // Gets a move from the camera and checks if it is valid and repeats until it is
     MoveStruct movePlanCamera = applyCameraMove(visionInterface, chess);
+
+    chess.printBoard();
+    chess.drawBoard();
+
     // Gets the transformation matrix
     std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
 
