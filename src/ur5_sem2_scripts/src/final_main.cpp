@@ -217,8 +217,8 @@ int main(int argc, char *argv[])
   visionInterface.getPieceMovedString(0, CAMERA);
 
   // if the player wants to be black
-  bool playerWhite = true;
-  if (!playerWhite)
+  float boardAngle = visionInterface.getBoardCutter(0).getAngle();
+  if (boardAngle > 90 || boardAngle < -90)
   {
     applyStockfishMove(engine, chess);
     Logger::setValue(CAMERA_MOVE, "0");
