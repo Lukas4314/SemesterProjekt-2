@@ -171,7 +171,19 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4])
 
     RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
     std::array<bool, 2> boardheight = {false, true};
-    if (execute_move(start, end, boardheight))
+
+    if (deathposition[0] == 0 && deathposition[1] == 0)
+    {
+        if (execute_move({0.2, 0.2}, end, boardheight, false))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if (execute_move(start, end, boardheight))
     {
         return true;
     }
