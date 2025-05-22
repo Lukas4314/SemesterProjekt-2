@@ -535,12 +535,24 @@ std::array<double, 2> ChessMoves::applyTransformation(int point[2], double TFche
     return transformed_point;
 }
 
+std::array<double, 2> ChessMoves::applyTransformationRaw(int point[2], double TFchess[4][4])
+{
+    RCLCPP_INFO(node_->get_logger(), "applyTransformation() called");
+    std::array<double, 2> transformed_point;
+    transformed_point[0] = TFchess[0][0] * (point[0]) + TFchess[0][1] * (point[1]) + TFchess[0][3];
+    transformed_point[1] = TFchess[1][0] * (point[0]) + TFchess[1][1] * (point[1]) + TFchess[1][3];
+    RCLCPP_INFO(node_->get_logger(), "Original point: (%d, %d)", point[0], point[1]);
+    RCLCPP_INFO(node_->get_logger(), "TF values: (%f, %f, %f, %f)", TFchess[0][0], TFchess[0][1], TFchess[0][3], TFchess[1][3]);
+    RCLCPP_INFO(node_->get_logger(), "Transformed point: (%f, %f)", transformed_point[0], transformed_point[1]);
+    return transformed_point;
+}
+
 void ChessMoves::moveToCenterInForTransformationMatrix(double TFchess[4][4])
 {
     RCLCPP_INFO(node_->get_logger(), "moveToCenterInTransformationMatrix() called");
     std::array<double, 2> start = {0, 0};
     int startPoint[2] = {start[0], start[1]};
-    std::array<double, 2> end = applyTransformation(startPoint, TFchess);
+    std::array<double, 2> end = applyTransformationRaw(startPoint, TFchess);
     std::array<bool, 2> boardheight = {true, true};
     execute_move(start, end, boardheight, false);
 }

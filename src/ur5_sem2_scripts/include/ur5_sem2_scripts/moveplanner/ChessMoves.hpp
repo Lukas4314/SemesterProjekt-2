@@ -29,10 +29,10 @@ public:
     bool execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight = {{false, false}}, bool gripperShouldDoStuffs = true);
     void moveToCenterInForTransformationMatrix(double TFchess[4][4]);
 
-
     void setEndEffectorAngle(float angle) { end_effector_angle = angle; }
 
     std::array<double, 2> applyTransformation(int point[2], double TFchess[4][4]);
+    std::array<double, 2> applyTransformationRaw(int point[2], double TFchess[4][4]);
 
     const std::array<std::array<double, 4>, 4> TFRed =
         {{{1.0, 0.0, 0.0, 90.0},
@@ -56,7 +56,7 @@ private:
     const float tile_size = 0.0353;                             // Size of each square on the chess board
 
     float end_effector_angle = 0.0; // Angle of the end effector
-    
+
     Gripper gripper; // Gripper object to control the gripper
 
     const float death_positionsleft[16][2] = {

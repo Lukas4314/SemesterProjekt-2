@@ -40,7 +40,7 @@ int main()
         __uint8_t ch = getchar_timeout_us(0);
         int adc_value = adc_read(); // Read ADC value
         // Check if the gripper is closed
-        if (adc_value >= 280 && status == GRIPPER_CLOSING && timeIndexForADC < 0)
+        if (adc_value >= 290 && status == GRIPPER_CLOSING && timeIndexForADC < 0)
         {
             status = GRIPPER_CLOSED;
             gripper.stop();
