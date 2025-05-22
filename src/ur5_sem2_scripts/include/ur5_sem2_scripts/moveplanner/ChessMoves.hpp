@@ -27,6 +27,8 @@ public:
     bool en_passant(MoveStruct move, double TFchess[4][4]);
     bool playercapture(MoveStruct move, double TFchess[4][4]);
     bool execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight = {{false, false}});
+    void moveToCenterInForTransformationMatrix(double TFchess[4][4]);
+
 
     void setEndEffectorAngle(float angle) { end_effector_angle = angle; }
 
