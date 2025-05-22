@@ -220,7 +220,14 @@ int main(int argc, char *argv[])
   float boardAngle = visionInterface.getBoardCutter(0).getAngle();
   if (boardAngle > 90 || boardAngle < -90)
   {
-    applyStockfishMove(engine, chess);
+    movePlan = applyStockfishMove(engine, chess);
+    std::cout << "Now trying to move robot with best move " << std::endl;
+
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+    ;
+    chessMoves.setEndEffectorAngle(end_effector_angle);
+    chessMoves.move(movePlan, raw_TF);
+    std::cout << "Moved the robot" << std::endl;
     Logger::setValue(CAMERA_MOVE, "0");
     Logger::writeRow();
   }
