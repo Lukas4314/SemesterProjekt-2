@@ -140,7 +140,7 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4])
     {
         for (int i = 0; i < 16; i++)
         {
-            if (toupper(deadPiecesLeft[i]) == toupper(move.piece))
+            if (toupper(deadPiecesLeft[i]) == toupper(move.promotion))
             {
                 deadPiecesLeft[i] = '-';
                 deathposition[0] = death_positionsleft[i][0];
