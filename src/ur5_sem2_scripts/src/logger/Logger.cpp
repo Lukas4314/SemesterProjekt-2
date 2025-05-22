@@ -146,6 +146,10 @@ void Logger::setStandardValues()
     setValue(GRIPPER_PICKUP_ENEMY_PIECE, "0");
     setValue(GRIPPER_PICKUP_ENEMY_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS, "1");
+    setValue(CameraCorrectGreenCornerLocation, "1");
+    setValue(CameraCorrectYellowCornorLocation, "1");
+    setValue(CameraCorrectRedPegLocation, "1");
+    setValue(CameraCorrectYellowPegLocation, "1");
 
     // Castling
     setValue(EXTRA_PICKUP_FOR_CASTLING, "0");
