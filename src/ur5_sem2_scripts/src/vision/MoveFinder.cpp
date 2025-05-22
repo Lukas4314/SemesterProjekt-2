@@ -22,7 +22,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 
 	cv::resize(oldChessBoard, oldChessBoard, newChessBoard.size());
 
-	ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
+	// ImageFinder::showHSVImageDifferences(newChessBoard.clone(), oldChessBoard.clone(), "diffBords");
 	cv::absdiff(oldChessBoard, newChessBoard, diffBoard);
 	cv::imshow("difBoard", diffBoard);
 
@@ -33,6 +33,9 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	double saturationExponent = 2;
 	double valueExponent = 2;
 
+	cv::imshow("Hue channel before exponent", diffBoardHsvColorChannels[0]);
+	cv::imshow("Saturation channel before exponent", diffBoardHsvColorChannels[1]);
+	cv::imshow("Value channel before exponent", diffBoardHsvColorChannels[2]);
 	ImageFinder::adjustHSVChannels(diffBoardHsvColorChannels, hueExponent, saturationExponent, valueExponent);
 
 	// Normalize to 8-bit
@@ -40,24 +43,36 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	cv::normalize(diffBoardHsvColorChannels[1], diffBoardHsvColorChannels[1], 0, 255, cv::NORM_MINMAX);
 	cv::normalize(diffBoardHsvColorChannels[2], diffBoardHsvColorChannels[2], 0, 255, cv::NORM_MINMAX);
 
+	cv::imshow("Hue channel after exponent", diffBoardHsvColorChannels[0]);
+	cv::imshow("Saturation channel after exponent", diffBoardHsvColorChannels[1]);
+	cv::imshow("Value channel after exponent", diffBoardHsvColorChannels[2]);
+
 	float hueWeight = 0.25f;
 	float saturationWeight = 1.0f;
 	float valueWeight = 0.25f;
 	float totalWeight = hueWeight + saturationWeight + valueWeight;
+
 
 	// Apply weights to each channel
 	diffBoardHsvColorChannels[0] *= hueWeight / totalWeight;
 	diffBoardHsvColorChannels[1] *= saturationWeight / totalWeight;
 	diffBoardHsvColorChannels[2] *= valueWeight / totalWeight;
 
+
+	cv::imshow("Weighted Hue channel", diffBoardHsvColorChannels[0]);
+	cv::imshow("Weighted Saturation channel", diffBoardHsvColorChannels[1]);
+	cv::imshow("Weighted Value channel", diffBoardHsvColorChannels[2]);
+
 	cv::Mat summedHSVImage = (diffBoardHsvColorChannels[0] + diffBoardHsvColorChannels[1] + diffBoardHsvColorChannels[2]);
+	cv::imshow("summedHSVImage in Movefinder", summedHSVImage);
+
+
 
 	int imageWidth = diffBoard.cols;
 	int imageHeight = diffBoard.rows;
 	int squareWidth = imageWidth / 8;
 	int squareHeight = imageHeight / 8;
 
-	cv::imshow("summedHSVImage in Movefinder", summedHSVImage);
 	float diffBoardArray[8][8];
 
 	cv::Mat diffBoardModified = summedHSVImage.clone();

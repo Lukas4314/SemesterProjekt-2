@@ -249,6 +249,13 @@ int main(int argc, char *argv[])
       }
     }
 
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+    chessMoves.setEndEffectorAngle(end_effector_angle);
+    chessMoves.move(movePlanCamera, raw_TF);
+
+    // Writes the row before stockfish starts playing
+    Logger::writeRow();
+
     if (chess.isMated(chess.getActiveColor()))
     {
       cout << "Checkmate! " << chess.getActiveColor() << " is mated!" << endl;
@@ -260,13 +267,6 @@ int main(int argc, char *argv[])
       cout << "Remi! " << endl;
       break;
     }
-
-    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
-    chessMoves.setEndEffectorAngle(end_effector_angle);
-    chessMoves.move(movePlanCamera, raw_TF);
-
-    // Writes the row before stockfish starts playing
-    Logger::writeRow();
 
     // Applies the move from stokfish
     MoveStruct movePlan;
@@ -288,6 +288,12 @@ int main(int argc, char *argv[])
     // cout << "End: [" << movePlan.end[0] << ", " << movePlan.end[1] << "]" << endl;
     // cout << "Type: " << movePlan.type << endl;
     // cout << "Promotion: " << movePlan.promotion << endl;
+
+    // Just for opdating the camera image
+    visionInterface.getPieceMovedString(0, ENGINE);
+
+    // writes the row after stockfish has played
+    Logger::writeRow();
 
     if (chess.isMated(chess.getActiveColor()))
     {
@@ -312,12 +318,6 @@ int main(int argc, char *argv[])
      }
      */
     // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-    // Just for opdating the camera image
-    visionInterface.getPieceMovedString(0, ENGINE);
-
-    // writes the row after stockfish has played
-    Logger::writeRow();
 
     chess.printBoard();
     chess.drawBoard();
