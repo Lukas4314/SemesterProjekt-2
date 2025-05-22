@@ -1,5 +1,0 @@
-"MoveCount","CameraMove","Move","GripperPickupOwnPieceSuccess","GripperPickupOwnPieceSuccess","GripperShouldPickupDeadPiece","GripperPickupDeadPieceSuccess","GripperPutdownDeadPieceSuccess","GripperPickupEnemyPiece","GripperPickupEnemyPieceSuccess","GripperPutdownEnemyPieceSuccess","ExtraPickupForCastling","ExtraPickupForCastlingSuccess","AngleOfTransformationMatrixChessboard","AngleOfTransformationMatrixPegs","MovesTriedBeforeSuccess","MostLikelyCameraMove","SecondMostLikelyCameraMove","ThirdMostLikelyCameraMove","MostLikelyCameraMoveScore","SecondMostLikelyCameraMoveScore","ThirdMostLikelyCameraMoveScore","RobotManagesToMakeMovement"
-"0","1","e2e4","","1","0","1","1","0","1","1","0","1","0.665095","0.962129","1","e4e2","e4d5","e4b8","3.261200","2.337640","2.330221","1"
-"0","","c7c5","","","","","","","","","","","","","","c7b7","c7d7","c7c8","2.608377","2.490550","2.365560",""
-"0","1","d2d4","","","","","","","","","","","0.665095","0.962129","1","d4d2","d4f1","d4d1","3.338088","2.525931","2.496445",""
-"0","","c5d4","","","","","","1","","","","","","","","d4e4","d4c1","d4f1","2.288043","2.225138","2.208306",""

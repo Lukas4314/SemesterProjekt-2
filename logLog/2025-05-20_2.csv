@@ -1,4 +1,0 @@
-MoveCount,CameraMove,Move,GripperPickupOwnPieceSuccess,GripperPickupOwnPieceSuccess_1,GripperShouldPickupDeadPiece,GripperPickupDeadPieceSuccess,GripperPutdownDeadPieceSuccess,GripperPickupEnemyPiece,GripperPickupEnemyPieceSuccess,GripperPutdownEnemyPieceSuccess,ExtraPickupForCastling,ExtraPickupForCastlingSuccess,AngleOfTransformationMatrixChessboard,AngleOfTransformationMatrixPegs,MovesTriedBeforeSuccess,MostLikelyCameraMove,SecondMostLikelyCameraMove,ThirdMostLikelyCameraMove,MostLikelyCameraMoveScore,SecondMostLikelyCameraMoveScore,ThirdMostLikelyCameraMoveScore,RobotManagesToMakeMovement
-Null,Null,Null,0,,2,1,1,0,1,1,0,1,Null,Null,Null,Null,Null,Null,Null,Null,Null,1
-Null,Null,Null,HEJ,,0,1,1,0,1,1,0,1,Null,Null,Null,Null,Null,Null,Null,Null,Null,1
-SUM,,,,,2.0,2.0,2.0,,2.0,2.0,,2.0,,,,,,,,,,2.0
