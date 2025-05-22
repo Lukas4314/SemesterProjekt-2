@@ -441,6 +441,10 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     {
         gripper.closeGripper();
     }
+    else
+    {
+        rclcpp::sleep_for(std::chrono::seconds(10));
+    }
     rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to the end position
@@ -539,8 +543,8 @@ std::array<double, 2> ChessMoves::applyTransformationRaw(int point[2], double TF
 {
     RCLCPP_INFO(node_->get_logger(), "applyTransformation() called");
     std::array<double, 2> transformed_point;
-    transformed_point[0] = TFchess[0][0] * (point[0]) + TFchess[0][1] * (point[1]) + TFchess[0][3];
-    transformed_point[1] = TFchess[1][0] * (point[0]) + TFchess[1][1] * (point[1]) + TFchess[1][3];
+    transformed_point[0] = TFchess[0][0] * point[0] + TFchess[0][1] * point[1] + TFchess[0][3];
+    transformed_point[1] = TFchess[1][0] * point[0] + TFchess[1][1] * point[1] + TFchess[1][3];
     RCLCPP_INFO(node_->get_logger(), "Original point: (%d, %d)", point[0], point[1]);
     RCLCPP_INFO(node_->get_logger(), "TF values: (%f, %f, %f, %f)", TFchess[0][0], TFchess[0][1], TFchess[0][3], TFchess[1][3]);
     RCLCPP_INFO(node_->get_logger(), "Transformed point: (%f, %f)", transformed_point[0], transformed_point[1]);

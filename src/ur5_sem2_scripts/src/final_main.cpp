@@ -51,7 +51,6 @@ std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot
 }
 
 std::array<std::array<double, 4>, 4> getTransformationMatrixBaseToGreenspot(VisionInterface &visionInterface)
-
 {
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = getTransformationMatrixYellowPegToGreenSpot(visionInterface);
 
@@ -229,19 +228,36 @@ int main(int argc, char *argv[])
   visionInterface.getPieceMovedString(0, CAMERA);
 
   // Moves the robot to green spot on the board for calibration
-  std::array<std::array<double, 4>, 4> base_boardRed_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
+
   end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
   double test_TF[4][4];
   for (size_t i = 0; i < 4; ++i)
   {
     for (size_t j = 0; j < 4; ++j)
     {
-      test_TF[i][j] = base_boardRed_T_m[i][j];
+      test_TF[i][j] = base_boardGreen_T_m[i][j];
     }
   }
   chessMoves.setEndEffectorAngle(end_effector_angle);
   chessMoves.moveToCenterInForTransformationMatrix(test_TF);
 
+  std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
+                                                                {-1, 0, 0, 25},
+                                                                {0, 0, 1, 0},
+                                                                {0, 0, 0, 1}}};
+
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_yellowPlok_T_cm[i][j];
+    }
+  }
+  chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
+
+  
   // if the player wants to be black
   float boardAngle = visionInterface.getBoardCutter(0).getAngle();
   if (boardAngle > 90 || boardAngle < -90)
