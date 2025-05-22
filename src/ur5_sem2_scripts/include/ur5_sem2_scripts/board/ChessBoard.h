@@ -36,6 +36,7 @@ public:
     void updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion);                                                 
     void resetMoveStruct();
     MoveStruct getMoveStruct();
+    void drawBoard();
     ~ChessBoard();                                                   
 
 private:

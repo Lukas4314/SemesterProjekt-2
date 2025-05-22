@@ -108,6 +108,7 @@ MoveStruct applyCameraMove(VisionInterface &visionInterface, ChessBoard &chess)
   } while (!succesMove);
   cout << "Camera Move is: " << move << endl;
   chess.printBoard();
+  chess.drawBoard();
 
   Logger::setValue(MOVES_TRIED_BEFORE_SUCCESS, to_string(moveDepth));
 
@@ -174,6 +175,7 @@ MoveStruct applyStockfishMove(StockfishUCI &engine, ChessBoard &chess)
   chess.applyIfValidMove(translatedBestMove);
   RCLCPP_DEBUG(logger, ("Engine Move is: " + translatedBestMove).c_str());
   chess.printBoard();
+  chess.drawBoard();
 
   // Here it needs to get movestruct
   MoveStruct movePlan;
@@ -318,6 +320,7 @@ int main(int argc, char *argv[])
     Logger::writeRow();
 
     chess.printBoard();
+    chess.drawBoard();
 
     // Check if the user quits, or wait for the player move
     if (cv::waitKey(0) == 'q')

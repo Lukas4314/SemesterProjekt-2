@@ -9,6 +9,8 @@
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
+#include <opencv2/opencv.hpp>
+
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created
@@ -576,4 +578,47 @@ MoveStruct ChessBoard::getMoveStruct()
     moveStruct.start[0] = 7 - moveStruct.start[0];
     moveStruct.end[0] = 7 - moveStruct.end[0];
     return moveStruct;
+}
+
+void ChessBoard::drawBoard()
+{
+
+    const int cellSize = 50; // Size of each cell in pixels
+    const int imageSize = cellSize * 8;
+
+    // Create a white image
+    cv::Mat image(imageSize, imageSize, CV_8UC3, cv::Scalar(255, 255, 255));
+
+    // Font settings
+    int fontFace = cv::FONT_HERSHEY_SIMPLEX;
+    double fontScale = 1.0;
+    int thickness = 2;
+
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            char ch = board[row][col];
+            std::string text(1, ch);
+
+            // Get text size
+            int baseline = 0;
+            cv::Size textSize = cv::getTextSize(text, fontFace, fontScale, thickness, &baseline);
+
+            // Calculate center position for the text
+            int x = col * cellSize + (cellSize - textSize.width) / 2;
+            int y = row * cellSize + (cellSize + textSize.height) / 2;
+
+            // Draw rectangle (optional grid)
+            cv::rectangle(image, cv::Point(col * cellSize, row * cellSize),
+                          cv::Point((col + 1) * cellSize, (row + 1) * cellSize),
+                          cv::Scalar(200, 200, 200), 1);
+
+            // Draw the character
+            cv::putText(image, text, cv::Point(x, y), fontFace, fontScale, cv::Scalar(0, 0, 0), thickness);
+        }
+    }
+
+    // Show the image
+    cv::imshow("Board text representaton", image);
 }

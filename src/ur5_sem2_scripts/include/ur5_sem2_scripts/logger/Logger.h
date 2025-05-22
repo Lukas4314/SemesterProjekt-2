@@ -12,7 +12,7 @@ constexpr const char *MOVE = "Move";
 
 // ALl the gripper related constants
 constexpr const char *GRIPPER_PICKUP_OWN_PIECE_SUCCESS = "GripperPickupOwnPieceSuccess";
-constexpr const char *GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS = "GripperPickupOwnPieceSuccess";
+constexpr const char *GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS = "GripperPutdownOwnPieceSuccess";
 constexpr const char *GRIPPER_SHOULD_PICKUP_DEAD_PIECE = "GripperShouldPickupDeadPiece";
 constexpr const char *GRIPPER_PICKUP_DEAD_PIECE_SUCCESS = "GripperPickupDeadPieceSuccess";
 constexpr const char *GRIPPER_PUTDOWN_DEAD_PIECE_SUCCESS = "GripperPutdownDeadPieceSuccess";
