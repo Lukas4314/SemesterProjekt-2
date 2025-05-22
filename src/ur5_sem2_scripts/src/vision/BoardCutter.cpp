@@ -105,7 +105,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	return cheesWithMarkedCornors;
 }
 
-std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
+std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode, float angleOffset)
 {
 	// Initialize the transformation matrix
 	std::array<std::array<double, 4>, 4> TFchess = {{{1, 0, 0, 0},
@@ -117,7 +117,7 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
 
 	// Calculate the angle of rotation in degrees
 
-	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45;
+	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45 + angleOffset;
 
 	// Calculate the translation values
 	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x, greenPointCenter.y);

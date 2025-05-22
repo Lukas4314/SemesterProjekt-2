@@ -53,7 +53,7 @@ private:
     const float TABLEHEIGHT = 0.212;                                     // Height of the table
 
     const float idle_position[3] = {0.15, 0.0, TRANSFERHEIGHT}; // Idle position of the robot
-    const float tile_size = 0.0353;                             // Size of each square on the chess board
+    const float tile_size = 0.036;                             // Size of each square on the chess board
 
     float end_effector_angle = 0.0; // Angle of the end effector
 

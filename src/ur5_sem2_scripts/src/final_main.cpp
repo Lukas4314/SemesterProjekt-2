@@ -31,7 +31,7 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
 
 std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot(VisionInterface &visionInterface)
 {
-  double pixelPerCm = 11.2;
+  double pixelPerCm = 11.05;
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = visionInterface.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
@@ -45,8 +45,9 @@ std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_pixels[1][3] / pixelPerCm;
 
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
-  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 1.6;
-  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 1.6;
+  float pegRadius = 1.6;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + pegRadius;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + pegRadius;
   return yellowPlok_boardGreen_T_cm;
 }
 
@@ -76,8 +77,9 @@ std::array<std::array<double, 4>, 4> getFullTransformationMatrix(VisionInterface
 
   std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
 
-  float boardSize = 0.295;
-  float cali = 0.011;
+  float boardSize = 0.288;
+  float cali = 0.00;
+
   std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
                                                                    {-1, 0, 0, boardSize + cali},
                                                                    {0, 0, -1, 0},
@@ -227,25 +229,20 @@ int main(int argc, char *argv[])
   // Takes start image
   visionInterface.getPieceMovedString(0, CAMERA);
 
+  end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+  chessMoves.setEndEffectorAngle(end_effector_angle);
+
+  std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 0.35},
+                                                                {-1, 0, 0, 0.25},
+                                                                {0, 0, 1, 0},
+                                                                {0, 0, 0, 1}}};
+
   // Moves the robot to green spot on the board for calibration
   std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
 
-  end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
-  double test_TF[4][4];
-  for (size_t i = 0; i < 4; ++i)
-  {
-    for (size_t j = 0; j < 4; ++j)
-    {
-      test_TF[i][j] = base_boardGreen_T_m[i][j];
-    }
-  }
-  chessMoves.setEndEffectorAngle(end_effector_angle);
-  chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+  std::array<std::array<double, 4>, 4> base_boardRed_T_m = getFullTransformationMatrix(visionInterface);
 
-  std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
-                                                                {-1, 0, 0, 25},
-                                                                {0, 0, 1, 0},
-                                                                {0, 0, 0, 1}}};
+  double test_TF[4][4];
 
   for (size_t i = 0; i < 4; ++i)
   {
@@ -254,13 +251,29 @@ int main(int argc, char *argv[])
       test_TF[i][j] = base_yellowPlok_T_cm[i][j];
     }
   }
-  chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
 
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_boardGreen_T_m[i][j];
+    }
+  }
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
 
-  
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_boardRed_T_m[i][j];
+    }
+  }
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
   // if the player wants to be black
   float boardAngle = visionInterface.getBoardCutter(0).getAngle();
-  if (boardAngle > 90 || boardAngle < -90)
+  if ((boardAngle > 90 && boardAngle < 180) || (boardAngle < -90 && boardAngle > -180))
   {
     std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
 
