@@ -3,25 +3,27 @@
 #include "StockfishUCI.h"
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
+#include <opencv2/opencv.hpp>
+
 using namespace std;
 
 class ChessBoard
 {
 public:
-    ChessBoard();                                                       
+    ChessBoard();
     void setupBoard();
-    string& getActiveColor();
+    string &getActiveColor();
     void updateHalfMoveClock(string move, vector<vector<char>> boardCopy);
     bool isThreefoldRule();
     void setBoard(const vector<vector<char>> &newBoard);
-    vector<vector<char>> getBoard();                                                                                                                 
-    vector<string> getMoveHistory();                                                 
+    vector<vector<char>> getBoard();
+    vector<string> getMoveHistory();
     static bool isWhite(char piece);
     static bool isBlack(char piece);
     void movePiece(int fromRow, int fromCol, int toRow, int toCol);
     void removePiece(int row, int col);
     void setPiece(int row, int col, char piece);
-    void doCastle(string &move);                                                      
+    void doCastle(string &move);
     void doSwitch(string &move);
     bool shouldSwitch(char piece1);
     void promoteAllEndRowPawns();
@@ -29,17 +31,20 @@ public:
     bool reachedFiftyMoveRule();
     bool isInsufficientMaterial();
     bool isStalemate(string &color);
-    bool isRemi(string &color);     
-    void updateTurn(string move, vector<vector<char>> boardCopy);                  
+    bool isRemi(string &color);
+    void updateTurn(string move, vector<vector<char>> boardCopy);
     bool applyIfValidMove(string move);
     void printBoard();
-    void updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion);                                                 
+    void updateMoveStruct(char piece, char captured, string activeColor, int fromRow, int fromCol, int toRow, int toCol, char type, bool promotion);
     void resetMoveStruct();
     MoveStruct getMoveStruct();
     void drawBoard();
-    ~ChessBoard();                                                   
+    ~ChessBoard();
 
 private:
+    void overlayImage(cv::Mat &background, const cv::Mat &foreground, cv::Point location);
+    cv::Mat loadAndResize(const std::string &path, int size);
+
     vector<vector<char>> board;
 
     string activeColor;
@@ -48,7 +53,7 @@ private:
     int halfMoveClock;
     int moveCount;
 
-    vector<string> moveHistory; 
+    vector<string> moveHistory;
 
     vector<vector<vector<char>>> boardHistory; // History of the board states
 
