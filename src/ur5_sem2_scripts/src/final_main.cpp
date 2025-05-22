@@ -29,10 +29,8 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
   }
 }
 
-std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &visionInterface)
+std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot(VisionInterface &visionInterface)
 {
-  // Create a logger
-  auto logger = rclcpp::get_logger("final_main");
   double pixelPerCm = 11.2;
 
   // Makes the transformation matrix from the cam to the yellow plok
@@ -49,6 +47,13 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
   yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 1.6;
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 1.6;
+  return yellowPlok_boardGreen_T_cm;
+}
+
+std::array<std::array<double, 4>, 4> getTransformationMatrixBaseToGreenspot(VisionInterface &visionInterface)
+
+{
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = getTransformationMatrixYellowPegToGreenSpot(visionInterface);
 
   std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
                                                                 {-1, 0, 0, 25},
@@ -62,6 +67,15 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
                                                                {{base_boardGreen_T_cm[1][0], base_boardGreen_T_cm[1][1], base_boardGreen_T_cm[1][2], base_boardGreen_T_cm[1][3] / 100.0}},
                                                                {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
+  return base_boardGreen_T_m;
+}
+
+std::array<std::array<double, 4>, 4> getFullTransformationMatrix(VisionInterface &visionInterface)
+{
+  // Create a logger
+  auto logger = rclcpp::get_logger("final_main");
+
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
 
   float boardSize = 0.295;
   float cali = 0.011;
@@ -72,9 +86,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
 
   std::array<std::array<double, 4>, 4> base_boardRed_T_m = BoardTransformer::multiplyMatrices(base_boardGreen_T_m, boardGreen_boardRed_T_m);
 
-  RCLCPP_INFO(logger, "cam_table_T_cm:");
-  // printMatrix(cam_table_T_cm, logger);
-
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = getTransformationMatrixYellowPegToGreenSpot(visionInterface);
   RCLCPP_INFO(logger, "yellowPlok_boardGreen_T_cm:");
   printMatrix(yellowPlok_boardGreen_T_cm, logger);
 
@@ -216,11 +228,25 @@ int main(int argc, char *argv[])
   // Takes start image
   visionInterface.getPieceMovedString(0, CAMERA);
 
+  // Moves the robot to green spot on the board for calibration
+  std::array<std::array<double, 4>, 4> base_boardRed_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
+  end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+  double test_TF[4][4];
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_boardRed_T_m[i][j];
+    }
+  }
+  chessMoves.setEndEffectorAngle(end_effector_angle);
+  chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
   // if the player wants to be black
   float boardAngle = visionInterface.getBoardCutter(0).getAngle();
   if (boardAngle > 90 || boardAngle < -90)
   {
-    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(visionInterface);
+    std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
 
     // Puts it into the array
     double raw_TF[4][4];
@@ -231,7 +257,7 @@ int main(int argc, char *argv[])
         raw_TF[i][j] = TF[i][j];
       }
     }
-    
+
     // Applies the move from stokfish
     MoveStruct movePlan;
     movePlan = applyStockfishMove(engine, chess);
@@ -258,7 +284,7 @@ int main(int argc, char *argv[])
     // Gets a move from the camera and checks if it is valid and repeats until it is
     MoveStruct movePlanCamera = applyCameraMove(visionInterface, chess);
     // Gets the transformation matrix
-    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(visionInterface);
+    std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
 
     // Puts it into the array
     double raw_TF[4][4];
@@ -301,15 +327,6 @@ int main(int argc, char *argv[])
     chessMoves.move(movePlan, raw_TF);
     std::cout << "Moved the robot" << std::endl;
 
-    // Outputting moveStruct
-    // cout << "Piece: " << movePlan.piece << endl;
-    // cout << "Captured: " << movePlan.captured << endl;
-    // cout << "Color: " << movePlan.color << endl;
-    // cout << "Start: [" << movePlan.start[0] << ", " << movePlan.start[1] << "]" << endl;
-    // cout << "End: [" << movePlan.end[0] << ", " << movePlan.end[1] << "]" << endl;
-    // cout << "Type: " << movePlan.type << endl;
-    // cout << "Promotion: " << movePlan.promotion << endl;
-
     // Just for opdating the camera image
     visionInterface.getPieceMovedString(0, ENGINE);
 
@@ -327,18 +344,6 @@ int main(int argc, char *argv[])
       cout << "Remi! " << endl;
       break;
     }
-
-    // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-    /*
-     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
-     std::cout << "Press a button when the robot has made its move" << std::endl;
-     if (cv::waitKey(0) == 'q')
-     {
-       break;
-     }
-     */
-    // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
     chess.printBoard();
     chess.drawBoard();
