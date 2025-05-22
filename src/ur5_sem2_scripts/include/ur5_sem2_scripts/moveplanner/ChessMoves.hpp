@@ -26,7 +26,7 @@ public:
     bool castle(MoveStruct move, double TFchess[4][4]);
     bool en_passant(MoveStruct move, double TFchess[4][4]);
     bool playercapture(MoveStruct move, double TFchess[4][4]);
-    bool execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight = {{false, false}});
+    bool execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight = {{false, false}}, bool gripperShouldDoStuffs = true);
     void moveToCenterInForTransformationMatrix(double TFchess[4][4]);
 
 

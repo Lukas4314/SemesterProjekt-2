@@ -376,7 +376,7 @@ bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4])
     return true;
 }
 
-bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight)
+bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight, bool gripperShouldDoStuffs)
 {
     RCLCPP_INFO(node_->get_logger(), "execute_move() called");
 
@@ -437,7 +437,10 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Pick up the piece
-    gripper.closeGripper();
+    if (gripperShouldDoStuffs)
+    {
+        gripper.closeGripper();
+    }
     rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to the end position
@@ -479,8 +482,10 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Set the piece down
-    gripper.openGripper();
-
+    if (gripperShouldDoStuffs)
+    {
+        gripper.openGripper();
+    }
     rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to idle position
@@ -495,7 +500,7 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     waypoints.push_back(pose6);
 
     geometry_msgs::msg::Pose pose7 = start_pose;
-    
+
     pose7.position.x = idle_position[0];
     pose7.position.y = idle_position[1];
     pose7.position.z = idle_position[2];
@@ -530,7 +535,6 @@ std::array<double, 2> ChessMoves::applyTransformation(int point[2], double TFche
     return transformed_point;
 }
 
-
 void ChessMoves::moveToCenterInForTransformationMatrix(double TFchess[4][4])
 {
     RCLCPP_INFO(node_->get_logger(), "moveToCenterInTransformationMatrix() called");
@@ -538,5 +542,5 @@ void ChessMoves::moveToCenterInForTransformationMatrix(double TFchess[4][4])
     int startPoint[2] = {start[0], start[1]};
     std::array<double, 2> end = applyTransformation(startPoint, TFchess);
     std::array<bool, 2> boardheight = {true, true};
-    execute_move(start, end, boardheight);
+    execute_move(start, end, boardheight, false);
 }
