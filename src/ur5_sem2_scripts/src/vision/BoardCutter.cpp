@@ -58,7 +58,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90 - 180;
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
-	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, redPoint.cols, redPoint.rows), cv::Scalar(0, 255, 0), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
 
 	// cv::imshow("MarkedConorsDebugWithMarkedCornors", chessWithMarkedCornorsDebug);
 
