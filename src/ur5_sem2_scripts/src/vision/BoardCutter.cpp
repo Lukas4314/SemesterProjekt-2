@@ -58,7 +58,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	double angle = atan2(difference.y, difference.x) * 180 / 3.14159265 - 45 - 90 - 180;
 	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(greenPoint.x, greenPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 0, 255), 2);
-	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, greenCircle.cols, greenCircle.rows), cv::Scalar(0, 255, 0), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, cv::Rect(redPoint.x, redPoint.y, redPoint.cols, redPoint.rows), cv::Scalar(0, 255, 0), 2);
 
 	// cv::imshow("MarkedConorsDebugWithMarkedCornors", chessWithMarkedCornorsDebug);
 
@@ -69,8 +69,8 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
 		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows)),
 		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows)));
-	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
-	//std::cout << boundingBox << std::endl;
+	// cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
+	// std::cout << boundingBox << std::endl;
 	cv::imshow("preRotationStuff" + name, chessWithMarkedCornorsDebug);
 
 	cv::warpAffine(cheesWithMarkedCornors, cheesWithMarkedCornors, rotationMatrix, cheesWithMarkedCornors.size());
@@ -86,7 +86,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
 		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows)),
 		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows)));
-	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(0, 255, 0), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox2, cv::Scalar(0, 255, 0), 2);
 
 	if (boundingBox2.x < 0 || boundingBox2.y < 0 || boundingBox2.x + boundingBox.width >= cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height >= cheesWithMarkedCornors.rows)
 	{
