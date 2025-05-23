@@ -83,7 +83,7 @@ int MoveFinder::findMove(cv::Mat oldChessBoard, cv::Mat newChessBoard, int depth
 	// Grid configuration
 	int cellWidth = width / 8;
 	int cellHeight = height / 8;
-	int falloffDistance = 30; // Distance from grid line to start dimming
+	int falloffDistance = 10; // Distance from grid line to start dimming
 
 	for (int y = 0; y < height; ++y)
 	{
