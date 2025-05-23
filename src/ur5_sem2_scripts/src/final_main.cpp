@@ -305,10 +305,15 @@ int main(int argc, char *argv[])
   }
 
   bool instaQuit = false;
-  if (cv::waitKey(0) == 'q')
-  {
-    instaQuit = true;
-  }
+
+  char keyPressed = cv::waitKey(0);
+  while (keyPressed != 32)
+    if (keyPressed == 'q')
+    {
+      instaQuit = true;
+      break;
+    }
+  keyPressed = cv::waitKey(0);
 
   while (!instaQuit)
   {
@@ -385,10 +390,14 @@ int main(int argc, char *argv[])
     chess.drawBoard();
 
     // Check if the user quits, or wait for the player move
-    if (cv::waitKey(0) == 'q')
-    {
-      break;
-    }
+    keyPressed = cv::waitKey(0);
+    while (keyPressed != 32)
+      if (keyPressed == 'q')
+      {
+        instaQuit = true;
+        break;
+      }
+      keyPressed = cv::waitKey(0);
   }
 
   // Shutdown ROS
