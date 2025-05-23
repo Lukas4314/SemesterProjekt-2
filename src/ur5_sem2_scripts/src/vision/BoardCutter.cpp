@@ -64,6 +64,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
 
+	std::cout << "67" << std::endl;
 	cv::Rect boundingBox(
 		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows) / 2,
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
@@ -81,6 +82,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	cv::imshow("PostRotation" + name, chessWithMarkedCornorsDebug);
 
+	std::cout << "85" << std::endl;
 	cv::Rect boundingBox2(
 		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows) / 2,
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
