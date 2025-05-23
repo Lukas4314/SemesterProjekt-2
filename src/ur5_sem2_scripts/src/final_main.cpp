@@ -308,13 +308,14 @@ int main(int argc, char *argv[])
 
   char keyPressed = cv::waitKey(0);
   while (keyPressed != 32)
+  {
     if (keyPressed == 'q')
     {
       instaQuit = true;
       break;
     }
-  keyPressed = cv::waitKey(0);
-
+    keyPressed = cv::waitKey(0);
+  }
   while (!instaQuit)
   {
 
@@ -392,12 +393,14 @@ int main(int argc, char *argv[])
     // Check if the user quits, or wait for the player move
     keyPressed = cv::waitKey(0);
     while (keyPressed != 32)
+    {
       if (keyPressed == 'q')
       {
         instaQuit = true;
         break;
       }
       keyPressed = cv::waitKey(0);
+    }
   }
 
   // Shutdown ROS
