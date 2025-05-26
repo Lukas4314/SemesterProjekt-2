@@ -129,10 +129,10 @@ for root, dirs, files in os.walk(directory_path):
                                 gripperPutdownEnemyPieceSuccessNum += 1
 
                             if gripperPickupForCastling == 1 and gripperPickupForCastlingSuccess == 1:
-                                gripperPickupOwnPieceSuccessNum += 2
-                                gripperPutDownOwnPieceSuccessNum += 2
-                                gripperPickupOwnPieceTotal += 2
-                                gripperPutdownOwnPieceTotal += 2
+                                gripperPickupOwnPieceSuccessNum += 1
+                                gripperPutDownOwnPieceSuccessNum += 1
+                                gripperPickupOwnPieceTotal += 1
+                                gripperPutdownOwnPieceTotal += 1
 
                             if playerMove != 1 and robotManagesToMakeMovement == 1:
                                 robotMoves += 1
