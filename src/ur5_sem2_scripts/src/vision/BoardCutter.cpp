@@ -119,15 +119,15 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode, float ang
 
 	// Calculate the angle of rotation in degrees
 
-	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45 + angleOffset;
+	double angle = -atan2(difference.y, difference.x) * 180.0f / M_PI - 45.0f + angleOffset;
 
 	// Calculate the translation values
 	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x, greenPointCenter.y);
 
-	TFchess[0][0] = cos(angle * M_PI / 180);
-	TFchess[0][1] = -sin(angle * M_PI / 180);
-	TFchess[1][0] = sin(angle * M_PI / 180);
-	TFchess[1][1] = cos(angle * M_PI / 180);
+	TFchess[0][0] = cos(angle * M_PI / 180.0f);
+	TFchess[0][1] = -sin(angle * M_PI / 180.0f);
+	TFchess[1][0] = sin(angle * M_PI / 180.0f);
+	TFchess[1][1] = cos(angle * M_PI / 180.0f);
 	TFchess[0][3] = translationFromCorner.x;
 	TFchess[1][3] = translationFromCorner.y;
 
@@ -145,7 +145,7 @@ float BoardCutter::getAngle()
 	// Set the transformation values based on the chessboard rotation and position
 	cv::Point2i difference = redPointCenter - greenPointCenter;
 
-	return -atan2(difference.y, difference.x) * 180 / M_PI - 45;
+	return -atan2(difference.y, difference.x) * 180.0f / M_PI - 45.0f;
 }
 
 void BoardCutter::zoom(cv::Mat inputImage, cv::Mat &outputImage, double zoomFactor, cv::Point2i offset)
