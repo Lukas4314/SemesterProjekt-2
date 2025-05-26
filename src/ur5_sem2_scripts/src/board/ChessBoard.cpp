@@ -10,6 +10,7 @@
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
 #include <opencv2/opencv.hpp>
+#include "ament_index_cpp/get_package_share_directory.hpp"
 
 using namespace std;
 
@@ -596,20 +597,22 @@ void ChessBoard::drawBoard()
             cv::rectangle(boardImage, cv::Rect(col * cellSize, row * cellSize, cellSize, cellSize), color, -1);
         }
     }
+
+    std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
     // Map piece chars to image paths
     std::unordered_map<char, std::string> pieceImages = {
-        {'P', "/pictures/pieces/wp.png"},
-        {'p', "/pictures/pieces/bp.png"},
-        {'R', "/pictures/pieces/wr.png"},
-        {'r', "/pictures/pieces/br.png"},
-        {'N', "/pictures/pieces/wn.png"},
-        {'n', "/pictures/pieces/bn.png"},
-        {'B', "/pictures/pieces/wb.png"},
-        {'b', "/pictures/pieces/bb.png"},
-        {'Q', "/pictures/pieces/wq.png"},
-        {'q', "/pictures/pieces/bq.png"},
-        {'K', "/pictures/pieces/wk.png"},
-        {'k', "/pictures/pieces/bk.png"},
+        {'p', package_share_dir + "/pictures/pieces/wp.png"},
+        {'P', package_share_dir + "/pictures/pieces/bp.png"},
+        {'r', package_share_dir + "/pictures/pieces/wr.png"},
+        {'R', package_share_dir + "/pictures/pieces/br.png"},
+        {'n', package_share_dir + "/pictures/pieces/wn.png"},
+        {'N', package_share_dir + "/pictures/pieces/bn.png"},
+        {'b', package_share_dir + "/pictures/pieces/wb.png"},
+        {'B', package_share_dir + "/pictures/pieces/bb.png"},
+        {'q', package_share_dir + "/pictures/pieces/wq.png"},
+        {'Q', package_share_dir + "/pictures/pieces/bq.png"},
+        {'k', package_share_dir + "/pictures/pieces/wk.png"},
+        {'K', package_share_dir + "/pictures/pieces/bk.png"},
     };
 
     // Load all images up front
@@ -639,6 +642,12 @@ void ChessBoard::drawBoard()
 cv::Mat ChessBoard::loadAndResize(const std::string &path, int size)
 {
     cv::Mat img = cv::imread(path, cv::IMREAD_UNCHANGED); // Load with alpha channel
+    if (img.empty())
+    {
+        std::cerr << "Error loading image: " << path << std::endl;
+        return cv::Mat();
+    }
+
     cv::resize(img, img, cv::Size(size, size));
     return img;
 }

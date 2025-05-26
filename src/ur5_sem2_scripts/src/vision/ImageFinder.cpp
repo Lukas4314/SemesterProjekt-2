@@ -143,6 +143,17 @@ void ImageFinder::findImageInImage(cv::Mat image, cv::Mat frame, cv::Point2i &po
             cv::normalize(diffS, diffS, 0, 255, cv::NORM_MINMAX);
             cv::normalize(diffV, diffV, 0, 255, cv::NORM_MINMAX);
 
+            float hueWeight = 2.0f;
+            float saturationWeight = 1.0f;
+            float valueWeight = 1.0f;
+            float summedWeight = hueWeight + saturationWeight + valueWeight;
+
+            diffH *= hueWeight / summedWeight;
+            diffS *= saturationWeight / summedWeight;
+            diffV *= valueWeight / summedWeight;
+
+
+
             cv::Mat summedHSVImage = (diffH + diffS + diffV) / 3;
 
             cv::Mat invertedMask = 255 - mask;

@@ -64,13 +64,14 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	cv::Mat rotationMatrix = cv::getRotationMatrix2D(cv::Point2i(cheesWithMarkedCornors.cols / 2, cheesWithMarkedCornors.rows / 2), angle, 1);
 
+	std::cout << "67" << std::endl;
 	cv::Rect boundingBox(
 		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows) / 2,
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
 		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows)),
 		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows)));
-	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
-	//std::cout << boundingBox << std::endl;
+	// cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(255, 255, 0), 2);
+	// std::cout << boundingBox << std::endl;
 	cv::imshow("preRotationStuff" + name, chessWithMarkedCornorsDebug);
 
 	cv::warpAffine(cheesWithMarkedCornors, cheesWithMarkedCornors, rotationMatrix, cheesWithMarkedCornors.size());
@@ -81,12 +82,13 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 
 	cv::imshow("PostRotation" + name, chessWithMarkedCornorsDebug);
 
+	std::cout << "85" << std::endl;
 	cv::Rect boundingBox2(
 		std::min(greenCenterPoint.x, redCenterPoint.x) + (mask.rows) / 2,
 		std::min(greenCenterPoint.y, redCenterPoint.y) + (mask.rows) / 2,
 		abs(abs(greenCenterPoint.x - redCenterPoint.x) - (mask.rows)),
 		abs(abs(greenCenterPoint.y - redCenterPoint.y) - (mask.rows)));
-	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox, cv::Scalar(0, 255, 0), 2);
+	cv::rectangle(chessWithMarkedCornorsDebug, boundingBox2, cv::Scalar(0, 255, 0), 2);
 
 	if (boundingBox2.x < 0 || boundingBox2.y < 0 || boundingBox2.x + boundingBox.width >= cheesWithMarkedCornors.cols || boundingBox.y + boundingBox.height >= cheesWithMarkedCornors.rows)
 	{
@@ -105,7 +107,7 @@ cv::Mat BoardCutter::cutBoard(cv::Mat cheesWithMarkedCornors, cv::Mat greenCircl
 	return cheesWithMarkedCornors;
 }
 
-std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
+std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode, float angleOffset)
 {
 	// Initialize the transformation matrix
 	std::array<std::array<double, 4>, 4> TFchess = {{{1, 0, 0, 0},
@@ -117,15 +119,15 @@ std::array<std::array<double, 4>, 4> BoardCutter::getTFchess(int mode)
 
 	// Calculate the angle of rotation in degrees
 
-	double angle = -atan2(difference.y, difference.x) * 180 / M_PI - 45;
+	double angle = -atan2(difference.y, difference.x) * 180.0f / M_PI - 45.0f + angleOffset;
 
 	// Calculate the translation values
 	cv::Point2i translationFromCorner = cv::Point2i(greenPointCenter.x, greenPointCenter.y);
 
-	TFchess[0][0] = cos(angle * M_PI / 180);
-	TFchess[0][1] = -sin(angle * M_PI / 180);
-	TFchess[1][0] = sin(angle * M_PI / 180);
-	TFchess[1][1] = cos(angle * M_PI / 180);
+	TFchess[0][0] = cos(angle * M_PI / 180.0f);
+	TFchess[0][1] = -sin(angle * M_PI / 180.0f);
+	TFchess[1][0] = sin(angle * M_PI / 180.0f);
+	TFchess[1][1] = cos(angle * M_PI / 180.0f);
 	TFchess[0][3] = translationFromCorner.x;
 	TFchess[1][3] = translationFromCorner.y;
 
@@ -143,7 +145,7 @@ float BoardCutter::getAngle()
 	// Set the transformation values based on the chessboard rotation and position
 	cv::Point2i difference = redPointCenter - greenPointCenter;
 
-	return -atan2(difference.y, difference.x) * 180 / M_PI - 45;
+	return -atan2(difference.y, difference.x) * 180.0f / M_PI - 45.0f;
 }
 
 void BoardCutter::zoom(cv::Mat inputImage, cv::Mat &outputImage, double zoomFactor, cv::Point2i offset)

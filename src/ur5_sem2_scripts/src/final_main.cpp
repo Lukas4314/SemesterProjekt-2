@@ -29,11 +29,9 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
   }
 }
 
-std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &visionInterface)
+std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot(VisionInterface &visionInterface)
 {
-  // Create a logger
-  auto logger = rclcpp::get_logger("final_main");
-  double pixelPerCm = 11.2;
+  double pixelPerCm = 11.05;
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = visionInterface.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
@@ -47,8 +45,15 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
   yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_pixels[1][3] / pixelPerCm;
 
   // Adds the 2.5 cm to the x and y for the square offset where the image is cutted to
-  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + 1.6;
-  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + 1.6;
+  float pegRadius = 1.6;
+  yellowPlok_boardGreen_T_cm[0][3] = yellowPlok_boardGreen_T_cm[0][3] + pegRadius;
+  yellowPlok_boardGreen_T_cm[1][3] = yellowPlok_boardGreen_T_cm[1][3] + pegRadius;
+  return yellowPlok_boardGreen_T_cm;
+}
+
+std::array<std::array<double, 4>, 4> getTransformationMatrixBaseToGreenspot(VisionInterface &visionInterface)
+{
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = getTransformationMatrixYellowPegToGreenSpot(visionInterface);
 
   std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 35},
                                                                 {-1, 0, 0, 25},
@@ -62,9 +67,19 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
                                                                {{base_boardGreen_T_cm[1][0], base_boardGreen_T_cm[1][1], base_boardGreen_T_cm[1][2], base_boardGreen_T_cm[1][3] / 100.0}},
                                                                {{base_boardGreen_T_cm[2][0], base_boardGreen_T_cm[2][1], base_boardGreen_T_cm[2][2], base_boardGreen_T_cm[2][3]}},
                                                                {{base_boardGreen_T_cm[3][0], base_boardGreen_T_cm[3][1], base_boardGreen_T_cm[3][2], base_boardGreen_T_cm[3][3]}}}};
+  return base_boardGreen_T_m;
+}
 
-  float boardSize = 0.295;
-  float cali = 0.011;
+std::array<std::array<double, 4>, 4> getFullTransformationMatrix(VisionInterface &visionInterface)
+{
+  // Create a logger
+  auto logger = rclcpp::get_logger("final_main");
+
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
+
+  float boardSize = 0.288;
+  float cali = 0.01;
+
   std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
                                                                    {-1, 0, 0, boardSize + cali},
                                                                    {0, 0, -1, 0},
@@ -72,9 +87,7 @@ std::array<std::array<double, 4>, 4> getTransformationMatrix(VisionInterface &vi
 
   std::array<std::array<double, 4>, 4> base_boardRed_T_m = BoardTransformer::multiplyMatrices(base_boardGreen_T_m, boardGreen_boardRed_T_m);
 
-  RCLCPP_INFO(logger, "cam_table_T_cm:");
-  // printMatrix(cam_table_T_cm, logger);
-
+  std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_cm = getTransformationMatrixYellowPegToGreenSpot(visionInterface);
   RCLCPP_INFO(logger, "yellowPlok_boardGreen_T_cm:");
   printMatrix(yellowPlok_boardGreen_T_cm, logger);
 
@@ -213,31 +226,59 @@ int main(int argc, char *argv[])
   ChessBoard chess;
   StockfishUCI engine;
 
+  chess.printBoard();
+  chess.drawBoard();
+
   // Takes start image
   visionInterface.getPieceMovedString(0, CAMERA);
 
+  end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+  chessMoves.setEndEffectorAngle(end_effector_angle);
+
+  std::array<std::array<double, 4>, 4> base_yellowPlok_T_cm = {{{0, 1, 0, 0.35},
+                                                                {-1, 0, 0, 0.25},
+                                                                {0, 0, 1, 0},
+                                                                {0, 0, 0, 1}}};
+
+  // Moves the robot to green spot on the board for calibration
+  std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
+
+  std::array<std::array<double, 4>, 4> base_boardRed_T_m = getFullTransformationMatrix(visionInterface);
+
+  double test_TF[4][4];
+
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_yellowPlok_T_cm[i][j];
+    }
+  }
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_boardGreen_T_m[i][j];
+    }
+  }
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
+  for (size_t i = 0; i < 4; ++i)
+  {
+    for (size_t j = 0; j < 4; ++j)
+    {
+      test_TF[i][j] = base_boardRed_T_m[i][j];
+    }
+  }
+  // chessMoves.moveToCenterInForTransformationMatrix(test_TF);
+
   // if the player wants to be black
-  bool playerWhite = true;
-  if (!playerWhite)
+  float boardAngle = visionInterface.getBoardCutter(0).getAngle();
+  if ((boardAngle > 90 && boardAngle < 180) || (boardAngle < -90 && boardAngle > -180))
   {
-    applyStockfishMove(engine, chess);
-    Logger::setValue(CAMERA_MOVE, "0");
-    Logger::writeRow();
-  }
-
-  bool instaQuit = false;
-  if (cv::waitKey(0) == 'q')
-  {
-    instaQuit = true;
-  }
-
-  while (!instaQuit)
-  {
-
-    // Gets a move from the camera and checks if it is valid and repeats until it is
-    MoveStruct movePlanCamera = applyCameraMove(visionInterface, chess);
-    // Gets the transformation matrix
-    std::array<std::array<double, 4>, 4> TF = getTransformationMatrix(visionInterface);
+    std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
 
     // Puts it into the array
     double raw_TF[4][4];
@@ -248,6 +289,61 @@ int main(int argc, char *argv[])
         raw_TF[i][j] = TF[i][j];
       }
     }
+
+    // Applies the move from stokfish
+    MoveStruct movePlan;
+    movePlan = applyStockfishMove(engine, chess);
+    std::cout << "Now trying to move robot with best move " << std::endl;
+
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+
+    chessMoves.setEndEffectorAngle(end_effector_angle);
+    chessMoves.move(movePlan, raw_TF);
+    std::cout << "Moved the robot" << std::endl;
+    Logger::setValue(CAMERA_MOVE, "0");
+    Logger::writeRow();
+  }
+
+  bool instaQuit = false;
+
+  char keyPressed = cv::waitKey(0);
+  while (keyPressed != 32)
+  {
+    if (keyPressed == 'q')
+    {
+      instaQuit = true;
+      break;
+    }
+    keyPressed = cv::waitKey(0);
+  }
+  while (!instaQuit)
+  {
+
+    // Gets a move from the camera and checks if it is valid and repeats until it is
+    MoveStruct movePlanCamera = applyCameraMove(visionInterface, chess);
+
+    chess.printBoard();
+    chess.drawBoard();
+
+    // Gets the transformation matrix
+    std::array<std::array<double, 4>, 4> TF = getFullTransformationMatrix(visionInterface);
+
+    // Puts it into the array
+    double raw_TF[4][4];
+    for (size_t i = 0; i < 4; ++i)
+    {
+      for (size_t j = 0; j < 4; ++j)
+      {
+        raw_TF[i][j] = TF[i][j];
+      }
+    }
+
+    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
+    chessMoves.setEndEffectorAngle(end_effector_angle);
+    chessMoves.move(movePlanCamera, raw_TF);
+
+    // Writes the row before stockfish starts playing
+    Logger::writeRow();
 
     if (chess.isMated(chess.getActiveColor()))
     {
@@ -260,13 +356,6 @@ int main(int argc, char *argv[])
       cout << "Remi! " << endl;
       break;
     }
-
-    end_effector_angle = visionInterface.getBoardCutter(0).getAngle() * M_PI / 180;
-    chessMoves.setEndEffectorAngle(end_effector_angle);
-    chessMoves.move(movePlanCamera, raw_TF);
-
-    // Writes the row before stockfish starts playing
-    Logger::writeRow();
 
     // Applies the move from stokfish
     MoveStruct movePlan;
@@ -280,14 +369,11 @@ int main(int argc, char *argv[])
     chessMoves.move(movePlan, raw_TF);
     std::cout << "Moved the robot" << std::endl;
 
-    // Outputting moveStruct
-    // cout << "Piece: " << movePlan.piece << endl;
-    // cout << "Captured: " << movePlan.captured << endl;
-    // cout << "Color: " << movePlan.color << endl;
-    // cout << "Start: [" << movePlan.start[0] << ", " << movePlan.start[1] << "]" << endl;
-    // cout << "End: [" << movePlan.end[0] << ", " << movePlan.end[1] << "]" << endl;
-    // cout << "Type: " << movePlan.type << endl;
-    // cout << "Promotion: " << movePlan.promotion << endl;
+    // Just for opdating the camera image
+    visionInterface.getPieceMovedString(0, ENGINE);
+
+    // writes the row after stockfish has played
+    Logger::writeRow();
 
     if (chess.isMated(chess.getActiveColor()))
     {
@@ -301,31 +387,19 @@ int main(int argc, char *argv[])
       break;
     }
 
-    // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-    /*
-     // wait for the robot to have done its move (not sure if chessMoves.move() is blocking though)
-     std::cout << "Press a button when the robot has made its move" << std::endl;
-     if (cv::waitKey(0) == 'q')
-     {
-       break;
-     }
-     */
-    // IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-
-    // Just for opdating the camera image
-    visionInterface.getPieceMovedString(0, ENGINE);
-
-    // writes the row after stockfish has played
-    Logger::writeRow();
-
     chess.printBoard();
     chess.drawBoard();
 
     // Check if the user quits, or wait for the player move
-    if (cv::waitKey(0) == 'q')
+    keyPressed = cv::waitKey(0);
+    while (keyPressed != 32)
     {
-      break;
+      if (keyPressed == 'q')
+      {
+        instaQuit = true;
+        break;
+      }
+      keyPressed = cv::waitKey(0);
     }
   }
 

@@ -140,7 +140,7 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4])
     {
         for (int i = 0; i < 16; i++)
         {
-            if (toupper(deadPiecesLeft[i]) == toupper(move.piece))
+            if (toupper(deadPiecesLeft[i]) == toupper(move.promotion))
             {
                 deadPiecesLeft[i] = '-';
                 deathposition[0] = death_positionsleft[i][0];
@@ -171,7 +171,19 @@ bool ChessMoves::add_piece(MoveStruct move, double TFchess[4][4])
 
     RCLCPP_INFO(node_->get_logger(), "start: %f, %f", start[0], start[1]);
     std::array<bool, 2> boardheight = {false, true};
-    if (execute_move(start, end, boardheight))
+
+    if (deathposition[0] == 0 && deathposition[1] == 0)
+    {
+        if (execute_move({0.2, 0.2}, end, boardheight, false))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if (execute_move(start, end, boardheight))
     {
         return true;
     }
@@ -376,7 +388,7 @@ bool ChessMoves::playercapture(MoveStruct move, double TFchess[4][4])
     return true;
 }
 
-bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight)
+bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2> end, std::array<bool, 2> boardheight, bool gripperShouldDoStuffs)
 {
     RCLCPP_INFO(node_->get_logger(), "execute_move() called");
 
@@ -437,7 +449,11 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Pick up the piece
-    gripper.closeGripper();
+    if (gripperShouldDoStuffs)
+    {
+        gripper.closeGripper();
+    }
+
     rclcpp::sleep_for(std::chrono::seconds(0));
 
     // Move to the end position
@@ -479,7 +495,14 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     }
 
     // Set the piece down
-    gripper.openGripper();
+    if (gripperShouldDoStuffs)
+    {
+        gripper.openGripper();
+    }
+    else
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    }
 
     rclcpp::sleep_for(std::chrono::seconds(0));
 
@@ -495,7 +518,7 @@ bool ChessMoves::execute_move(std::array<double, 2> start, std::array<double, 2>
     waypoints.push_back(pose6);
 
     geometry_msgs::msg::Pose pose7 = start_pose;
-    
+
     pose7.position.x = idle_position[0];
     pose7.position.y = idle_position[1];
     pose7.position.z = idle_position[2];
@@ -522,10 +545,32 @@ std::array<double, 2> ChessMoves::applyTransformation(int point[2], double TFche
 {
     RCLCPP_INFO(node_->get_logger(), "applyTransformation() called");
     std::array<double, 2> transformed_point;
-    transformed_point[0] = TFchess[0][0] * (point[0] * tile_size + 0.024) + TFchess[0][1] * (point[1] * tile_size + 0.024) + TFchess[0][3];
-    transformed_point[1] = TFchess[1][0] * (point[0] * tile_size + 0.024) + TFchess[1][1] * (point[1] * tile_size + 0.024) + TFchess[1][3];
+    transformed_point[0] = TFchess[0][0] * ((float)point[0] + 0.5f) * tile_size + TFchess[0][1] * ((float)point[1] + 0.5f) * tile_size + TFchess[0][3];
+    transformed_point[1] = TFchess[1][0] * ((float)point[0] + 0.5f) * tile_size + TFchess[1][1] * ((float)point[1] + 0.5f) * tile_size + TFchess[1][3];
     RCLCPP_INFO(node_->get_logger(), "Original point: (%d, %d)", point[0], point[1]);
     RCLCPP_INFO(node_->get_logger(), "TF values: (%f, %f, %f, %f)", TFchess[0][0], TFchess[0][1], TFchess[0][3], TFchess[1][3]);
     RCLCPP_INFO(node_->get_logger(), "Transformed point: (%f, %f)", transformed_point[0], transformed_point[1]);
     return transformed_point;
+}
+
+std::array<double, 2> ChessMoves::applyTransformationRaw(int point[2], double TFchess[4][4])
+{
+    RCLCPP_INFO(node_->get_logger(), "applyTransformation() called");
+    std::array<double, 2> transformed_point;
+    transformed_point[0] = TFchess[0][0] * point[0] + TFchess[0][1] * point[1] + TFchess[0][3];
+    transformed_point[1] = TFchess[1][0] * point[0] + TFchess[1][1] * point[1] + TFchess[1][3];
+    RCLCPP_INFO(node_->get_logger(), "Original point: (%d, %d)", point[0], point[1]);
+    RCLCPP_INFO(node_->get_logger(), "TF values: (%f, %f, %f, %f)", TFchess[0][0], TFchess[0][1], TFchess[0][3], TFchess[1][3]);
+    RCLCPP_INFO(node_->get_logger(), "Transformed point: (%f, %f)", transformed_point[0], transformed_point[1]);
+    return transformed_point;
+}
+
+void ChessMoves::moveToCenterInForTransformationMatrix(double TFchess[4][4])
+{
+    RCLCPP_INFO(node_->get_logger(), "moveToCenterInTransformationMatrix() called");
+    std::array<double, 2> start = {0.2, 0.2};
+    int startPoint[2] = {start[0], start[1]};
+    std::array<double, 2> end = applyTransformationRaw(startPoint, TFchess);
+    std::array<bool, 2> boardheight = {true, true};
+    execute_move(start, end, boardheight, false);
 }
