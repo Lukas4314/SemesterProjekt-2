@@ -13,6 +13,10 @@ source install/setup.bash
 ros2 run ur5_sem2_scripts vision_main --ros-args -p camera_index:=<insert index>
 ```
 
+## To use the final_main run
+```
+ros2 run ur5_sem2_scripts final_main --ros-args -p camera_index:=<insert index>
+```
 ## To use with robot run
 
 for starting communication with robot:
@@ -44,4 +48,8 @@ start debug mode:
 ```
 --log-level DEBUG 
 ```
+
+# For Pico R/W access
+sudo chmod a+rw /dev/ttyACM0
+
 

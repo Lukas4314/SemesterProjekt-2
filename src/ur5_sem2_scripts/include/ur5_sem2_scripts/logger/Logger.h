@@ -12,7 +12,7 @@ constexpr const char *MOVE = "Move";
 
 // ALl the gripper related constants
 constexpr const char *GRIPPER_PICKUP_OWN_PIECE_SUCCESS = "GripperPickupOwnPieceSuccess";
-constexpr const char *GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS = "GripperPickupOwnPieceSuccess";
+constexpr const char *GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS = "GripperPutdownOwnPieceSuccess";
 constexpr const char *GRIPPER_SHOULD_PICKUP_DEAD_PIECE = "GripperShouldPickupDeadPiece";
 constexpr const char *GRIPPER_PICKUP_DEAD_PIECE_SUCCESS = "GripperPickupDeadPieceSuccess";
 constexpr const char *GRIPPER_PUTDOWN_DEAD_PIECE_SUCCESS = "GripperPutdownDeadPieceSuccess";
@@ -27,6 +27,11 @@ constexpr const char *EXTRA_PICKUP_FOR_CASTLING_SUCCESS = "ExtraPickupForCastlin
 constexpr const char *ANGLE_OF_TRANSFORMATION_MATRIX_CHESSBOARD = "AngleOfTransformationMatrixChessboard";
 constexpr const char *ANGLE_OF_TRANSFORMATION_MATRIX_PEGS = "AngleOfTransformationMatrixPegs";
 constexpr const char *MOVES_TRIED_BEFORE_SUCCESS = "MovesTriedBeforeSuccess";
+constexpr const char *CameraCorrectMove = "CameraCorrectImage";
+constexpr const char *CameraCorrectYellowPegLocation = "CameraCorrectYellowPegLocation";
+constexpr const char *CameraCorrectRedPegLocation = "CameraCorrectRedPegLocation";
+constexpr const char *CameraCorrectGreenCornerLocation = "CameraCorrectGreenCornorLocation";
+constexpr const char *CameraCorrectYellowCornorLocation = "CameraCorrectYellowCornorLocation";
 constexpr const char *MOST_LIKELY_CAMERA_MOVE = "MostLikelyCameraMove";
 constexpr const char *SECOND_MOST_LIKELY_CAMERA_MOVE = "SecondMostLikelyCameraMove";
 constexpr const char *THIRD_MOST_LIKELY_CAMERA_MOVE = "ThirdMostLikelyCameraMove";

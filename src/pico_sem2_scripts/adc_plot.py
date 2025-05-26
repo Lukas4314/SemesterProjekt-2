@@ -8,9 +8,9 @@ ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 plt.ion()
 fig, ax = plt.subplots()
 
-data = [0] * 100  # Start med dummy-værdier
+data = [0] * 500  # Start med dummy-værdier
 line, = ax.plot(data)
-ax.set_ylim(0, 4095)  # Hvis du bruger 12-bit ADC på Pico
+ax.set_ylim(0, 400)  # Hvis du bruger 12-bit ADC på Pico
 
 while True:
     try:

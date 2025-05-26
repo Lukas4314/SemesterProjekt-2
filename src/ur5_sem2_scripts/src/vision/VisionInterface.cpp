@@ -1,4 +1,4 @@
-#include "AllInOneMain.h"
+#include "VisionInterface.h"
 #include "ImageFinder.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
@@ -11,7 +11,7 @@
 #include "ament_index_cpp/get_package_share_directory.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
 
-AllInOneMain::AllInOneMain(int camera_index)
+VisionInterface::VisionInterface(int camera_index)
 {
 	std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
 
@@ -35,12 +35,12 @@ AllInOneMain::AllInOneMain(int camera_index)
 	boardCutter = BoardCutter();
 	boardCutter2 = BoardCutter("BoardCutter2");
 }
-AllInOneMain::~AllInOneMain() {}
+VisionInterface::~VisionInterface() {}
 
-int AllInOneMain::getPieceMoved(int depth)
+int VisionInterface::getPieceMoved(int depth, const std::string calledBy)
 {
 
-	if (depth != 0)
+	if (depth != 0 && calledBy == CAMERA)
 	{
 		if (oldChessboard.empty() || chessboard.empty())
 		{
@@ -51,7 +51,6 @@ int AllInOneMain::getPieceMoved(int depth)
 		return move;
 	}
 
-	std::cout << "gets new images" << std::endl;
 	if (!chessboard.empty())
 	{
 		oldChessboard = chessboard.clone();
@@ -59,7 +58,7 @@ int AllInOneMain::getPieceMoved(int depth)
 
 	flushCamera();
 
-	cv::imshow("Original frame", chessWithMarkedCornors);
+	cv::imshow("Original frame" + calledBy, chessWithMarkedCornors);
 
 	// Get the different colors
 	cv::Vec3b yellowCircleColor = yellowCircle.at<cv::Vec3b>(0, 0);
@@ -71,17 +70,17 @@ int AllInOneMain::getPieceMoved(int depth)
 	cv::Scalar redCircleScalar(redCircleColor[0], redCircleColor[1], redCircleColor[2]);
 	cv::Scalar greenCircleScalar(greenCircleColor[0], greenCircleColor[1], greenCircleColor[2]);
 
-	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorPegSearch");
-	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, yellowCircleScalar, "YellowColorPegSearch");
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorPegSearch" + calledBy);
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, yellowCircleScalar, "YellowColorPegSearch" + calledBy);
 
 	float circleScale2 = 1.4;
 	chessWithMarkedCornors = boardCutter2.cutBoard(chessWithMarkedCornors, yellowCircle, redCircle, mask, circleScale2, ImageFinder::hsvMode2);
 
-	cv::imshow("chessWithMarkedCornors after plok cut", chessWithMarkedCornors.clone());
+	cv::imshow("chessWithMarkedCornors after plok cut" + calledBy, chessWithMarkedCornors.clone());
 
 	// Show the differences for the chessboard
-	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, greenCircleScalar, "greenColorBoardSearch");
-	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorBoardSearch");
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, greenCircleScalar, "greenColorBoardSearch" + calledBy);
+	ImageFinder::showHSVChannelDifferences(chessWithMarkedCornors, redCircleScalar, "redColorBoardSearch" + calledBy);
 
 	// Cut out chessboard
 	chessboard = boardCutter.cutBoard(chessWithMarkedCornors, greenCircle, redCircle, mask, 0.45, ImageFinder::hsvMode2);
@@ -91,13 +90,18 @@ int AllInOneMain::getPieceMoved(int depth)
 	cv::Mat drawedChessboard = chessboard.clone();
 	ImageDrawer::drawChessBoard(chessboard, drawedChessboard);
 
-	cv::imshow("drawedChessboard", drawedChessboard);
-	cv::imshow("chessBoard", chessboard.clone());
+	cv::imshow("drawedChessboard" + calledBy, drawedChessboard);
+	cv::imshow("chessBoard" + calledBy, chessboard.clone());
+
+	if (calledBy == ENGINE)
+	{
+		return 0;
+	}
 
 	int movedPiece = 0;
 	if (!oldChessboard.empty())
 	{
-		cv::imshow("oldBoard", oldChessboard);
+		cv::imshow("oldBoard" + calledBy, oldChessboard);
 		movedPiece = MoveFinder::findMove(oldChessboard.clone(), chessboard.clone(), depth);
 	}
 
@@ -114,13 +118,13 @@ int AllInOneMain::getPieceMoved(int depth)
 	return 0;
 }
 
-std::string AllInOneMain::getPieceMovedString(int depth)
+std::string VisionInterface::getPieceMovedString(int depth, const std::string calledBy)
 {
-	std::string move = Utill::translateIntMoveToString(getPieceMoved(depth));
+	std::string move = Utill::translateIntMoveToString(getPieceMoved(depth, calledBy));
 	return move;
 }
 
-BoardCutter AllInOneMain::getBoardCutter(int index)
+BoardCutter VisionInterface::getBoardCutter(int index)
 {
 	if (index == 0)
 	{
@@ -137,7 +141,7 @@ BoardCutter AllInOneMain::getBoardCutter(int index)
 	}
 }
 
-void AllInOneMain::flushCamera()
+void VisionInterface::flushCamera()
 {
 	for (int i = 0; i < 10; i++)
 	{

@@ -9,6 +9,9 @@
 #include <rclcpp/rclcpp.hpp> // For git logger
 #include "ur5_sem2_scripts/moveStruct.hpp"
 #include "ur5_sem2_scripts/logger/Logger.h"
+#include <opencv2/opencv.hpp>
+#include "ament_index_cpp/get_package_share_directory.hpp"
+
 using namespace std;
 
 // Constructer that runs everytime a ChessBoard object is created
@@ -144,10 +147,10 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 2); // Move the king
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
-        moveStruct.start[0] = 4;
-        moveStruct.start[1] = 0;
-        moveStruct.end[0] = 2;
-        moveStruct.end[1] = 0;
+        moveStruct.start[0] = 7;
+        moveStruct.start[1] = 4;
+        moveStruct.end[0] = 7;
+        moveStruct.end[1] = 2;
         moveStruct.type = 'c';
     }
     else if (move == "wK")
@@ -155,9 +158,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 6); // Move the king
         movePiece(7, 7, 7, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1g1");
-        moveStruct.start[0] = 0;
+        moveStruct.start[0] = 7;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 0;
+        moveStruct.end[0] = 7;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }
@@ -167,9 +170,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 2); // Move the king
         movePiece(0, 0, 0, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8c8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 2;
         moveStruct.type = 'c';
     }
@@ -178,9 +181,9 @@ void ChessBoard::doCastle(string &move)
         movePiece(0, 4, 0, 6); // Move the king
         movePiece(0, 7, 0, 5); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e8g8");
-        moveStruct.start[0] = 7;
+        moveStruct.start[0] = 0;
         moveStruct.start[1] = 4;
-        moveStruct.end[0] = 7;
+        moveStruct.end[0] = 0;
         moveStruct.end[1] = 6;
         moveStruct.type = 'c';
     }
@@ -576,4 +579,91 @@ MoveStruct ChessBoard::getMoveStruct()
     moveStruct.start[0] = 7 - moveStruct.start[0];
     moveStruct.end[0] = 7 - moveStruct.end[0];
     return moveStruct;
+}
+
+void ChessBoard::drawBoard()
+{
+
+    const int cellSize = 80;
+    const int boardSize = 8;
+    cv::Mat boardImage(cellSize * boardSize, cellSize * boardSize, CV_8UC3);
+
+    // Chessboard pattern
+    for (int row = 0; row < boardSize; ++row)
+    {
+        for (int col = 0; col < boardSize; ++col)
+        {
+            cv::Scalar color = (row + col) % 2 == 0 ? cv::Scalar(240, 217, 181) : cv::Scalar(181, 136, 99);
+            cv::rectangle(boardImage, cv::Rect(col * cellSize, row * cellSize, cellSize, cellSize), color, -1);
+        }
+    }
+
+    std::string package_share_dir = ament_index_cpp::get_package_share_directory("ur5_sem2_scripts");
+    // Map piece chars to image paths
+    std::unordered_map<char, std::string> pieceImages = {
+        {'p', package_share_dir + "/pictures/pieces/wp.png"},
+        {'P', package_share_dir + "/pictures/pieces/bp.png"},
+        {'r', package_share_dir + "/pictures/pieces/wr.png"},
+        {'R', package_share_dir + "/pictures/pieces/br.png"},
+        {'n', package_share_dir + "/pictures/pieces/wn.png"},
+        {'N', package_share_dir + "/pictures/pieces/bn.png"},
+        {'b', package_share_dir + "/pictures/pieces/wb.png"},
+        {'B', package_share_dir + "/pictures/pieces/bb.png"},
+        {'q', package_share_dir + "/pictures/pieces/wq.png"},
+        {'Q', package_share_dir + "/pictures/pieces/bq.png"},
+        {'k', package_share_dir + "/pictures/pieces/wk.png"},
+        {'K', package_share_dir + "/pictures/pieces/bk.png"},
+    };
+
+    // Load all images up front
+    std::unordered_map<char, cv::Mat> loadedPieces;
+    for (const auto &[ch, path] : pieceImages)
+    {
+        loadedPieces[ch] = loadAndResize(path, cellSize);
+    }
+
+    // Draw pieces
+    for (int row = 0; row < boardSize; ++row)
+    {
+        for (int col = 0; col < boardSize; ++col)
+        {
+            char piece = board[row][col];
+            if (piece != '-' && loadedPieces.count(piece))
+            {
+                cv::Mat &pieceImg = loadedPieces[piece];
+                overlayImage(boardImage, pieceImg, cv::Point(col * cellSize, row * cellSize));
+            }
+        }
+    }
+
+    cv::imshow("Chessboard", boardImage);
+}
+
+cv::Mat ChessBoard::loadAndResize(const std::string &path, int size)
+{
+    cv::Mat img = cv::imread(path, cv::IMREAD_UNCHANGED); // Load with alpha channel
+    if (img.empty())
+    {
+        std::cerr << "Error loading image: " << path << std::endl;
+        return cv::Mat();
+    }
+
+    cv::resize(img, img, cv::Size(size, size));
+    return img;
+}
+
+void ChessBoard::overlayImage(cv::Mat &background, const cv::Mat &foreground, cv::Point location)
+{
+    for (int y = 0; y < foreground.rows; ++y)
+    {
+        for (int x = 0; x < foreground.cols; ++x)
+        {
+            cv::Vec4b fgPixel = foreground.at<cv::Vec4b>(y, x);
+            if (fgPixel[3] > 0)
+            { // Alpha > 0
+                background.at<cv::Vec3b>(location.y + y, location.x + x) =
+                    cv::Vec3b(fgPixel[0], fgPixel[1], fgPixel[2]); // BGR
+            }
+        }
+    }
 }

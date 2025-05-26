@@ -24,7 +24,7 @@ public:
 	~BoardCutter();
 
 	cv::Mat cutBoard(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode);
-	std::array<std::array<double, 4>, 4> getTFchess(int mode);
+	std::array<std::array<double, 4>, 4> getTFchess(int mode, float angleOffset = 0);
 	static void zoom(cv::Mat, cv::Mat&, double, cv::Point2i);
 	void getCornorPoints(cv::Mat image, cv::Mat greenCircle, cv::Mat redCircle, cv::Mat mask, double scale, int mode);
 	float getAngle();

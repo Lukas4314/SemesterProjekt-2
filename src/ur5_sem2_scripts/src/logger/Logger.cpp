@@ -28,10 +28,19 @@ std::string Logger::generateUniqueFileName()
     std::string finalName;
     int counter = 0;
 
+    // Sæt log-mappen her:
+    std::string folderPath = "Logs/";
+
+    if (!fs::exists(folderPath))
+    {
+        std::cout << "Creating log folder, since it doesn't already exist: " << folderPath << std::endl;
+        fs::create_directory(folderPath);
+    }
+
     do
     {
         std::ostringstream oss;
-        oss << baseName;
+        oss << folderPath << baseName;
         if (counter > 0)
             oss << "_" << counter;
         oss << ".csv";
@@ -93,6 +102,7 @@ void Logger::initialize(const std::vector<const char *> &headerNames)
 
         buffer.assign(headers.size(), "");
         writeHeaders();
+        setStandardValues();
         std::cout << "Logger initialized: " << fileName << std::endl;
     }
 }
@@ -125,6 +135,7 @@ void Logger::writeRow()
         logFile << std::endl;
         buffer.assign(headers.size(), "");
     }
+    setStandardValues();
 }
 
 void Logger::setStandardValues()
@@ -133,7 +144,7 @@ void Logger::setStandardValues()
     setValue(CAMERA_MOVE, "Null");
     setValue(MOVE, "Null");
 
-    // Gripper related values
+    // Gripper related valuesros2 run ur5_sem2_scripts svejse_frame 
     setValue(GRIPPER_PICKUP_OWN_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_OWN_PIECE_SUCCESS, "1");
     setValue(GRIPPER_SHOULD_PICKUP_DEAD_PIECE, "0");
@@ -142,6 +153,10 @@ void Logger::setStandardValues()
     setValue(GRIPPER_PICKUP_ENEMY_PIECE, "0");
     setValue(GRIPPER_PICKUP_ENEMY_PIECE_SUCCESS, "1");
     setValue(GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS, "1");
+    setValue(CameraCorrectGreenCornerLocation, "1");
+    setValue(CameraCorrectYellowCornorLocation, "1");
+    setValue(CameraCorrectRedPegLocation, "1");
+    setValue(CameraCorrectYellowPegLocation, "1");
 
     // Castling
     setValue(EXTRA_PICKUP_FOR_CASTLING, "0");
@@ -179,6 +194,7 @@ std::vector<const char *> Logger::getAllLoggerKeys()
         GRIPPER_PICKUP_ENEMY_PIECE,
         GRIPPER_PICKUP_ENEMY_PIECE_SUCCESS,
         GRIPPER_PUTDOWN_ENEMY_PIECE_SUCCESS,
+        
 
         // Castling
         EXTRA_PICKUP_FOR_CASTLING,
@@ -196,6 +212,11 @@ std::vector<const char *> Logger::getAllLoggerKeys()
         MOST_LIKELY_CAMERA_MOVE_SCORE,
         SECOND_MOST_LIKELY_CAMERA_MOVE_SCORE,
         THIRD_MOST_LIKELY_CAMERA_MOVE_SCORE,
+        CameraCorrectGreenCornerLocation,
+        CameraCorrectYellowCornorLocation,
+        CameraCorrectRedPegLocation,
+        CameraCorrectYellowPegLocation,
+
 
         // Final status
         ROBOT_MANAGES_TO_MAKE_MOVEMENT};
