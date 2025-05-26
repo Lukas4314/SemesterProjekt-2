@@ -41,9 +41,16 @@ angleOfChessBoardBetween25and45Degrees = 0
 angleOfChessBoardBetween45and90Degrees = 0
 angleOfChessBoardBetween90and180Degrees = 0
 
+succesfullGames = []
+gameCount = -1
 # Walk through the directory and its subdirectories
 for root, dirs, files in os.walk(directory_path):
+    
+    
     for file in files:
+        succesfullGames.append("Succes")
+        gameCount += 1
+        
         if file.endswith(".csv"):
             file_path = os.path.join(root, file)
             try:
@@ -70,6 +77,24 @@ for root, dirs, files in os.walk(directory_path):
                             gripperPutdownEnemyPieceSuccess = int(row.get("GripperPutdownEnemyPieceSuccess", 0))
                             gripperPickupForCastling = int(row.get("ExtraPickupForCastling", 0))
                             gripperPickupForCastlingSuccess = int(row.get("ExtraPickupForCastlingSuccess", 0))
+
+
+                            if gripperPickupOwnPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"
+                            if gripperPutdownOwnPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"
+                            if gripperPickupDeadPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"
+                            if gripperPutdownDeadPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"
+                            if gripperPickupEnemyPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"
+                            if gripperPutdownEnemyPieceSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"     
+                            if gripperPickupForCastlingSuccess == "0":
+                                succesfullGames[gameCount] = "Failed"  
+
+
 
                             cameraMoveDepth = row.get("MovesTriedBeforeSuccess", 0)
                             if cameraMoveDepth != "Null":
@@ -149,12 +174,28 @@ for root, dirs, files in os.walk(directory_path):
                                 angleOfChessBoardBetween90and180Degrees += 1
                                 
                             totalMoves += 1
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                                 
                         except ValueError:
                             print("ValueError encountered, skipping row.")
                             continue
             except Exception as e:
                 print(f"Error processing {file_path}: {e}")
+
+
+# Print the successful games
+print("Succesful games:", succesfullGames.count("Succes"))
+print("Failed games:", succesfullGames.count("Failed"))
 
 print(f"Total moves: {totalMoves}")
 print(f"Total robot moves: {robotMoves}")
