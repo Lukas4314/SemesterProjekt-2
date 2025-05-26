@@ -99,16 +99,15 @@ for root, dirs, files in os.walk(directory_path):
                                 cameraTriedMoreThanTwoTries += 1
 
                             if playerMove != 1 and gripperPickupOwnPieceSuccess == 1:
-                                # skal den kun gøre hvis det er en succces jo
                                 gripperPickupOwnPieceSuccessNum += 1
 
                             if playerMove == 0:
                                 gripperPickupOwnPieceTotal += 1
 
-                            if playerMove != 1 and gripperPutdownOwnPieceSuccess == 1:
+                            if playerMove != 1 and gripperPutdownOwnPieceSuccess == 1 and gripperPickupOwnPieceSuccess == 1:
                                 gripperPutDownOwnPieceSuccessNum += 1
                             
-                            if playerMove == 0:
+                            if playerMove == 0 and gripperPickupOwnPieceSuccess == 1:
                                 gripperPutdownOwnPieceTotal += 1
 
                             if gripperShouldPickupDeadPiece == 1:

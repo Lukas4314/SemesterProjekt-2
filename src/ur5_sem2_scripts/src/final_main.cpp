@@ -31,7 +31,7 @@ void printMatrix(const std::array<std::array<double, 4>, 4> &matrix, auto logger
 
 std::array<std::array<double, 4>, 4> getTransformationMatrixYellowPegToGreenSpot(VisionInterface &visionInterface)
 {
-  double pixelPerCm = 11.05;
+  double pixelPerCm = 10.945696;
 
   // Makes the transformation matrix from the cam to the yellow plok
   std::array<std::array<double, 4>, 4> yellowPlok_boardGreen_T_pixels = visionInterface.getBoardCutter(0).getTFchess(BUTTOMLEFTMODE);
@@ -78,7 +78,7 @@ std::array<std::array<double, 4>, 4> getFullTransformationMatrix(VisionInterface
   std::array<std::array<double, 4>, 4> base_boardGreen_T_m = getTransformationMatrixBaseToGreenspot(visionInterface);
 
   float boardSize = 0.288;
-  float cali = 0.01;
+  float cali = 0.005;
 
   std::array<std::array<double, 4>, 4> boardGreen_boardRed_T_m = {{{0, -1, 0, boardSize + cali},
                                                                    {-1, 0, 0, boardSize + cali},
