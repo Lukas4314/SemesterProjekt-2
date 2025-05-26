@@ -146,10 +146,10 @@ void ChessBoard::doCastle(string &move)
         movePiece(7, 4, 7, 2); // Move the king
         movePiece(7, 0, 7, 3); // Move the rook
         RCLCPP_DEBUG(logger, "Move is : e1c1");
-        moveStruct.start[0] = 4;
-        moveStruct.start[1] = 7;
-        moveStruct.end[0] = 2;
-        moveStruct.end[1] = 7;
+        moveStruct.start[0] = 7;
+        moveStruct.start[1] = 4;
+        moveStruct.end[0] = 7;
+        moveStruct.end[1] = 2;
         moveStruct.type = 'c';
     }
     else if (move == "wK")
